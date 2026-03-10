@@ -143,10 +143,10 @@ def _qa_section(oneliners: list[dict]) -> str:
     rows = ""
     for i, ol in enumerate(oneliners):
         cat   = _e(ol.get("upsc_topics", ["General"])[0] if ol.get("upsc_topics") else "General")
-        q_en  = _e(ol.get("question", ol.get("title", "")))
-        a_en  = _e(ol.get("answer",  ol.get("context", "")))
-        q_hi  = _e(ol.get("question_hi", ""))
-        a_hi  = _e(ol.get("answer_hi",   ""))
+        q_en  = _e(ol.get("q_en", ol.get("title", "")))
+        a_en  = _e(ol.get("a_en", ""))
+        q_hi  = _e(ol.get("q_hi", ol.get("title", "")))
+        a_hi  = _e(ol.get("a_hi", ""))
         src   = _e(ol.get("source", ""))
         rows += f"""
 <div class="qa-card">
