@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.venv/
+venv/
+env/
+.env
+
+# Output artifacts (generated each run — not versioned)
+/tmp/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Playwright
+/playwright-report/
+/test-results/
+
+# Data + PDFs ARE versioned (monthly archive)
+# do NOT add data/ or pdfs/ here
