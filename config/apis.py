@@ -22,27 +22,30 @@ PROVIDERS: dict[str, dict] = {
         "model": "llama-3.3-70b-versatile",
         "base_url": "https://api.groq.com/openai/v1",
         "rpm": 30, "tpm": 6000, "tpd": 14400, "priority": 1,
-        "tasks": ["enrich"], "enabled": True,
+        "tasks": ["enrich", "oneliner", "caption"],  # FIX: added oneliner+caption fallback
+        "enabled": True,
     },
     "groq_2": {
         "type": "groq", "key_env": "GROQ_API_KEY_2",
         "model": "llama-3.3-70b-versatile",
         "base_url": "https://api.groq.com/openai/v1",
         "rpm": 30, "tpm": 6000, "tpd": 14400, "priority": 1,
-        "tasks": ["enrich"], "enabled": True,
+        "tasks": ["enrich", "oneliner", "caption"],  # FIX: added oneliner+caption fallback
+        "enabled": True,
     },
     "groq_3": {
         "type": "groq", "key_env": "GROQ_API_KEY_3",
         "model": "llama-3.3-70b-versatile",
         "base_url": "https://api.groq.com/openai/v1",
         "rpm": 30, "tpm": 6000, "tpd": 14400, "priority": 1,
-        "tasks": ["enrich"], "enabled": True,
+        "tasks": ["enrich", "oneliner", "caption"],  # FIX: added oneliner+caption fallback
+        "enabled": True,
     },
 
     # ── Cerebras — fast 70b ───────────────────────────────────────────────────
     "cerebras_1": {
         "type": "openai_compat", "key_env": "CEREBRAS_API_KEY_1",
-        "model": "llama3.1-70b",
+        "model": "llama-3.3-70b",                   # FIX: was llama3.1-70b (404)
         "base_url": "https://api.cerebras.ai/v1",
         "rpm": 30, "tpm": 60000, "tpd": 0, "priority": 2,
         "tasks": ["enrich"], "enabled": True,
@@ -65,7 +68,7 @@ PROVIDERS: dict[str, dict] = {
     },
     "gemini_3": {
         "type": "google", "key_env": "GEMINI_API_KEY_3",
-        "model": "gemini-1.5-flash",
+        "model": "gemini-2.0-flash-lite",            # FIX: was gemini-1.5-flash (404)
         "base_url": "https://generativelanguage.googleapis.com/v1beta",
         "rpm": 15, "tpm": 0, "tpd": 1500, "priority": 2,
         "tasks": ["oneliner", "caption", "filter"], "enabled": True,
@@ -129,7 +132,7 @@ def get_api_key(provider_name: str) -> str | None:
 def active_providers(task: str | None = None) -> list[str]:
     """
     Return enabled providers with a key present, filtered by task.
-    
+
     SINGLE-KEY FALLBACK: if only one provider is active total, it is returned
     for ALL tasks regardless of its tasks spec — so the system always runs.
     """
