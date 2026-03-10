@@ -45,50 +45,95 @@ def _topic_tags(topics: list[str]) -> str:
     return " ".join(f'<span class="topic-tag">{_e(t)}</span>' for t in topics[:3])
 
 
+
 def _article_card(n: int, art: dict) -> str:
     conf      = art.get("fact_confidence", 3)
     flags     = art.get("fact_flags", [])
     topics    = art.get("upsc_topics", [])
     kps_en    = [str(k) for k in art.get("key_points", []) if k]
     kps_hi    = [str(k) for k in art.get("key_points_hi", []) if k]
+
+    # Pre-build every conditional piece so no backslashes or nested quotes live
+    # inside f-string {} expressions (Python < 3.12 forbids this)
     flags_html = ""
     if F.show_verify_flags and flags:
-        flag_items = "".join(f"<li>{_e(f)}</li>" for f in flags)
-        flags_html = f'<div class="flags"><strong>⚑ Verify:</strong><ul>{flag_items}</ul></div>'
-    kp_en_html = "".join(f"<li>{_e(k)}</li>" for k in kps_en) if F.show_key_points else ""
-    kp_hi_html = "".join(f"<li>{_e(k)}</li>" for k in kps_hi) if F.show_key_points else ""
-    why        = _e(art.get("why_in_news", ""))
-    why_html   = f'<div class="why-in-news"><strong>📌 Why in News:</strong> {why}</div>' if (why and F.show_why_in_news) else ""
+        flag_items = "".join("<li>" + _e(f) + "</li>" for f in flags)
+        flags_html = '<div class="flags"><strong>⚑ Verify:</strong><ul>' + flag_items + "</ul></div>"
 
-    # Data attributes for JS filter
+    kp_en_html = "".join("<li>" + _e(k) + "</li>" for k in kps_en) if F.show_key_points else ""
+    kp_hi_html = "".join("<li>" + _e(k) + "</li>" for k in kps_hi) if F.show_key_points else ""
+
+    why      = _e(art.get("why_in_news", ""))
+    why_html = '<div class="why-in-news"><strong>&#128204; Why in News:</strong> ' + why + "</div>" if (why and F.show_why_in_news) else ""
+
+    art_num_html   = '<span class="art-num">#' + f"{n:02d}" + "</span>" if F.show_article_number else ""
+    topic_tag_html = _topic_tags(topics) if F.show_topic_tags else ""
+    gs_html        = _gs_badge(art.get("gs_paper", "")) if F.show_gs_badge else ""
+    conf_html      = _confidence_badge(conf) if F.show_conf_badge else ""
+    title_hi_html  = "<h3 class='art-title-hi'>" + _e(art.get("title_hi", "")) + "</h3>" if F.show_title_hindi else ""
+
+    if F.show_hindi_tab:
+        tab_bar_html = (
+            "<div class='tab-bar'>"
+            "<button class='tab-btn active' onclick='switchTab(this,\"en\"," + str(n) + ")'>English</button>"
+            "<button class='tab-btn' onclick='switchTab(this,\"hi\"," + str(n) + ")'>\u0939\u093f\u0928\u094d\u0926\u0940</button>"
+            "</div>"
+        )
+    else:
+        tab_bar_html = "<div class='tab-bar'></div>"
+
+    ctx_html = '<div class="section-label">Context</div><p>' + _e(art.get("context", "")) + "</p>" if F.show_context else ""
+    bg_html  = '<div class="section-label">Background</div><p class="background">' + _e(art.get("background", "")) + "</p>" if F.show_background else ""
+    kp_html  = '<div class="section-label">Key Points</div><ul class="kp-list">' + kp_en_html + "</ul>" if F.show_key_points else ""
+    imp_html = '<div class="section-label">Implication</div><p class="implication">' + _e(art.get("implication", "")) + "</p>" if F.show_implication else ""
+
+    if F.generate_hindi:
+        hi_tab_html = (
+            "<div class='tab-content hidden hindi' id='tab-hi-" + str(n) + "'>"
+            "<div class='section-label'>\u0938\u0902\u0926\u0930\u094d\u092d</div>"
+            "<p>" + _e(art.get("context_hi", "")) + "</p>"
+            "<div class='section-label'>\u092e\u0941\u0916\u094d\u092f \u092c\u093f\u0902\u0926\u0941</div>"
+            "<ul class='kp-list'>" + kp_hi_html + "</ul>"
+            "<div class='section-label'>\u092e\u0939\u0924\u094d\u0924\u094d\u0935</div>"
+            "<p class='implication'>" + _e(art.get("implication_hi", "")) + "</p>"
+            "</div>"
+        )
+    else:
+        hi_tab_html = ""
+
+    if F.show_source_link:
+        src_html = '<a href="' + _e(art.get("url", "#")) + '" target="_blank" rel="noopener">&#128240; ' + _e(art.get("source", "")) + " &#8599;</a>"
+    elif F.show_source:
+        src_html = "<span>&#128240; " + _e(art.get("source", "")) + "</span>"
+    else:
+        src_html = ""
+    date_html   = "&nbsp;&middot;&nbsp;<span style='color:#888'>" + _e(art.get("published", "")) + "</span>" if F.show_date else ""
+    footer_html = "<div class='art-footer'>" + src_html + date_html + "</div>"
+
     topic_attr = " ".join(topics[:3])
     gs_attr    = (art.get("gs_paper") or "").split("—")[0].strip()
 
     return f"""
 <article class="article-card" id="art-{n}" data-topics="{_e(topic_attr)}" data-gs="{_e(gs_attr)}">
   <div class="art-header">
-    {f'<span class="art-num">#{n:02d}</span>' if F.show_article_number else ""}
-    {_topic_tags(topics) if F.show_topic_tags else ""}
-    {_gs_badge(art.get("gs_paper","")) if F.show_gs_badge else ""}
-    {_confidence_badge(conf) if F.show_conf_badge else ""}
+    {art_num_html}
+    {topic_tag_html}
+    {gs_html}
+    {conf_html}
   </div>
   {why_html}
   <h2 class="art-title">{_e(art.get("title",""))}</h2>
-  {"<h3 class='art-title-hi'>" + _e(art.get("title_hi","")) + "</h3>" if F.show_title_hindi else ""}
-
-  {"<div class='tab-bar'><button class='tab-btn active' onclick='switchTab(this,\"en\","+str(n)+")'>English</button><button class='tab-btn' onclick='switchTab(this,\"hi\","+str(n)+")'>हिन्दी</button></div>" if F.show_hindi_tab else "<div class='tab-bar'></div>"}
-
+  {title_hi_html}
+  {tab_bar_html}
   <div class="tab-content" id="tab-en-{n}">
-    {'<div class="section-label">Context</div><p>' + _e(art.get("context","")) + "</p>" if F.show_context else ""}
-    {'<div class="section-label">Background</div><p class="background">' + _e(art.get("background","")) + "</p>" if F.show_background else ""}
-    {'<div class="section-label">Key Points</div><ul class="kp-list">' + kp_en_html + "</ul>" if F.show_key_points else ""}
-    {'<div class="section-label">Implication</div><p class="implication">' + _e(art.get("implication","")) + "</p>" if F.show_implication else ""}
+    {ctx_html}
+    {bg_html}
+    {kp_html}
+    {imp_html}
     {flags_html}
   </div>
-
-  {"<div class='tab-content hidden hindi' id='tab-hi-"+str(n)+"'><div class='section-label'>संदर्भ</div><p>"+_e(art.get("context_hi",""))+"</p><div class='section-label'>मुख्य बिंदु</div><ul class='kp-list'>"+kp_hi_html+"</ul><div class='section-label'>महत्त्व</div><p class='implication'>"+_e(art.get("implication_hi",""))+"</p></div>" if F.generate_hindi else ""}
-
-  {"<div class='art-footer'>" + ('<a href="'+_e(art.get("url","#"))+'" target="_blank" rel="noopener">📰 '+_e(art.get("source",""))+' ↗</a>' if F.show_source_link else ('<span>📰 '+_e(art.get("source",""))+'</span>' if F.show_source else "")) + ("&nbsp;·&nbsp;<span style='color:#888'>" + _e(art.get("published","")) + "</span>" if F.show_date else "") + "</div>"}
+  {hi_tab_html}
+  {footer_html}
 </article>"""
 
 
@@ -389,6 +434,7 @@ body {{ font-family: 'Segoe UI', Arial, sans-serif; background: var(--light);
 </main>
 
 {"<footer class='site-footer'><span>The Currents</span> &middot; UPSC Current Affairs &middot; " + _e(date_str) + "<br>For serious aspirants. Verify all facts from official sources before the exam.</footer>" if F.show_site_footer else ""}
+
 <script>
 // ── All monthly data (injected at build time) ─────────────────────────────
 {month_data_js}
