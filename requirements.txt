@@ -1,0 +1,12 @@
+# HTTP & feed fetching
+requests>=2.31.0
+feedparser>=6.0.10
+
+# Image processing (fallback / PDF builder)
+Pillow>=10.0.0
+
+# Social post image generation (HTML→PNG via headless browser)
+playwright>=1.40.0
+
+# Testing
+pytest>=7.0.0

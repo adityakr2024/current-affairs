@@ -1,0 +1,118 @@
+"""tests/test_filter_engine.py — Unit tests for core/filter_engine.py"""
+import pytest, sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from core.filter_engine import (
+    is_excluded, score_article, filter_and_rank,
+    filter_oneliners, classify_oneliner,
+)
+
+def _art(title, summary="", source="The Hindu", score=None):
+    a = {"title": title, "summary": summary, "source": source,
+         "source_weight": 10, "category": "India", "_id": "test"}
+    if score is not None:
+        a["_score"] = score
+    return a
+
+# ── Exclusion ──────────────────────────────────────────────────────────────────
+class TestExclusion:
+    def test_excludes_cricket(self):
+        assert is_excluded(_art("India wins cricket test match"))
+
+    def test_excludes_ipl(self):
+        assert is_excluded(_art("IPL 2026 auction results"))
+
+    def test_excludes_bollywood(self):
+        assert is_excluded(_art("Bollywood actor wins award"))
+
+    def test_excludes_sensex(self):
+        assert is_excluded(_art("Sensex drops 500 points today"))
+
+    def test_keeps_upsc(self):
+        assert not is_excluded(_art("Cabinet approves ₹10,000 crore MSME scheme"))
+
+    def test_keeps_nuclear(self):
+        assert not is_excluded(_art("India signs uranium deal with Canada"))
+
+    def test_keeps_film_policy(self):
+        assert not is_excluded(_art("Government announces new film production policy"))
+
+
+# ── Scoring ────────────────────────────────────────────────────────────────────
+class TestScoring:
+    def test_pib_source_bonus(self):
+        sc, _ = score_article(_art("PM launches scheme", source="PIB"))
+        sc2, _ = score_article(_art("PM launches scheme", source="Mint"))
+        assert sc > sc2
+
+    def test_action_phrase_boost(self):
+        sc_action, _ = score_article(_art("Cabinet approves new nuclear deal with Canada"))
+        sc_plain, _  = score_article(_art("Nuclear discussions between India and Canada"))
+        assert sc_action > sc_plain
+
+    def test_scheme_signals_boost(self):
+        sc, _ = score_article(_art("Yojana for 1 lakh beneficiaries worth ₹500 crore launched"))
+        assert sc >= 10
+
+    def test_topics_returned(self):
+        _, topics = score_article(_art("RBI raises repo rate amid inflation concerns"))
+        assert len(topics) > 0
+
+    def test_international_india_proximity(self):
+        a = _art("UN Security Council meets on Indian Ocean dispute", category="International")
+        a["category"] = "International"
+        sc, _ = score_article(a)
+        assert sc > 5  # India proximity bonus applied
+
+
+# ── Filter and rank ────────────────────────────────────────────────────────────
+class TestFilterAndRank:
+    def test_returns_top_n(self):
+        articles = [
+            _art(f"Cabinet approves MSME scheme {i} worth ₹{i*100} crore", source="PIB")
+            for i in range(1, 30)
+        ]
+        result = filter_and_rank(articles, top_n=5)
+        assert len(result) <= 5
+
+    def test_excludes_sports(self):
+        articles = [
+            _art("Cabinet approves nuclear energy scheme", source="PIB"),
+            _art("India wins cricket world cup final"),
+        ]
+        result = filter_and_rank(articles, top_n=10)
+        assert all("cricket" not in a["title"].lower() for a in result)
+
+    def test_topic_diversity_cap(self):
+        # 8 polity articles — max_per_topic=4 should cap them
+        articles = [
+            _art(f"Supreme Court orders constitution amendment review {i}", source="PIB")
+            for i in range(8)
+        ]
+        result = filter_and_rank(articles, top_n=10)
+        polity_count = sum(1 for a in result if "Polity" in a.get("upsc_topics", []))
+        assert polity_count <= 4
+
+
+# ── One-liner classification ───────────────────────────────────────────────────
+class TestOneliners:
+    def test_classifies_scheme(self):
+        cat = classify_oneliner(_art("PM launches new Yojana for tribal welfare"))
+        assert cat == "Scheme / Govt Launch"
+
+    def test_classifies_award(self):
+        cat = classify_oneliner(_art("Dr Sharma receives Padma Shri for medicine"))
+        assert cat == "Award / Achievement"
+
+    def test_classifies_report(self):
+        cat = classify_oneliner(_art("India ranks 5th in Global Innovation Index 2026"))
+        assert cat == "Report / Ranking / Index"
+
+    def test_unclassifiable_returns_none(self):
+        cat = classify_oneliner(_art("Random unrelated news item about things"))
+        assert cat is None
+
+    def test_filter_excludes_full_articles(self):
+        full = [_art("India nuclear deal signed")]
+        all_arts = full + [_art("India wins Padma awards")]
+        result = filter_oneliners(all_arts, full, max_items=10)
+        assert all(a["title"] != "India nuclear deal signed" for a in result)
