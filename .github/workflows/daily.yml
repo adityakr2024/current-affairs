@@ -72,23 +72,18 @@ jobs:
           GMAIL_SENDER:         ${{ secrets.GMAIL_SENDER }}
           GMAIL_APP_PASSWORD:   ${{ secrets.GMAIL_APP_PASSWORD }}
           GMAIL_RECIPIENT:      ${{ secrets.GMAIL_RECIPIENT }}
-          # ── Site URL ────────────────────────────────────────────────────────
-          SITE_URL: https://adityakr2024.github.io/aarambh/
+          # ── Site URL — update this if you rename the repo ────────────────────
+          SITE_URL:   https://adityakr2024.github.io/current-affairs/
           OUTPUT_DIR: /tmp/the_currents
         run: python main.py
 
       # ── 6. Commit monthly data + PDFs back to main branch ───────────────────
-      # This archives today's articles in data/YYYY-MM.json and PDFs in pdfs/
       - name: Commit monthly archive to main
         if: always()
         run: |
           DATE=$(date +%Y-%m-%d)
-          MONTH=$(date +%Y-%m)
-
           git config user.name  "The Currents Bot"
           git config user.email "bot@thecurrents.in"
-
-          # data/ and pdfs/ are written by main.py (via _accumulate_monthly)
           git add data/ pdfs/ 2>/dev/null || true
           git diff --staged --quiet || git commit -m "data: ${DATE} articles archived"
           git push origin main || echo "⚠ Push to main failed (non-fatal)"
@@ -108,24 +103,45 @@ jobs:
           git config user.name  "The Currents Bot"
           git config user.email "bot@thecurrents.in"
 
+          # Build a clean staging directory for gh-pages
+          STAGE=$(mktemp -d)
+
+          # Copy web page
+          cp /tmp/the_currents/web/index.html "${STAGE}/index.html"
+
+          # Copy today's PDFs into staging
+          mkdir -p "${STAGE}/pdfs/${MONTH}"
+          cp /tmp/the_currents/pdf/TheCurrents_EN_${DATE}.pdf "${STAGE}/pdfs/${MONTH}/" 2>/dev/null || true
+          cp /tmp/the_currents/pdf/TheCurrents_HI_${DATE}.pdf "${STAGE}/pdfs/${MONTH}/" 2>/dev/null || true
+
+          # Merge existing PDF archive from current gh-pages branch (keep old issues)
+          git fetch origin gh-pages 2>/dev/null || true
+          if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
+            git checkout origin/gh-pages -- pdfs/ 2>/dev/null || true
+            if [ -d pdfs ]; then
+              cp -rn pdfs/. "${STAGE}/pdfs/" 2>/dev/null || true
+            fi
+            git checkout HEAD -- . 2>/dev/null || true
+          fi
+
+          # Switch to gh-pages branch
           git fetch origin gh-pages 2>/dev/null || true
           git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
+
+          # Clear branch content
           git rm -rf . --quiet 2>/dev/null || true
 
-          # Web page
-          cp /tmp/the_currents/web/index.html ./index.html
+          # Copy staged files
+          cp -r "${STAGE}/." .
 
-          # Today's PDFs (flat for direct links in existing integrations)
-          mkdir -p pdfs/${MONTH}
-          cp /tmp/the_currents/pdf/TheCurrents_EN_${DATE}.pdf pdfs/${MONTH}/ 2>/dev/null || true
-          cp /tmp/the_currents/pdf/TheCurrents_HI_${DATE}.pdf pdfs/${MONTH}/ 2>/dev/null || true
+          # Add nojekyll so GitHub Pages serves as-is
+          touch .nojekyll
 
-          # Copy entire pdfs archive from main branch so old issues remain browsable
-          git show main:pdfs 2>/dev/null | tar -x -C . 2>/dev/null || true
-
-          git add index.html pdfs/
+          git add -A
           git diff --staged --quiet || git commit -m "The Currents — ${DATE}"
           git push origin gh-pages --force
+
+          echo "✅ Deployed to gh-pages"
 
       # ── 8. Save all outputs as downloadable artifact (backup) ────────────────
       - name: Upload run artifacts
