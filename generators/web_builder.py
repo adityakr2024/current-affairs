@@ -388,8 +388,7 @@ body {{ font-family: 'Segoe UI', Arial, sans-serif; background: var(--light);
 
 </main>
 
-{"""<footer class='site-footer'><span>The Currents</span> · UPSC Current Affairs · """ + _e(date_str) + """<br>For serious aspirants. Verify all facts from official sources before the exam.</footer>""" if F.show_site_footer else ""}
-
+{"<footer class='site-footer'><span>The Currents</span> &middot; UPSC Current Affairs &middot; " + _e(date_str) + "<br>For serious aspirants. Verify all facts from official sources before the exam.</footer>" if F.show_site_footer else ""}
 <script>
 // ── All monthly data (injected at build time) ─────────────────────────────
 {month_data_js}
