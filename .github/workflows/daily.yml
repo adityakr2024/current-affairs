@@ -1,0 +1,137 @@
+name: The Currents — Daily Pipeline
+
+on:
+  schedule:
+    # 6:00 AM IST = 00:30 UTC
+    # GitHub Actions queue adds ~10–20 min, so target 00:10 UTC → arrives ~6:20 AM IST
+    - cron: "10 0 * * 1-6"   # Mon–Sat, 00:10 UTC = ~6:10 AM IST (queue-adjusted)
+  workflow_dispatch:           # Manual trigger from GitHub UI
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── 2. Python ────────────────────────────────────────────────────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      # ── 3. System packages ───────────────────────────────────────────────────
+      - name: Install system packages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            wkhtmltopdf \
+            fonts-liberation \
+            fonts-noto-core \
+            fonts-noto-cjk \
+            fonts-noto
+
+      # ── 4. Playwright (for social post image generation) ─────────────────────
+      - name: Install Playwright browser
+        run: python -m playwright install chromium --with-deps
+
+      # ── 5. Run pipeline ──────────────────────────────────────────────────────
+      - name: Run pipeline
+        env:
+          # ── AI Providers ────────────────────────────────────────────────────
+          GROQ_API_KEY_1:       ${{ secrets.GROQ_API_KEY_1 }}
+          GROQ_API_KEY_2:       ${{ secrets.GROQ_API_KEY_2 }}
+          GROQ_API_KEY_3:       ${{ secrets.GROQ_API_KEY_3 }}
+          GEMINI_API_KEY_1:     ${{ secrets.GEMINI_API_KEY_1 }}
+          GEMINI_API_KEY_2:     ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3:     ${{ secrets.GEMINI_API_KEY_3 }}
+          OPENAI_API_KEY_1:     ${{ secrets.OPENAI_API_KEY_1 }}
+          OPENAI_API_KEY_2:     ${{ secrets.OPENAI_API_KEY_2 }}
+          OPENAI_API_KEY_3:     ${{ secrets.OPENAI_API_KEY_3 }}
+          OPENROUTER_API_KEY_1: ${{ secrets.OPENROUTER_API_KEY_1 }}
+          OPENROUTER_API_KEY_2: ${{ secrets.OPENROUTER_API_KEY_2 }}
+          CEREBRAS_API_KEY_1:   ${{ secrets.CEREBRAS_API_KEY_1 }}
+          ANTHROPIC_API_KEY_1:  ${{ secrets.ANTHROPIC_API_KEY_1 }}
+          # ── Delivery ────────────────────────────────────────────────────────
+          TELEGRAM_BOT_TOKEN:   ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID:     ${{ secrets.TELEGRAM_CHAT_ID }}
+          GMAIL_SENDER:         ${{ secrets.GMAIL_SENDER }}
+          GMAIL_APP_PASSWORD:   ${{ secrets.GMAIL_APP_PASSWORD }}
+          GMAIL_RECIPIENT:      ${{ secrets.GMAIL_RECIPIENT }}
+          # ── Site URL ────────────────────────────────────────────────────────
+          SITE_URL: https://adityakr2024.github.io/aarambh/
+          OUTPUT_DIR: /tmp/the_currents
+        run: python main.py
+
+      # ── 6. Commit monthly data + PDFs back to main branch ───────────────────
+      # This archives today's articles in data/YYYY-MM.json and PDFs in pdfs/
+      - name: Commit monthly archive to main
+        if: always()
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          MONTH=$(date +%Y-%m)
+
+          git config user.name  "The Currents Bot"
+          git config user.email "bot@thecurrents.in"
+
+          # data/ and pdfs/ are written by main.py (via _accumulate_monthly)
+          git add data/ pdfs/ 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "data: ${DATE} articles archived"
+          git push origin main || echo "⚠ Push to main failed (non-fatal)"
+
+      # ── 7. Publish web page + PDFs to GitHub Pages ──────────────────────────
+      - name: Deploy to GitHub Pages
+        if: always()
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          MONTH=$(date +%Y-%m)
+
+          if [ ! -f /tmp/the_currents/web/index.html ]; then
+            echo "⚠ Web output not found — skipping Pages deploy"
+            exit 0
+          fi
+
+          git config user.name  "The Currents Bot"
+          git config user.email "bot@thecurrents.in"
+
+          git fetch origin gh-pages 2>/dev/null || true
+          git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
+          git rm -rf . --quiet 2>/dev/null || true
+
+          # Web page
+          cp /tmp/the_currents/web/index.html ./index.html
+
+          # Today's PDFs (flat for direct links in existing integrations)
+          mkdir -p pdfs/${MONTH}
+          cp /tmp/the_currents/pdf/TheCurrents_EN_${DATE}.pdf pdfs/${MONTH}/ 2>/dev/null || true
+          cp /tmp/the_currents/pdf/TheCurrents_HI_${DATE}.pdf pdfs/${MONTH}/ 2>/dev/null || true
+
+          # Copy entire pdfs archive from main branch so old issues remain browsable
+          git show main:pdfs 2>/dev/null | tar -x -C . 2>/dev/null || true
+
+          git add index.html pdfs/
+          git diff --staged --quiet || git commit -m "The Currents — ${DATE}"
+          git push origin gh-pages --force
+
+      # ── 8. Save all outputs as downloadable artifact (backup) ────────────────
+      - name: Upload run artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aarambh-${{ github.run_id }}
+          path: /tmp/the_currents/
+          retention-days: 30
