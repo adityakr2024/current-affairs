@@ -288,27 +288,27 @@ _HTML_TEMPLATE = """\
 
 <div class="top-band">
   <div class="brand-row">
-    {"<div class='brand-bar'></div>" if F.show_brand_bar else ""}
-    {"<div class='brand-name'>The Currents · UPSC</div>" if F.show_brand_name else ""}
-    {"<div class='topic-chip'>" + label + "</div>" if F.show_topic_chip else ""}
+    {brand_bar_html}
+    {brand_name_html}
+    {topic_chip_html}
   </div>
   <div class="headline">{headline}</div>
 </div>
 
 <div class="body-area">
-  {"<div class='context-block'><div class='context-text'>" + context + "</div></div>" if (F.show_context_block and context) else ""}
+  {context_block_html}
 
-  {"<div class='bullets'>" + bullets_html + "</div>" if (F.show_bullets and bullets_html) else ""}
+  {bullets_block_html}
 
   <div class="info-row">
-    {"<div class='gs-pill'>" + gs_tag + "</div>" if (F.show_gs_pill and gs_tag) else ""}
-    {"<div class='source-chip'>" + source + ("<br>" + date if date else "") + "</div>" if (F.show_source_chip and (source or date)) else ""}
+    {gs_pill_html}
+    {source_chip_html}
   </div>
 </div>
 
 <div class="bottom-band">
-  {"<div class='bottom-left'>Daily. Curated. <em>UPSC-Ready.</em></div>" if F.show_bottom_cta else ""}
-  {"<div class='bottom-right'>adityakr2024.github.io/aarambh</div>" if F.show_site_url else ""}
+  {bottom_cta_html}
+  {bottom_url_html}
 </div>
 
 </body>
@@ -356,7 +356,7 @@ def _build_html(article: dict) -> str:
     topics      = article.get("upsc_topics", []) or []
     bg_dark, bg_mid, accent, label = _get_theme(topics)
 
-    headline    = (article.get("headline_social") or article.get("title") or "").strip()
+    headline    = (article.get("title") or "").strip()
     context_raw = (
         article.get("context_social")
         or article.get("context")
@@ -372,6 +372,18 @@ def _build_html(article: dict) -> str:
     source      = (article.get("source") or "").strip() if F.show_source_chip else ""
     date        = datetime.date.today().strftime("%d %B %Y") if F.show_date else ""
 
+    # Pre-compute all conditional HTML — .format() cannot evaluate Python expressions
+    brand_bar_html    = "<div class='brand-bar'></div>" if F.show_brand_bar else ""
+    brand_name_html   = "<div class='brand-name'>The Currents &middot; UPSC</div>" if F.show_brand_name else ""
+    topic_chip_html   = "<div class='topic-chip'>" + label + "</div>" if F.show_topic_chip else ""
+    context_block_html = "<div class='context-block'><div class='context-text'>" + context + "</div></div>" if (F.show_context_block and context) else ""
+    bullets_block_html = "<div class='bullets'>" + bullets_html + "</div>" if (F.show_bullets and bullets_html) else ""
+    gs_pill_html      = "<div class='gs-pill'>" + gs_tag + "</div>" if (F.show_gs_pill and gs_tag) else ""
+    src_date          = source + ("<br>" + date if date else "")
+    source_chip_html  = "<div class='source-chip'>" + src_date + "</div>" if (F.show_source_chip and (source or date)) else ""
+    bottom_cta_html   = "<div class='bottom-left'>Daily. Curated. <em>UPSC-Ready.</em></div>" if F.show_bottom_cta else ""
+    bottom_url_html   = "<div class='bottom-right'>adityakr2024.github.io/current-affairs</div>" if F.show_site_url else ""
+
     return _HTML_TEMPLATE.format(
         accent      = accent,
         accent_08   = _hex_rgba(accent, 0.08),
@@ -385,6 +397,15 @@ def _build_html(article: dict) -> str:
         gs_tag      = gs_tag,
         source      = source,
         date        = date,
+        brand_bar_html     = brand_bar_html,
+        brand_name_html    = brand_name_html,
+        topic_chip_html    = topic_chip_html,
+        context_block_html = context_block_html,
+        bullets_block_html = bullets_block_html,
+        gs_pill_html       = gs_pill_html,
+        source_chip_html   = source_chip_html,
+        bottom_cta_html    = bottom_cta_html,
+        bottom_url_html    = bottom_url_html,
     )
 
 
