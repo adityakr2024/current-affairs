@@ -356,7 +356,7 @@ def _build_html(article: dict) -> str:
     topics      = article.get("upsc_topics", []) or []
     bg_dark, bg_mid, accent, label = _get_theme(topics)
 
-    headline    = (article.get("title") or "").strip()
+    headline    = (article.get("headline_social") or article.get("title") or "").strip()
     context_raw = (
         article.get("context_social")
         or article.get("context")
