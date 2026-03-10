@@ -22,6 +22,16 @@ from core.logger import log
 from config.settings import OUTPUT_DIR
 from config.display_flags import PDF as F
 
+# Devanagari Unicode block: U+0900–U+097F
+_DEVA_RE = __import__('re').compile(r'[ऀ-ॿ]')
+
+def _en_title(art: dict) -> str:
+    """Return English title — falls back to why_in_news if original title is Hindi."""
+    title = art.get("title", "")
+    if _DEVA_RE.search(title):
+        return art.get("why_in_news", "") or art.get("context", title)[:120]
+    return title
+
 # ── Constants ──────────────────────────────────────────────────────────────────
 
 _TOPICS_HI: dict[str, str] = {
@@ -403,7 +413,7 @@ def _toc_page(articles: list[dict], date_str: str, lang: str) -> str:
     for i, art in enumerate(articles):
         n  = i + 1
         hl = (_e(art.get("title_hi", art.get("title", "")))
-              if lang == "hi" else _e(art.get("title", "")))
+              if lang == "hi" else _e(_en_title(art)))
         rows += f"""
 <div class="toc-item">
   <span class="toc-n">#{n:02d}</span>
@@ -443,7 +453,7 @@ def _article_en(n: int, art: dict) -> str:
 
     topics  = art.get("upsc_topics", [])
     banner  = " &nbsp;·&nbsp; ".join(_e(t) for t in topics[:3]) if topics else "Current Affairs"
-    title   = _e(art.get("title", ""))
+    title   = _e(_en_title(art))
 
     # Context: prefer AI-enriched; fallback to summary; final fallback to title snippet
     if low:
