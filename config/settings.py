@@ -76,7 +76,7 @@ IMAGE_FETCH_TIMEOUT      = 8     # seconds
 WIKIMEDIA_API_URL        = "https://commons.wikimedia.org/w/api.php"  # kept for reference
 
 # ── Site / delivery settings ──────────────────────────────────────────────────
-SITE_URL                 = "https://adityakr2024.github.io/aarambh/"
+SITE_URL                 = "https://adityakr2024.github.io/current-affairs/"
 SITE_SHORT               = "adityakr2024.github.io/aarambh"
 TELEGRAM_BOT_TOKEN_ENV   = "TELEGRAM_BOT_TOKEN"
 TELEGRAM_CHAT_ID_ENV     = "TELEGRAM_CHAT_ID"
