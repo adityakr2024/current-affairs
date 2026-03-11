@@ -1,577 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Currents — UPSC Current Affairs</title>
-<style>
-:root {
-  --navy:    #0D1B2A;
-  --saffron: #E87722;
-  --light:   #f7f7f7;
-  --mid:     #e0e0e0;
-  --text:    #1a1a1a;
-  --muted:   #666;
-  --card-bg: #ffffff;
-  --radius:  10px;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--light);
-        color: var(--text); font-size: 16px; line-height: 1.6; }
-
-/* ── Header ── */
-.site-header { background: var(--navy); color: #fff; padding: 18px 24px;
-                display: flex; justify-content: space-between; align-items: center; }
-.site-name   { font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; color: var(--saffron); }
-.site-date   { font-size: 0.85rem; color: #aaa; }
-.site-tagline { font-size: 0.78rem; color: #888; margin-top: 2px; }
-
-/* ── Filter bar ── */
-.filter-bar {
-  background: #fff; border-bottom: 2px solid var(--saffron);
-  padding: 12px 20px; display: flex; gap: 12px; align-items: center;
-  flex-wrap: wrap; position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 2px 6px rgba(0,0,0,.1);
-}
-.filter-bar label { font-size: 0.78rem; font-weight: 700; color: var(--navy);
-                     text-transform: uppercase; letter-spacing: .5px; }
-.filter-bar select, .filter-bar input[type=date] {
-  border: 1.5px solid var(--mid); border-radius: 6px; padding: 5px 10px;
-  font-size: 0.82rem; color: var(--navy); background: #fff; cursor: pointer;
-}
-.filter-bar select:focus, .filter-bar input:focus {
-  outline: none; border-color: var(--saffron);
-}
-.filter-btn {
-  background: var(--navy); color: #fff; border: none; border-radius: 6px;
-  padding: 6px 16px; font-size: 0.82rem; font-weight: 700; cursor: pointer;
-  letter-spacing: .5px;
-}
-.filter-btn:hover { background: var(--saffron); }
-.filter-clear {
-  background: transparent; color: var(--muted); border: 1.5px solid var(--mid);
-  border-radius: 6px; padding: 5px 12px; font-size: 0.8rem; cursor: pointer;
-}
-.filter-result { font-size: 0.8rem; color: var(--muted); margin-left: auto; }
-
-/* ── Layout ── */
-.container  { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
-.toc-bar    { background: var(--navy); border-radius: var(--radius);
-               padding: 16px 20px; margin-bottom: 28px; }
-.toc-title  { color: var(--saffron); font-size: 0.8rem; font-weight: 700;
-               letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
-.toc-list   { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
-.toc-list a { color: #ccc; font-size: 0.78rem; text-decoration: none; white-space: nowrap; }
-.toc-list a:hover { color: var(--saffron); }
-
-/* ── Article card ── */
-.article-card { background: var(--card-bg); border-radius: var(--radius);
-                 padding: 22px 24px; margin-bottom: 20px;
-                 box-shadow: 0 2px 8px rgba(0,0,0,.07); }
-.art-header   { display: flex; flex-wrap: wrap; align-items: center;
-                 gap: 6px; margin-bottom: 10px; }
-.art-num      { font-size: 0.75rem; font-weight: 800; color: var(--saffron); min-width: 30px; }
-.topic-tag    { background: var(--navy); color: #ddd; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; }
-.gs-badge     { background: var(--saffron); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
-.conf-badge   { font-size: 0.75rem; letter-spacing: 1px; }
-.why-in-news  { background: #fff8f0; border-left: 3px solid var(--saffron);
-                 padding: 8px 12px; margin-bottom: 10px; font-size: 0.88rem;
-                 border-radius: 0 6px 6px 0; }
-.art-title    { font-size: 1.18rem; font-weight: 700; color: var(--navy); line-height: 1.35; margin-bottom: 4px; }
-.art-title-hi { font-size: 1rem; color: #555; margin-bottom: 14px; font-weight: 400; }
-.section-label { font-size: 0.75rem; font-weight: 700; color: var(--saffron);
-                  text-transform: uppercase; letter-spacing: .8px; margin: 12px 0 4px; }
-.background   { color: #555; font-style: italic; font-size: 0.93rem;
-                 border-left: 2px solid #ddd; padding-left: 10px; }
-.kp-list      { padding-left: 0; list-style: none; }
-.kp-list li   { padding: 3px 0 3px 18px; position: relative; font-size: 0.93rem; }
-.kp-list li::before { content: "❖"; position: absolute; left: 0; color: var(--saffron); font-size: 0.7rem; top: 5px; }
-.implication  { font-style: italic; color: #444; font-size: 0.93rem; border-left: 2px solid var(--saffron); padding-left: 10px; }
-.flags        { background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 8px 12px; margin-top: 10px; font-size: 0.82rem; }
-.flags ul     { padding-left: 16px; margin-top: 4px; }
-.art-footer   { margin-top: 14px; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.8rem; }
-.art-footer a { color: var(--saffron); text-decoration: none; font-weight: 600; }
-.hindi        { font-family: 'Noto Sans Devanagari', 'Mangal', Arial, sans-serif; line-height: 1.8; }
-
-/* ── Tabs ── */
-.tab-bar     { display: flex; gap: 6px; margin-bottom: 12px; }
-.tab-btn     { background: var(--mid); border: none; padding: 5px 14px; border-radius: 5px; cursor: pointer; font-size: 0.82rem; font-weight: 600; }
-.tab-btn.active { background: var(--navy); color: #fff; }
-.tab-btn.small  { padding: 3px 10px; font-size: 0.75rem; }
-.hidden { display: none; }
-
-/* ── Q&A section ── */
-.qa-section  { margin-top: 32px; }
-.section-heading { font-size: 1.2rem; font-weight: 800; color: var(--navy);
-                    border-bottom: 3px solid var(--saffron); padding-bottom: 8px; margin-bottom: 18px; }
-.qa-grid     { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 14px; }
-.qa-card     { background: var(--card-bg); border-radius: var(--radius); padding: 14px 16px; box-shadow: 0 1px 5px rgba(0,0,0,.06); }
-.qa-cat      { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--saffron); letter-spacing: .8px; margin-bottom: 8px; }
-.qa-q        { font-size: 0.88rem; color: #333; margin-bottom: 6px; }
-.qa-a        { font-size: 0.9rem; color: var(--navy); }
-.qa-src      { font-size: 0.72rem; color: #aaa; margin-top: 8px; }
-.qa-tab-bar  { margin-bottom: 8px; }
-
-/* ── Historical articles view ── */
-#hist-view   { display: none; }
-.hist-article { background: #fff; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
-.hist-title  { font-weight: 700; color: var(--navy); font-size: 1rem; margin-bottom: 4px; }
-.hist-meta   { font-size: 0.78rem; color: #888; margin-bottom: 6px; }
-.hist-context { font-size: 0.88rem; color: #555; }
-.hist-gs     { display: inline-block; background: var(--saffron); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 3px; margin-right: 4px; }
-
-/* ── PDF archive ── */
-.pdf-archive  { margin-top: 32px; }
-.month-group  { margin-bottom: 14px; }
-.month-label  { font-weight: 700; color: var(--navy); font-size: 0.85rem; margin-right: 10px; }
-.pdf-link     { display: inline-block; background: var(--navy); color: #ddd; font-size: 0.75rem;
-                 padding: 3px 10px; border-radius: 4px; text-decoration: none; margin: 2px 3px;
-                 transition: background .2s; }
-.pdf-link:hover { background: var(--saffron); color: #fff; }
-
-/* ── No results ── */
-.no-results  { text-align: center; padding: 40px; color: var(--muted); font-size: 1rem; }
-
-/* ── Footer ── */
-.site-footer { background: var(--navy); color: #888; text-align: center; padding: 18px; font-size: 0.8rem; margin-top: 40px; }
-.site-footer span { color: var(--saffron); }
-
-/* ── Responsive ── */
-@media(max-width:600px) {
-  .site-header { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .article-card { padding: 16px; }
-  .qa-grid { grid-template-columns: 1fr; }
-  .filter-bar { gap: 8px; }
-}
-</style>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>The Currents &mdash; UPSC Current Affairs &mdash; 2026-03-11</title>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@700;900&amp;family=Noto+Sans+Devanagari:wght@400;500;600;700&amp;display=swap' rel='stylesheet'>
+<style>:root{--blue:#006ce9;--blue2:#0056b8;--blue-bg:#e8f1fd;--black:#111;--white:#fff;--border:#e5e5e5;--bg:#f7f8fa;--text:#1a1a1a;--muted:#666;--light:#f1f1f1;--sidebar-w:230px;--right-w:252px;}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}.masthead{background:var(--white);border-bottom:2px solid var(--blue);padding:0 24px;display:flex;align-items:center;height:58px;position:sticky;top:0;z-index:200;gap:14px}.masthead-logo{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:900;letter-spacing:1px;color:var(--black);text-transform:uppercase;flex-shrink:0}.masthead-logo span{color:var(--blue)}.masthead-divider{width:1px;height:22px;background:var(--border);flex-shrink:0}.masthead-sub{font-size:.72rem;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;font-weight:600}.masthead-spacer{flex:1}.masthead-date{font-size:.75rem;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:4px 12px;border-radius:4px}.masthead-badge{font-size:.67rem;font-weight:600;color:var(--muted);background:var(--light);padding:4px 10px;border-radius:4px;border:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px}.layout{display:grid;grid-template-columns:var(--sidebar-w) 1fr var(--right-w);max-width:1380px;margin:0 auto;min-height:calc(100vh - 58px)}.left-panel,.right-panel{background:var(--white);position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.left-panel{border-right:1px solid var(--border)}.right-panel{border-left:1px solid var(--border)}.panel-head{padding:13px 15px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--white)}.panel-head-dot{width:7px;height:7px;background:var(--blue);border-radius:50%;flex-shrink:0}.panel-head-label{font-size:.65rem;font-weight:800;color:var(--muted);letter-spacing:1.8px;text-transform:uppercase}.day-entry{border-bottom:1px solid var(--border);transition:background .12s;cursor:pointer}.day-entry:hover{background:#f5f8ff}.day-entry.active{background:var(--blue-bg);border-left:3px solid var(--blue)}.day-link{display:block;padding:13px 14px 11px;text-decoration:none;color:inherit}.day-date{font-size:.73rem;font-weight:700;color:var(--blue);margin-bottom:4px}.day-entry.active .day-date{color:var(--blue2)}.day-topics{font-size:.76rem;color:var(--muted);line-height:1.3;margin-bottom:5px}.day-count{font-size:.64rem;font-weight:600;color:#bbb}.day-entry.active .day-count{color:var(--blue);opacity:.7}.main{padding:26px 30px;min-width:0;background:var(--bg)}.content-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}.content-date-pill{font-size:.73rem;font-weight:800;background:var(--blue);color:#fff;padding:4px 13px;border-radius:4px}.content-info{font-size:.8rem;color:var(--muted);font-weight:500}.toc{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:6px;padding:18px 20px;margin-bottom:22px}.toc-lbl{font-size:.68rem;font-weight:800;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}.toc-lbl::after{content:'';flex:1;height:1px;background:var(--border)}.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 24px}.toc-row{display:flex;gap:8px;align-items:baseline}.toc-n{font-size:.65rem;font-weight:800;color:var(--blue);flex-shrink:0;font-family:monospace}.toc-t{font-size:.8rem;color:var(--text);line-height:1.3}.toc-t a{color:var(--text);text-decoration:none}.toc-t a:hover{color:var(--blue);text-decoration:underline}.article{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:20px 22px;margin-bottom:14px;transition:box-shadow .15s}.article:hover{box-shadow:0 3px 14px rgba(0,108,233,.08)}.art-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}.art-num{font-size:.65rem;font-weight:800;color:var(--blue);background:var(--blue-bg);padding:2px 8px;border-radius:3px}.gs-badge{font-size:.62rem;font-weight:700;color:#fff;background:var(--black);padding:2px 8px;border-radius:3px}.topic-chip{font-size:.62rem;font-weight:600;color:var(--muted);background:var(--light);border:1px solid var(--border);padding:2px 7px;border-radius:3px}.conf{font-size:.66rem;color:#f59e0b;margin-left:auto}.art-why{font-size:.8rem;font-weight:500;color:var(--blue2);background:var(--blue-bg);padding:7px 11px;border-left:3px solid var(--blue);border-radius:0 4px 4px 0;margin-bottom:10px;line-height:1.45}.art-title{font-size:1.05rem;font-weight:700;color:var(--black);line-height:1.35;margin-bottom:6px;letter-spacing:-.2px}.art-title-hi{font-size:.88rem;font-weight:500;color:var(--muted);margin-bottom:10px;line-height:1.4;font-family:'Noto Sans Devanagari',sans-serif}.tab-bar{display:flex;gap:4px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}.tab-btn{font-size:.72rem;font-weight:600;padding:4px 13px;border:1px solid var(--border);border-radius:3px;background:var(--white);color:var(--muted);cursor:pointer;transition:all .12s}.tab-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}.sect-label{font-size:.64rem;font-weight:800;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin:11px 0 5px}.art-context{font-size:.9rem;line-height:1.7;color:#444}.art-bg{font-size:.87rem;line-height:1.65;color:var(--muted);font-style:italic}.kp-list{list-style:none;display:flex;flex-direction:column;gap:6px}.kp-list li{font-size:.87rem;line-height:1.45;color:#444;padding-left:15px;position:relative}.kp-list li::before{content:'\25C6';position:absolute;left:0;color:var(--blue);font-size:.55rem;top:4px}.content-en{display:block}.content-hi{display:none;font-family:'Noto Sans Devanagari',sans-serif}.content-hi .art-context,.content-hi .art-bg,.content-hi .kp-list li{font-family:'Noto Sans Devanagari',sans-serif;line-height:1.8}.verify-flag{background:#fff8e1;border:1px solid #fde68a;border-radius:4px;padding:7px 11px;font-size:.76rem;color:#92400e;margin-top:10px}.art-footer{margin-top:12px;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}.art-src{font-size:.7rem;font-weight:600;color:var(--muted)}.art-src a{color:var(--blue);text-decoration:none}.art-src a:hover{text-decoration:underline}.qa-section{background:var(--white);border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:6px;padding:22px 24px;margin-top:6px}.qa-head{font-size:.7rem;font-weight:800;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px}.qa-head::after{content:'';flex:1;height:1px;background:var(--border)}.qa-item{padding:13px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:30px 1fr;gap:8px}.qa-item:last-child{border-bottom:none}.qa-n{font-size:.65rem;font-weight:700;color:#bbb;padding-top:2px;font-family:monospace}.qa-cat{font-size:.62rem;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:2px 8px;border-radius:2px;display:inline-block;margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}.qa-tab-bar{display:flex;gap:4px;margin-bottom:7px}.qa-tab{font-size:.62rem;font-weight:700;padding:2px 9px;border:1px solid var(--border);border-radius:2px;background:var(--white);color:var(--muted);cursor:pointer;transition:all .12s}.qa-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}.qa-q{font-size:.87rem;color:var(--text);line-height:1.45;margin-bottom:6px}.qa-a{font-size:.83rem;font-weight:700;color:var(--blue2)}.qa-content-en{display:block}.qa-content-hi{display:none;font-family:'Noto Sans Devanagari',sans-serif}.topic-cloud-block{padding:13px 14px 15px;border-bottom:1px solid var(--border)}.topic-cloud{display:flex;flex-wrap:wrap;gap:6px}.cloud-tag{font-size:.75rem;font-weight:600;padding:5px 11px;border-radius:4px;cursor:pointer;transition:all .12s;border:1px solid var(--border);color:var(--text);background:var(--light);white-space:nowrap;user-select:none}.cloud-tag:hover{background:var(--blue-bg);color:var(--blue);border-color:var(--blue)}.cloud-tag.active{background:var(--blue);color:#fff;border-color:var(--blue)}.pdf-section-head{padding:13px 15px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}.pdf-section-head-dot{width:7px;height:7px;background:var(--blue);border-radius:50%}.pdf-section-head-label{font-size:.65rem;font-weight:800;color:var(--muted);letter-spacing:1.8px;text-transform:uppercase}.pdf-day{padding:13px 14px 12px;border-bottom:1px solid var(--border);transition:background .12s}.pdf-day:hover{background:#f5f8ff}.pdf-day.today{background:var(--blue-bg);border-left:3px solid var(--blue)}.pdf-day-date{font-size:.75rem;font-weight:700;color:var(--black);margin-bottom:8px}.pdf-day.today .pdf-day-date{color:var(--blue)}.pdf-btns{display:flex;gap:6px}.pdf-dl{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:4px;font-size:.7rem;font-weight:700;text-decoration:none;transition:all .12s}.pdf-dl.en{background:var(--blue);color:#fff}.pdf-dl.en:hover{background:var(--blue2)}.pdf-dl.hi{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}.pdf-dl.hi:hover{background:var(--blue);color:#fff}#hist-view{display:none}.hist-article{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin-bottom:12px}.hist-title{font-weight:700;color:var(--black);font-size:1rem;margin-bottom:4px}.hist-meta{font-size:.78rem;color:#888;margin-bottom:6px}.hist-context{font-size:.88rem;color:#555}.hist-gs{display:inline-block;background:var(--black);color:#fff;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:3px;margin-right:4px}.no-results{text-align:center;padding:40px;color:var(--muted)}.hidden{display:none}.drawer-backdrop{display:none;position:fixed;inset:58px 0 56px 0;background:rgba(0,0,0,.35);z-index:240;backdrop-filter:blur(1px)}.drawer-backdrop.visible{display:block}.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);z-index:300;height:56px}.mobile-nav-inner{display:flex;height:100%}.mob-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:transparent;color:var(--muted);font-size:.6rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:0;transition:color .12s}.mob-btn.active{color:var(--blue)}.mob-btn svg{width:20px;height:20px}.drawer{display:none;position:fixed;top:58px;left:0;right:0;bottom:56px;background:var(--white);z-index:250;overflow-y:auto;transform:translateX(-100%);transition:transform .25s ease}.drawer.open{transform:translateX(0)}.drawer-r{transform:translateX(100%)}.drawer-r.open{transform:translateX(0)}.site-footer{background:var(--black);color:#555;text-align:center;padding:18px;font-size:.78rem}.site-footer span{color:var(--blue)}@media(max-width:900px){:root{--sidebar-w:200px;--right-w:210px}.masthead-badge{display:none}}@media(max-width:700px){.left-panel,.right-panel{display:none}.layout{grid-template-columns:1fr}.main{padding:16px 14px 80px}.mobile-nav{display:block}.drawer{display:block}.masthead{padding:0 14px;gap:10px}.masthead-sub{display:none}.masthead-logo{font-size:1.1rem}.toc-grid{grid-template-columns:1fr}.article{padding:15px 14px}.art-title{font-size:.97rem}.qa-section{padding:16px 14px}.art-meta{row-gap:4px}.conf{margin-left:0}}@media(max-width:380px){.masthead-date{display:none}.art-title{font-size:.93rem}}</style>
 </head>
 <body>
-
-<header class="site-header">
-  <div>
-    <div class="site-name">THE CURRENTS</div>
-    <div class="site-tagline">UPSC Current Affairs · For Serious Aspirants</div>
-  </div>
-  <div class="site-date" id="hdr-date">2026-03-11</div>
-</header>
-
-<!-- ── Filter Bar ── -->
-<div class="filter-bar">
-  <label>📅 Date:</label><input type="date" id="fil-date" value="2026-03-11" max="2026-03-11">
-
-  <label>📆 Month:</label><select id="fil-month"><option value="">— All months —</option></select>
-
-  <label>📌 Topic:</label><select id="fil-topic"><option value="">— All topics —</option><option value="Economy">Economy</option><option value="Infrastructure">Infrastructure</option><option value="Polity &amp; Governance">Polity &amp; Governance</option><option value="Schemes &amp; Initiatives">Schemes &amp; Initiatives</option></select>
-
-  <button class="filter-btn" onclick="applyFilter()">Apply</button>
-  <button class="filter-clear" onclick="clearFilter()">✕ Clear</button>
-  <span class="filter-result" id="fil-result"></span>
+<header class="masthead"><div class="masthead-logo">The <span>Currents</span></div><div class="masthead-divider"></div><div class="masthead-sub">UPSC Current Affairs</div><div class="masthead-spacer"></div><div class="masthead-badge">Daily &middot; Free &middot; Bilingual</div><div class="masthead-date" id="hdrDate">11 Mar 2026</div></header>
+<div class='drawer' id='drawerLeft'><div class='panel-head'><div class='panel-head-dot'></div><span class='panel-head-label'>Daily Archive</span></div><div id='drawerLeftContent'></div></div>
+<div class='drawer drawer-r' id='drawerRight'><div class="panel-head"><div class="panel-head-dot"></div><span class="panel-head-label">Topics Today</span></div><div class="topic-cloud-block"><div class="topic-cloud"><span class="cloud-tag" onclick="filterByTopic(this)">Economy</span><span class="cloud-tag" onclick="filterByTopic(this)">Infrastructure</span><span class="cloud-tag" onclick="filterByTopic(this)">Polity &amp; Governance</span><span class="cloud-tag" onclick="filterByTopic(this)">Schemes &amp; Initiatives</span></div></div><div class="pdf-section-head"><div class="pdf-section-head-dot"></div><span class="pdf-section-head-label">Download PDF</span></div><div class="pdf-day today"><div class="pdf-day-date">2026-03-11 &middot; Today</div><div class="pdf-btns"><a href="pdfs/2026-03/TheCurrents_EN_2026-03-11.pdf" class="pdf-dl en">&#128196; EN PDF</a><a href="pdfs/2026-03/TheCurrents_HI_2026-03-11.pdf" class="pdf-dl hi">&#128196; HI PDF</a></div></div><div class="pdf-day"><div class="pdf-day-date">2026-03-10</div><div class="pdf-btns"><a href="pdfs/2026-03/TheCurrents_EN_2026-03-10.pdf" class="pdf-dl en">&#128196; EN PDF</a><a href="pdfs/2026-03/TheCurrents_HI_2026-03-10.pdf" class="pdf-dl hi">&#128196; HI PDF</a></div></div></div>
+<div class='layout'>
+<aside class='left-panel'><div class='panel-head'><div class='panel-head-dot'></div><span class='panel-head-label'>Daily Archive</span></div><div id='leftPanelContent'></div></aside>
+<main class='main'><div class='content-bar'><span class='content-date-pill' id='mainDatePill'>11 MAR 2026</span><span class='content-info' id='mainInfo'>5 articles &middot; EN + &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span></div><div id='today-view'><div class="toc"><div class="toc-lbl">In This Issue &mdash; 5 Articles</div><div class="toc-grid"><div class="toc-row"><span class="toc-n">#01</span><span class="toc-t"><a href="#art1">Union Cabinet approves international status for Madurai airp</a></span></div><div class="toc-row"><span class="toc-n">#02</span><span class="toc-t"><a href="#art2">Kerala Cabinet approves new anti-narcotics bureau</a></span></div><div class="toc-row"><span class="toc-n">#03</span><span class="toc-t"><a href="#art3">Chhattisgarh Cabinet approves new anti-conversion law draft</a></span></div><div class="toc-row"><span class="toc-n">#04</span><span class="toc-t"><a href="#art4">Cabinet nod for 23% hike in cost of link road from Noida air</a></span></div><div class="toc-row"><span class="toc-n">#05</span><span class="toc-t"><a href="#art5">Now, Rajasthan Assembly passes Bill to repeal two-child norm</a></span></div></div></div><div id='articles-container'><div class="article" id="art1" data-topics="Polity &amp; Governance Infrastructure Schemes &amp; Initiatives" data-gs="GS3"><div class="art-meta"><span class="art-num">#01</span><span class="gs-badge">GS3 · Economy: Infrastructure Development</span><span class="topic-chip">Polity &amp; Governance</span><span class="topic-chip">Infrastructure</span><span class="topic-chip">Schemes &amp; Initiatives</span><span class="conf">&#9733;&#9733;&#9733;&#9733;&#9734;</span></div><div class="art-why">&#128204; The Union Cabinet has approved international status for Madurai airport, allowing for more regular international routes and easier approvals for foreign airlines.</div><h2 class="art-title">Union Cabinet approves international status for Madurai airport</h2><h3 class="art-title-hi">केंद्रीय मंत्रिमंडल ने मदुरै हवाई अड्डे को अंतरराष्ट्रीय दर्जा देने की मंजूरी दी</h3><div class='tab-bar'><button class='tab-btn active' onclick="switchLang(this,'art1')">English</button><button class='tab-btn' onclick="switchLang(this,'art1')">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</button></div><div class="content-en" id="art1-en"><div class="sect-label">Context</div><p class="art-context">The Union Cabinet has given its approval for granting international status to Madurai airport. This move is expected to boost the airport's connectivity and facilitate easier approvals for foreign airlines. The airport currently handles limited international flights. With this new status, the airport is likely to see an increase in regular international routes. The development is seen as a significant boost to the region's economy and tourism industry.</p><div class="sect-label">Background</div><p class="art-bg">The Madurai airport has been seeking international status for several years. The Airports Authority of India (AAI) has been working to upgrade the airport's infrastructure to meet international standards, with the aim of increasing its connectivity and appeal to foreign airlines.</p><div class="sect-label">Key Points</div><ul class="kp-list"><li>Union Cabinet — International Status: Approved for Madurai airport.</li><li>Airports Authority of India (AAI) — Airport Upgradation: Infrastructure development to meet international standards.</li><li>Madurai Airport — International Routes: Expected increase in regular international flights.</li><li>Foreign Airlines — Approval Process: Easier approvals for operating in Madurai airport.</li><li>Regional Economy — Tourism Industry: Expected boost to the local economy and tourism sector.</li></ul><div class="sect-label">Implication</div><p class="art-context">The granting of international status to Madurai airport is expected to have a positive impact on the regional economy and tourism industry. The increased connectivity and easier approvals for foreign airlines will likely attract more tourists and businesses to the region, contributing to its growth and development.</p></div><div class="content-hi" id="art1-hi"><div class="sect-label">&#2360;&#2306;&#2342;&#2352;&#2381;&#2349;</div><p class="art-context">केंद्रीय मंत्रिमंडल ने मदुरै हवाई अड्डे को अंतरराष्ट्रीय दर्जा देने की मंजूरी दे दी है। यह कदम हवाई अड्डे की कनेक्टिविटी को बढ़ावा देने और विदेशी एयरलाइंस के लिए अनुमोदन प्रक्रिया को आसान बनाने में मदद करेगा। वर्तमान में, हवाई अड्डा सीमित अंतरराष्ट्रीय उड़ानें संचालित करता है। इस नए दर्जे के साथ, हवाई अड्डे में नियमित अंतरराष्ट्रीय मार्गों में वृद्धि होने की संभावना है। इस विकास को क्षेत्र की अर्थव्यवस्था और पर्यटन उद्योग के लिए एक महत्वपूर्ण बढ़ावा माना जा रहा है।</p><div class="sect-label">&#2350;&#2369;&#2326;&#2381;&#2351; &#2348;&#2367;&#2306;&#2342;&#2369;</div><ul class="kp-list"><li>केंद्रीय मंत्रिमंडल — अंतरराष्ट्रीय दर्जा: मदुरै हवाई अड्डे के लिए मंजूरी दी गई।</li><li>भारतीय विमानपत्तन प्राधिकरण (एएआई) — हवाई अड्डा उन्नयन: अंतरराष्ट्रीय मानकों को पूरा करने के लिए बुनियादी ढांचे का विकास।</li><li>मदुरै हवाई अड्डा — अंतरराष्ट्रीय मार्ग: नियमित अंतरराष्ट्रीय उड़ानों में वृद्धि की उम्मीद है।</li><li>विदेशी एयरलाइंस — अनुमोदन प्रक्रिया: मदुरै हवाई अड्डे में संचालन के लिए अनुमोदन प्रक्रिया आसान होगी।</li><li>क्षेत्रीय अर्थव्यवस्था — पर्यटन उद्योग: स्थानीय अर्थव्यवस्था और पर्यटन क्षेत्र में वृद्धि की उम्मीद है।</li></ul><div class="sect-label">&#2350;&#2361;&#2340;&#2381;&#2357;</div><p class="art-context">मदुरै हवाई अड्डे को अंतरराष्ट्रीय दर्जा देने से क्षेत्रीय अर्थव्यवस्था और पर्यटन उद्योग पर सकारात्मक प्रभाव पड़ने की उम्मीद है। बढ़ी हुई कनेक्टिविटी और विदेशी एयरलाइंस के लिए आसान अनुमोदन प्रक्रिया से क्षेत्र में अधिक पर्यटकों और व्यवसायों को आकर्षित किया जा सकेगा, जिससे इसके विकास और विकास में योगदान होगा। इस विकास के परिणामस्वरूप, मदुरै हवाई अड्डा एक महत्वपूर्ण पर्यटन और व्यावसायिक केंद्र बन सकता है।</p></div><div class="art-footer"><span class="art-src">&#128240; <a href="https://www.thehindu.com/news/national/union-cabinet-approves-international-status-for-madurai-airport/article70727932.ece" target="_blank" rel="noopener">The Hindu &#8599;</a></span><span></span></div></div>
+<div class="article" id="art2" data-topics="Polity &amp; Governance Economy Schemes &amp; Initiatives" data-gs="GS2"><div class="art-meta"><span class="art-num">#02</span><span class="gs-badge">GS2 · Governance: Government Schemes and Initiatives</span><span class="topic-chip">Polity &amp; Governance</span><span class="topic-chip">Economy</span><span class="topic-chip">Schemes &amp; Initiatives</span><span class="conf">&#9733;&#9733;&#9734;&#9734;&#9734;</span></div><div class="art-why">&#128204; The Kerala Cabinet has approved the formation of a new anti-narcotics bureau to tackle the growing drug menace in the state.</div><h2 class="art-title">Kerala Cabinet approves new anti-narcotics bureau</h2><h3 class="art-title-hi">केरल कैबिनेट ने नए नारकोटिक्स ब्यूरो को मंजूरी दी</h3><div class='tab-bar'><button class='tab-btn active' onclick="switchLang(this,'art2')">English</button><button class='tab-btn' onclick="switchLang(this,'art2')">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</button></div><div class="content-en" id="art2-en"><div class="sect-label">Context</div><p class="art-context">The Kerala Cabinet has given its nod to set up a new anti-narcotics bureau, which will be headed by an ADGP-rank officer. The bureau will have 3 units, including a narcotics intelligence unit, a narcotics investigation unit, and a narcotics prosecution unit. The new bureau is expected to have 300 personnel, including 20 DySPs, 50 inspectors, and 100 sub-inspectors. The Kerala government has allocated ₹10 crore for the initial setup of the bureau.</p><div class="sect-label">Background</div><p class="art-bg">The decision to set up a new anti-narcotics bureau comes in the wake of a growing concern over the increasing drug abuse cases in Kerala. The state has seen a significant rise in drug-related crimes in recent years, prompting the government to take stringent measures to curb the menace. The Narcotic Drugs and Psychotropic Substances Act, 1985, provides the legal framework for the government to tackle drug-related issues.</p><div class="sect-label">Key Points</div><ul class="kp-list"><li>Kerala Cabinet — Anti-Narcotics Bureau: Approved the formation of a new anti-narcotics bureau.</li><li>Kerala Government — Anti-Narcotics Bureau: Allocated ₹10 crore for the initial setup of the bureau.</li><li>Anti-Narcotics Bureau — Personnel: Will have 300 personnel, including 20 DySPs, 50 inspectors, and 100 sub-inspectors.</li><li>Anti-Narcotics Bureau — Units: Will have 3 units, including a narcotics intelligence unit, a narcotics investigation unit, and a narcotics prosecution unit.</li><li>Kerala Government — ADGP: The bureau will be headed by an ADGP-rank officer.</li></ul><div class="sect-label">Implication</div><p class="art-context">The formation of the new anti-narcotics bureau is expected to strengthen the state's efforts to combat drug abuse and related crimes. The bureau will work in coordination with other law enforcement agencies to identify and prosecute those involved in drug trafficking and other narcotics-related activities.</p></div><div class="content-hi" id="art2-hi"><div class="sect-label">&#2360;&#2306;&#2342;&#2352;&#2381;&#2349;</div><p class="art-context">केरल कैबिनेट ने एक नए नारकोटिक्स ब्यूरो की स्थापना को मंजूरी दे दी है, जिसका नेतृत्व एडीजीपी रैंक के अधिकारी करेंगे। ब्यूरो में 3 इकाइयाँ होंगी, जिनमें नारकोटिक्स इंटेलिजेंस यूनिट, नारकोटिक्स जांच यूनिट, और नारकोटिक्स अभियोजन यूनिट शामिल हैं। नए ब्यूरो में 300 कर्मियों की तैनाती की जाएगी, जिनमें 20 डीएसपी, 50 निरीक्षक, और 100 उप-निरीक्षक शामिल हैं। केरल सरकार ने ब्यूरो की प्रारंभिक स्थापना के लिए ₹10 करोड़ आवंटित किए हैं।</p><div class="sect-label">&#2350;&#2369;&#2326;&#2381;&#2351; &#2348;&#2367;&#2306;&#2342;&#2369;</div><ul class="kp-list"><li>केरल कैबिनेट — नारकोटिक्स ब्यूरो: नए नारकोटिक्स ब्यूरो की स्थापना को मंजूरी दी।</li><li>केरल सरकार — नारकोटिक्स ब्यूरो: ब्यूरो की प्रारंभिक स्थापना के लिए ₹10 करोड़ आवंटित किए।</li><li>नारकोटिक्स ब्यूरो — कर्मियों: 300 कर्मियों की तैनाती की जाएगी, जिनमें 20 डीएसपी, 50 निरीक्षक, और 100 उप-निरीक्षक शामिल हैं।</li><li>नारकोटिक्स ब्यूरो — इकाइयाँ: 3 इकाइयाँ होंगी, जिनमें नारकोटिक्स इंटेलिजेंस यूनिट, नारकोटिक्स जांच यूनिट, और नारकोटिक्स अभियोजन यूनिट शामिल हैं।</li><li>केरल सरकार — एडीजीपी: ब्यूरो का नेतृत्व एडीजीपी रैंक के अधिकारी करेंगे।</li></ul><div class="sect-label">&#2350;&#2361;&#2340;&#2381;&#2357;</div><p class="art-context">नए नारकोटिक्स ब्यूरो की स्थापना से राज्य के नशीली दवाओं के दुरुपयोग और संबंधित अपराधों से निपटने के प्रयासों को मजबूती मिलेगी। ब्यूरो अन्य कानून प्रवर्तन एजेंसियों के साथ मिलकर नशीली दवाओं के अवैध व्यापार और अन्य नारकोटिक्स से संबंधित गतिविधियों में शामिल लोगों की पहचान और अभियोजन करेगा।</p></div><div class="verify-flag">&#9873; <strong>Verify:</strong><ul><li>Validation: NUMBERS MISSING from context_hi: ₹10 crore</li></ul></div><div class="art-footer"><span class="art-src">&#128240; <a href="https://www.thehindu.com/news/national/kerala/kerala-cabinet-approves-new-anti-narcotics-bureau/article70727783.ece" target="_blank" rel="noopener">The Hindu &#8599;</a></span><span></span></div></div>
+<div class="article" id="art3" data-topics="Polity &amp; Governance Schemes &amp; Initiatives" data-gs="GS2"><div class="art-meta"><span class="art-num">#03</span><span class="gs-badge">GS2 · Polity: Legislation and Parliament</span><span class="topic-chip">Polity &amp; Governance</span><span class="topic-chip">Schemes &amp; Initiatives</span><span class="conf">&#9733;&#9733;&#9734;&#9734;&#9734;</span></div><div class="art-why">&#128204; The Chhattisgarh Cabinet has approved a new anti-conversion law draft, paving the way for its introduction in the State Assembly.</div><h2 class="art-title">Chhattisgarh Cabinet approves new anti-conversion law draft</h2><h3 class="art-title-hi">छत्तीसगढ़ कैबिनेट ने नए धर्म परिवर्तन विरोधी कानून के मसौदे को मंजूरी दी</h3><div class='tab-bar'><button class='tab-btn active' onclick="switchLang(this,'art3')">English</button><button class='tab-btn' onclick="switchLang(this,'art3')">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</button></div><div class="content-en" id="art3-en"><div class="sect-label">Context</div><p class="art-context">The Chhattisgarh Cabinet has approved a draft of the Chhattisgarh Freedom of Religion (Amendment) Bill, 2023. The Bill aims to prevent forced conversions in the state. With this approval, the decks are now clear for the introduction of the Bill in the State Assembly, which is currently in session. The Bill proposes stringent penalties for those found guilty of forced conversions. The Chhattisgarh government has been working on this legislation for some time now.</p><div class="sect-label">Background</div><p class="art-bg">The issue of forced conversions has been a concern in Chhattisgarh for several years. In 2020, the state government had announced its intention to bring in a law to prevent such conversions, citing instances of forced conversions in the state. The draft Bill is a follow-up to this announcement, and its approval by the Cabinet is a significant step towards its enactment.</p><div class="sect-label">Key Points</div><ul class="kp-list"><li>The Chhattisgarh Cabinet — Chhattisgarh Freedom of Religion (Amendment) Bill, 2023: Approved draft for introduction in State Assembly.</li><li>The Chhattisgarh government — Anti-conversion law: Proposes stringent penalties for those found guilty of forced conversions.</li><li>The State Assembly — Legislative session: Currently in session, where the Bill is expected to be introduced.</li><li>The Chhattisgarh government — Legislation: Has been working on this for some time now, with the aim of preventing forced conversions.</li><li>The Chhattisgarh Freedom of Religion (Amendment) Bill, 2023 — Penalty: Proposes punishment for those found guilty of forced conversions.</li></ul><div class="sect-label">Implication</div><p class="art-context">The approval of the draft Bill has significant implications for the state's legislation on forced conversions. If enacted, the law would provide a legal framework for preventing and punishing forced conversions in Chhattisgarh. The introduction of the Bill in the State Assembly is the next step in the legislative process.</p></div><div class="content-hi" id="art3-hi"><div class="sect-label">&#2360;&#2306;&#2342;&#2352;&#2381;&#2349;</div><p class="art-context">छत्तीसगढ़ कैबिनेट ने छत्तीसगढ़ धार्मिक स्वतंत्रता (संशोधन) विधेयक, 2023 के मसौदे को मंजूरी दे दी है। यह विधेयक राज्य में जबरन धर्म परिवर्तन को रोकने के लिए है। इस मंजूरी के साथ, विधेयक को राज्य विधानसभा में पेश करने के लिए रास्ता साफ हो गया है, जो वर्तमान में सत्र में है। विधेयक में जबरन धर्म परिवर्तन के दोषी पाए जाने वालों के लिए सख्त दंड का प्रावधान है। छत्तीसगढ़ सरकार इस कानून पर कुछ समय से काम कर रही है।</p><div class="sect-label">&#2350;&#2369;&#2326;&#2381;&#2351; &#2348;&#2367;&#2306;&#2342;&#2369;</div><ul class="kp-list"><li>छत्तीसगढ़ कैबिनेट — छत्तीसगढ़ धार्मिक स्वतंत्रता (संशोधन) विधेयक, 2023: राज्य विधानसभा में पेश करने के लिए मसौदे को मंजूरी दी।</li><li>छत्तीसगढ़ सरकार — धर्म परिवर्तन विरोधी कानून: जबरन धर्म परिवर्तन के दोषी पाए जाने वालों के लिए सख्त दंड का प्रावधान करता है।</li><li>राज्य विधानसभा — विधायी सत्र: वर्तमान में सत्र में है, जहां विधेयक पेश किया जाना है।</li><li>छत्तीसगढ़ सरकार — कानून: जबरन धर्म परिवर्तन को रोकने के लिए कुछ समय से काम कर रही है।</li><li>छत्तीसगढ़ धार्मिक स्वतंत्रता (संशोधन) विधेयक, 2023 — दंड: जबरन धर्म परिवर्तन के दोषी पाए जाने वालों के लिए दंड का प्रावधान करता है।</li></ul><div class="sect-label">&#2350;&#2361;&#2340;&#2381;&#2357;</div><p class="art-context">मसौदे की मंजूरी के परिणामस्वरूप राज्य के जबरन धर्म परिवर्तन पर कानून के लिए महत्वपूर्ण परिणाम होंगे। यदि यह कानून बन जाता है, तो यह छत्तीसगढ़ में जबरन धर्म परिवर्तन को रोकने और दंडित करने के लिए एक कानूनी ढांचा प्रदान करेगा। राज्य विधानसभा में विधेयक पेश करना कानूनी प्रक्रिया का अगला कदम है।</p></div><div class="verify-flag">&#9873; <strong>Verify:</strong><ul><li>Validation: NUMBERS MISSING from context_hi: 2023.</li></ul></div><div class="art-footer"><span class="art-src">&#128240; <a href="https://www.thehindu.com/news/national/chhattisgarh/chhattisgarh-cabinet-approves-new-anti-conversion-law-draft/article70728272.ece" target="_blank" rel="noopener">The Hindu &#8599;</a></span><span></span></div></div>
+<div class="article" id="art4" data-topics="Polity &amp; Governance Infrastructure" data-gs="GS3"><div class="art-meta"><span class="art-num">#04</span><span class="gs-badge">GS3 · Economy: Infrastructure Development and Investment</span><span class="topic-chip">Polity &amp; Governance</span><span class="topic-chip">Infrastructure</span><span class="conf">&#9733;&#9733;&#9734;&#9734;&#9734;</span></div><div class="art-why">&#128204; The Cabinet has approved a 23% hike in the cost of the link road from Noida airport to the Delhi-Mumbai Expressway, revising the project cost to ₹3,630 crore.</div><h2 class="art-title">Cabinet nod for 23% hike in cost of link road from Noida airport to Delhi-Mumbai Expressway</h2><h3 class="art-title-hi">नोएडा एयरपोर्ट से दिल्ली-मुंबई एक्सप्रेसवे के लिए लिंक रोड परियोजना की लागत में 23% की वृद्धि को मंत्रिमंडल की मंजूरी</h3><div class='tab-bar'><button class='tab-btn active' onclick="switchLang(this,'art4')">English</button><button class='tab-btn' onclick="switchLang(this,'art4')">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</button></div><div class="content-en" id="art4-en"><div class="sect-label">Context</div><p class="art-context">The link road project, which will connect Noida airport to the Delhi-Mumbai Expressway, has been approved by the Cabinet with a revised cost of ₹3,630 crore, marking a 23% increase. The 31-km link road will be developed on Hybrid Annuity Mode in Haryana and U.P. Notably, 11 km of the link road will be an elevated highway. The project aims to improve connectivity between Noida airport and the Delhi-Mumbai Expressway. The revised cost and project details were recently announced.</p><div class="sect-label">Background</div><p class="art-bg">The Delhi-Mumbai Expressway is a significant infrastructure project aimed at reducing travel time between Delhi and Mumbai. The link road from Noida airport to the expressway is a crucial component of this project, and its development is expected to enhance connectivity and facilitate economic growth in the region. The Hybrid Annuity Mode, under which the project will be developed, is a popular model for infrastructure projects in India, allowing for private sector participation and reducing the financial burden on the government.</p><div class="sect-label">Key Points</div><ul class="kp-list"><li>Cabinet — Link Road Project: Approved a 23% hike in the project cost to ₹3,630 crore.</li><li>National Highways Authority of India — Hybrid Annuity Mode: The 31-km link road will be developed under this model in Haryana and U.P.</li><li>Project Details — Elevated Highway: 11 km of the link road will be an elevated highway, enhancing connectivity and reducing travel time.</li><li>Cabinet — Project Approval: The revised project cost and details were recently approved, marking a significant step forward for the project.</li><li>Ministry of Road Transport and Highways — Infrastructure Development: The project is part of the government's efforts to improve infrastructure and enhance connectivity in the region.</li></ul><div class="sect-label">Implication</div><p class="art-context">The approval of the revised project cost and details marks a significant step forward for the link road project, which is expected to improve connectivity and facilitate economic growth in the region. The project's development under the Hybrid Annuity Mode is also expected to attract private sector participation and reduce the financial burden on the government.</p></div><div class="content-hi" id="art4-hi"><div class="sect-label">&#2360;&#2306;&#2342;&#2352;&#2381;&#2349;</div><p class="art-context">नोएडा एयरपोर्ट से दिल्ली-मुंबई एक्सप्रेसवे को जोड़ने वाली लिंक रोड परियोजना की लागत में 23% की वृद्धि को मंत्रिमंडल ने मंजूरी दे दी है, जिससे परियोजना की लागत ₹3,630 करोड़ हो गई है। यह 31-किमी लिंक रोड हरियाणा और उत्तर प्रदेश में हाइब्रिड अन्नुइटी मोड पर विकसित की जाएगी। उल्लेखनीय है कि लिंक रोड का 11 किमी हिस्सा एक ऊंचा राजमार्ग होगा। यह परियोजना नोएडा एयरपोर्ट और दिल्ली-मुंबई एक्सप्रेसवे के बीच संपर्क में सुधार करने के लिए है। परियोजना की संशोधित लागत और विवरण हाल ही में घोषित किए गए थे।</p><div class="sect-label">&#2350;&#2369;&#2326;&#2381;&#2351; &#2348;&#2367;&#2306;&#2342;&#2369;</div><ul class="kp-list"><li>मंत्रिमंडल — लिंक रोड परियोजना: परियोजना की लागत में 23% की वृद्धि को मंजूरी दी है, जिससे लागत ₹3,630 करोड़ हो गई है।</li><li>राष्ट्रीय राजमार्ग प्राधिकरण — हाइब्रिड अन्नुइटी मोड: 31-किमी लिंक रोड हरियाणा और उत्तर प्रदेश में इस मोड पर विकसित की जाएगी।</li><li>परियोजना विवरण — ऊंचा राजमार्ग: लिंक रोड का 11 किमी हिस्सा एक ऊंचा राजमार्ग होगा, जिससे संपर्क में सुधार होगा और यात्रा समय कम होगा।</li><li>मंत्रिमंडल — परियोजना अनुमोदन: संशोधित परियोजना लागत और विवरण हाल ही में अनुमोदित किए गए हैं, जो परियोजना के लिए एक महत्वपूर्ण कदम है।</li><li>सड़क परिवहन और राजमार्ग मंत्रालय — बुनियादी ढांचा विकास: यह परियोजना सरकार के बुनियादी ढांचा में सुधार और क्षेत्र में संपर्क में सुधार के प्रयासों का हिस्सा है।</li></ul><div class="sect-label">&#2350;&#2361;&#2340;&#2381;&#2357;</div><p class="art-context">परियोजना की संशोधित लागत और विवरण को मंजूरी देना एक महत्वपूर्ण कदम है, जो क्षेत्र में संपर्क में सुधार और आर्थिक विकास में सुधार करने की उम्मीद है। परियोजना का हाइब्रिड अन्नुइटी मोड पर विकास निजी क्षेत्र की भागीदारी को आकर्षित करने और सरकार पर वित्तीय बोझ को कम करने की उम्मीद है।</p></div><div class="verify-flag">&#9873; <strong>Verify:</strong><ul><li>Validation: NUMBERS MISSING from context_hi: ₹3,630 crore</li></ul></div><div class="art-footer"><span class="art-src">&#128240; <a href="https://www.thehindu.com/news/national/cabinet-nod-for-23-hike-in-cost-of-link-road-from-noida-airport-to-delhi-mumbai-expressway/article70727613.ece" target="_blank" rel="noopener">The Hindu &#8599;</a></span><span></span></div></div>
+<div class="article" id="art5" data-topics="" data-gs="GS2"><div class="art-meta"><span class="art-num">#05</span><span class="gs-badge">GS2 · Governance: Government Schemes and Initiatives</span><span class="conf">&#9733;&#9733;&#9734;&#9734;&#9734;</span></div><div class="art-why">&#128204; The Rajasthan Assembly has passed a Bill to repeal the two-child norm for Urban Local Body (ULB) elections.</div><h2 class="art-title">Now, Rajasthan Assembly passes Bill to repeal two-child norm for ULB elections</h2><h3 class="art-title-hi">अब राजस्थान विधानसभा ने यूलबी चुनावों के लिए दो-बच्चों के नियम को निरस्त करने वाला विधेयक पारित किया</h3><div class='tab-bar'><button class='tab-btn active' onclick="switchLang(this,'art5')">English</button><button class='tab-btn' onclick="switchLang(this,'art5')">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</button></div><div class="content-en" id="art5-en"><div class="sect-label">Context</div><p class="art-context">The Rajasthan Assembly has passed a Bill to repeal the two-child norm for Urban Local Body (ULB) elections. The two-child norm was introduced in 2019, which barred individuals with more than two children from contesting ULB elections. The Bill aims to remove this restriction, allowing individuals with more than two children to participate in ULB elections. The move is expected to impact approximately 10% of the total ULB seats in the state. The Rajasthan government has stated that the decision was made to increase participation in local governance.</p><div class="sect-label">Background</div><p class="art-bg">The two-child norm was introduced in 2019 as part of the Rajasthan Panchayati Raj (Amendment) Act, 2019. The Act aimed to promote family planning and population control, but it faced criticism from various quarters, including opposition parties and social organizations, who argued that it was an unfair restriction on individuals' right to participate in the democratic process.</p><div class="sect-label">Key Points</div><ul class="kp-list"><li>Rajasthan Assembly — ULB Elections: Repealed two-child norm.</li><li>Rajasthan Government — Panchayati Raj (Amendment) Act, 2019: Introduced two-child norm in 2019.</li><li>Rajasthan Government — ULB Elections: Approximately 10% of total ULB seats expected to be impacted.</li><li>Rajasthan Government — Local Governance: Aims to increase participation in local governance.</li><li>Rajasthan Assembly — Bill: Passed to remove restriction on individuals with more than two children.</li></ul><div class="sect-label">Implication</div><p class="art-context">The repeal of the two-child norm is expected to have a significant impact on the upcoming ULB elections in Rajasthan, with more individuals now eligible to contest. However, the move may also raise concerns about the effectiveness of population control measures in the state.</p></div><div class="content-hi" id="art5-hi"><div class="sect-label">&#2360;&#2306;&#2342;&#2352;&#2381;&#2349;</div><p class="art-context">राजस्थान विधानसभा ने यूलबी चुनावों के लिए दो-बच्चों के नियम को निरस्त करने वाला विधेयक पारित किया है। 2019 में दो-बच्चों का नियम पेश किया गया था, जिसमें यूलबी चुनावों में दो से अधिक बच्चों वाले व्यक्तियों को चुनाव लड़ने से रोका गया था। इस विधेयक का उद्देश्य इस प्रतिबंध को हटाना है, जिससे दो से अधिक बच्चों वाले व्यक्ति यूलबी चुनावों में भाग ले सकें। यह कदम राज्य में लगभग 10% यूलबी सीटों पर प्रभाव डालने की उम्मीद है। राजस्थान सरकार ने कहा है कि स्थानीय शासन में भागीदारी बढ़ाने के लिए यह निर्णय लिया गया है।</p><div class="sect-label">&#2350;&#2369;&#2326;&#2381;&#2351; &#2348;&#2367;&#2306;&#2342;&#2369;</div><ul class="kp-list"><li>राजस्थान विधानसभा — यूलबी चुनाव: दो-बच्चों के नियम को निरस्त किया।</li><li>राजस्थान सरकार — पंचायती राज (संशोधन) अधिनियम, 2019: 2019 में दो-बच्चों के नियम को पेश किया।</li><li>राजस्थान सरकार — यूलबी चुनाव: लगभग 10% यूलबी सीटें प्रभावित होने की उम्मीद है।</li><li>राजस्थान सरकार — स्थानीय शासन: स्थानीय शासन में भागीदारी बढ़ाने का उद्देश्य है।</li><li>राजस्थान विधानसभा — विधेयक: दो से अधिक बच्चों वाले व्यक्तियों पर प्रतिबंध हटाने के लिए पारित किया गया।</li></ul><div class="sect-label">&#2350;&#2361;&#2340;&#2381;&#2357;</div><p class="art-context">दो-बच्चों के नियम को निरस्त करने से राजस्थान में आगामी यूलबी चुनावों पर महत्वपूर्ण प्रभाव पड़ने की उम्मीद है, जिसमें अब अधिक व्यक्ति चुनाव लड़ने के लिए पात्र होंगे। हालांकि, इस कदम से राज्य में जनसंख्या नियंत्रण उपायों की प्रभावशीलता के बारे में चिंताएं उठ सकती हैं।</p></div><div class="verify-flag">&#9873; <strong>Verify:</strong><ul><li>Validation: NUMBERS MISSING from context_hi: 2019,</li></ul></div><div class="art-footer"><span class="art-src">&#128240; <a href="https://www.thehindu.com/news/national/rajasthan/now-rajasthan-assembly-passes-bill-to-repeal-two-child-norm-forulbelections/article70727435.ece" target="_blank" rel="noopener">The Hindu &#8599;</a></span><span></span></div></div></div><div class="qa-section"><div class="qa-head">&#9889; Quick Bites &mdash; Q&amp;A</div><div class="qa-item"><span class="qa-n">01.</span><div><span class="qa-cat">Scheme / Govt Launch</span><div class="qa-tab-bar"><button class="qa-tab active" onclick="switchQA(this,'qa1')">EN</button><button class="qa-tab" onclick="switchQA(this,'qa1')">HI</button></div><div class="qa-content-en" id="qa1-en"><div class="qa-q">Q: Under which article does the Supreme Court direct the formation of special tribunals to hear appeals?</div><div class="qa-a">Answer: <strong>Article 142</strong></div></div><div class="qa-content-hi" id="qa1-hi"><div class="qa-q">&#2346;&#2381;&#2352;: सुप्रीम कोर्ट विशेष न्यायाधिकरणों के गठन के लिए किस अनुच्छेद के तहत निर्देश देता है?</div><div class="qa-a">&#2313;: <strong>अनुच्छेद 142</strong></div></div><div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: The Hindu</div></div></div><div class="qa-item"><span class="qa-n">02.</span><div><span class="qa-cat">Supreme Court / Judiciary</span><div class="qa-tab-bar"><button class="qa-tab active" onclick="switchQA(this,'qa2')">EN</button><button class="qa-tab" onclick="switchQA(this,'qa2')">HI</button></div><div class="qa-content-en" id="qa2-en"><div class="qa-q">Q: What is the key provision of the Maharashtra government's early departure scheme for women staff in MMR?</div><div class="qa-a">Answer: <strong>Flexible working hours</strong></div></div><div class="qa-content-hi" id="qa2-hi"><div class="qa-q">&#2346;&#2381;&#2352;: महाराष्ट्र सरकार की एमएमआर में महिला कर्मचारियों के लिए प्रारंभिक प्रस्थान योजना का मुख्य प्रावधान क्या है?</div><div class="qa-a">&#2313;: <strong>लचीले कार्य घंटे</strong></div></div><div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: The Hindu</div></div></div><div class="qa-item"><span class="qa-n">03.</span><div><span class="qa-cat">Supreme Court / Judiciary</span><div class="qa-tab-bar"><button class="qa-tab active" onclick="switchQA(this,'qa3')">EN</button><button class="qa-tab" onclick="switchQA(this,'qa3')">HI</button></div><div class="qa-content-en" id="qa3-en"><div class="qa-q">Q: By which year has the age-checking technology come of age amid the wave of kids' online safety laws?</div><div class="qa-a">Answer: <strong>2026</strong></div></div><div class="qa-content-hi" id="qa3-hi"><div class="qa-q">&#2346;&#2381;&#2352;: बच्चों की ऑनलाइन सुरक्षा कानूनों की लहर के बीच आयु-जांच प्रौद्योगिकी किस वर्ष तक आयु में परिपक्व हो गई है?</div><div class="qa-a">&#2313;: <strong>2026</strong></div></div><div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: The Hindu</div></div></div><div class="qa-item"><span class="qa-n">04.</span><div><span class="qa-cat">Supreme Court / Judiciary</span><div class="qa-tab-bar"><button class="qa-tab active" onclick="switchQA(this,'qa4')">EN</button><button class="qa-tab" onclick="switchQA(this,'qa4')">HI</button></div><div class="qa-content-en" id="qa4-en"><div class="qa-q">Q: What is the name of the award given to six persons by IIT-M?</div><div class="qa-a">Answer: <strong>First Principles Teachers Award</strong></div></div><div class="qa-content-hi" id="qa4-hi"><div class="qa-q">&#2346;&#2381;&#2352;: आईआईटी-एम द्वारा छह व्यक्तियों को दिया गया पुरस्कार का नाम क्या है?</div><div class="qa-a">&#2313;: <strong>पहले सिद्धांत शिक्षक पुरस्कार</strong></div></div><div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: The Hindu</div></div></div><div class="qa-item"><span class="qa-n">05.</span><div><span class="qa-cat">Scheme / Govt Launch</span><div class="qa-tab-bar"><button class="qa-tab active" onclick="switchQA(this,'qa5')">EN</button><button class="qa-tab" onclick="switchQA(this,'qa5')">HI</button></div><div class="qa-content-en" id="qa5-en"><div class="qa-q">Q: Under which article does the Supreme Court allow withdrawal of life support to a person in coma?</div><div class="qa-a">Answer: <strong>Article 21</strong></div></div><div class="qa-content-hi" id="qa5-hi"><div class="qa-q">&#2346;&#2381;&#2352;: सुप्रीम कोर्ट कोमा में एक व्यक्ति के जीवन समर्थन को वापस लेने की अनुमति किस अनुच्छेद के तहत देता है?</div><div class="qa-a">&#2313;: <strong>अनुच्छेद 21</strong></div></div><div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: The Hindu</div></div></div><div class="qa-item"><span class="qa-n">06.</span><div><span class="qa-cat">Constitutional / Statutory</span><div class="qa-tab-bar"><button class="qa-tab active" onclick="switchQA(this,'qa6')">EN</button><button class="qa-tab" onclick="switchQA(this,'qa6')">HI</button></div><div class="qa-content-en" id="qa6-en"><div class="qa-q">Q: What is the purpose of the special tribunals directed to be formed by the Supreme Court in Bengal SIR case?</div><div class="qa-a">Answer: <strong>To hear appeals of people left out of Bengal SIR</strong></div></div><div class="qa-content-hi" id="qa6-hi"><div class="qa-q">&#2346;&#2381;&#2352;: बंगाल एसआईआर मामले में सुप्रीम कोर्ट द्वारा निर्देशित विशेष न्यायाधिकरणों का उद्देश्य क्या है?</div><div class="qa-a">&#2313;: <strong>बंगाल एसआईआर से बाहर निकाले गए लोगों की अपील सुनने के लिए</strong></div></div><div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: The Hindu</div></div></div><div class="qa-item"><span class="qa-n">07.</span><div><span class="qa-cat">Scheme / Govt Launch</span><div class="qa-tab-bar"><button class="qa-tab active" onclick="switchQA(this,'qa7')">EN</button><button class="qa-tab" onclick="switchQA(this,'qa7')">HI</button></div><div class="qa-content-en" id="qa7-en"><div class="qa-q">Q: Who confers the First Principles Teachers Award?</div><div class="qa-a">Answer: <strong>IIT-M</strong></div></div><div class="qa-content-hi" id="qa7-hi"><div class="qa-q">&#2346;&#2381;&#2352;: पहले सिद्धांत शिक्षक पुरस्कार कौन प्रदान करता है?</div><div class="qa-a">&#2313;: <strong>आईआईटी-एम</strong></div></div><div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: The Hindu</div></div></div><div class="qa-item"><span class="qa-n">08.</span><div><span class="qa-cat">Award / Achievement</span><div class="qa-tab-bar"><button class="qa-tab active" onclick="switchQA(this,'qa8')">EN</button><button class="qa-tab" onclick="switchQA(this,'qa8')">HI</button></div><div class="qa-content-en" id="qa8-en"><div class="qa-q">Q: Under which ministry does the railway project inaugurated by the PM in Kerala fall?</div><div class="qa-a">Answer: <strong>Ministry of Railways</strong></div></div><div class="qa-content-hi" id="qa8-hi"><div class="qa-q">&#2346;&#2381;&#2352;: केरल में पीएम द्वारा उद्घाटन किया गया रेलवे परियोजना किस मंत्रालय के तहत आता है?</div><div class="qa-a">&#2313;: <strong>रेल मंत्रालय</strong></div></div><div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: The Hindu</div></div></div></div></div><div id='hist-view'><div style='margin-bottom:16px'><span id='hist-heading' style='font-size:1.1rem;font-weight:700;color:var(--black)'></span></div><div id='hist-articles'></div><div class='no-results hidden' id='hist-empty'>No articles found for this date.</div></div></main>
+<aside class='right-panel'><div class="panel-head"><div class="panel-head-dot"></div><span class="panel-head-label">Topics Today</span></div><div class="topic-cloud-block"><div class="topic-cloud"><span class="cloud-tag" onclick="filterByTopic(this)">Economy</span><span class="cloud-tag" onclick="filterByTopic(this)">Infrastructure</span><span class="cloud-tag" onclick="filterByTopic(this)">Polity &amp; Governance</span><span class="cloud-tag" onclick="filterByTopic(this)">Schemes &amp; Initiatives</span></div></div><div class="pdf-section-head"><div class="pdf-section-head-dot"></div><span class="pdf-section-head-label">Download PDF</span></div><div class="pdf-day today"><div class="pdf-day-date">2026-03-11 &middot; Today</div><div class="pdf-btns"><a href="pdfs/2026-03/TheCurrents_EN_2026-03-11.pdf" class="pdf-dl en">&#128196; EN PDF</a><a href="pdfs/2026-03/TheCurrents_HI_2026-03-11.pdf" class="pdf-dl hi">&#128196; HI PDF</a></div></div><div class="pdf-day"><div class="pdf-day-date">2026-03-10</div><div class="pdf-btns"><a href="pdfs/2026-03/TheCurrents_EN_2026-03-10.pdf" class="pdf-dl en">&#128196; EN PDF</a><a href="pdfs/2026-03/TheCurrents_HI_2026-03-10.pdf" class="pdf-dl hi">&#128196; HI PDF</a></div></div></aside>
 </div>
+<div class='drawer-backdrop' id='drawerBackdrop' onclick='closeAllDrawers()'></div>
+<nav class='mobile-nav'><div class='mobile-nav-inner'><button class='mob-btn' onclick="toggleDrawer('left')"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='3' y='4' width='18' height='16' rx='2'/><line x1='3' y1='9' x2='21' y2='9'/><line x1='9' y1='9' x2='9' y2='20'/></svg>Archive</button><button class='mob-btn active' id='mobToday'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z'/><polyline points='9 22 9 12 15 12 15 22'/></svg>Today</button><button class='mob-btn' onclick="toggleDrawer('right')"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>Topics</button></div></nav>
+<footer class="site-footer"><span>The Currents</span> &middot; UPSC Current Affairs &middot; 11 Mar 2026<br>For serious aspirants. Verify all facts from official sources before the exam.</footer>
+<script>var MONTHLY_DATA = {"2026-03-10": [{"title": "West Bengal SIR test: reading the Supreme Court’s order", "title_hi": "पश्चिम बंगाल में चुनावी मतदाता सूची विवाद: सुप्रीम कोर्ट के आदेश की व्याख्या", "gs_paper": "GS2 — Polity: Election Commission and Electoral Process", "upsc_topics": ["Polity & Governance", "International Relations", "Schemes & Initiatives"], "context": "The Supreme Court's order comes amidst 60 lakh pending cases in West Bengal, which has sparked a discussion on the Election Commission's need for permanent staff to handle electoral roll disputes. The publication of final rolls is also a crucial aspect of this issue. The Supreme Court's decision aims to address the backlog of cases and ensure the integrity of the electoral process. The Election Commission's current staffing structure has been questioned, with some arguing that it needs permanent staff to effectively manage electoral disputes. The Supreme Court's order is seen as a step towards strengthening the electoral process in West Bengal.", "key_points": ["The Supreme Court — Electoral Roll Disputes: Ordered deployment of judicial officers to decide cases.", "Election Commission — Staffing: Equipped with permanent staff to handle electoral roll disputes.", "West Bengal — Pending Cases: 60 lakh cases pending adjudication.", "The Supreme Court — Publication of Final Rolls: Crucial aspect of electoral process.", "Election Commission — Electoral Process: Aims to ensure integrity and transparency."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/west-bengal/west-bengal-sir-test-reading-the-supreme-courts-order/article70722401.ece"}, {"title": "Prime Minister to launch projects worth ₹10,800 crore at Kochi event", "title_hi": "प्रधान मंत्री ₹10,800 करोड़ की परियोजनाओं का कोच्चि में शुभारंभ करेंगे", "gs_paper": "GS2 — Governance: Government Schemes and Initiatives", "upsc_topics": ["Polity & Governance", "Agriculture & Rural", "Schemes & Initiatives"], "context": "The Prime Minister will lay the foundation stone for a polypropylene unit at Kochi Refinery, a project worth ₹10,800 crore. This initiative is expected to boost the region's infrastructure and economy. The event will also see the inauguration of 23 rural roads constructed under the Pradhan Mantri Gram Sadak Yojana in the State. The Kochi Refinery is a significant contributor to the region's industrial growth. The Pradhan Mantri Gram Sadak Yojana aims to improve rural connectivity across the country.", "key_points": ["The Prime Minister — Polypropylene Unit: Laying foundation stone at Kochi Refinery (₹10,800 crore).", "The Prime Minister — Pradhan Mantri Gram Sadak Yojana: Inaugurating 23 rural roads in the State.", "The Government — Kochi Refinery: Boosting regional infrastructure and economy through the polypropylene unit.", "The Government — Pradhan Mantri Gram Sadak Yojana: Improving rural connectivity across the country.", "The Prime Minister — Kochi Event: Launching projects worth ₹10,800 crore."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/kerala/prime-minister-to-launch-projects-worth-10800-crore-at-kochi-event/article70723929.ece"}, {"title": "Supreme Court approves Centre's proposal extending term of tribunal members", "title_hi": "सुप्रीम कोर्ट ने केंद्र के प्रस्ताव को मंजूरी दी, ट्रिब्यूनल सदस्यों की अवधि बढ़ाई", "gs_paper": "GS2 — Polity: Judiciary and Tribunal Reforms", "upsc_topics": ["Polity & Governance", "International Relations", "Economy"], "context": "The Supreme Court has given its nod to the Centre's proposal to extend the term of tribunal members. This move will affect those appointed under the Tribunal Reforms Act of 2021. According to Attorney General R Venkataramani, a new law is likely to be enacted by next September, either in the upcoming Budget session or the Monsoon session. Around 21 members are due to retire before the new law is enacted. The extension is intended to ensure continuity until the new legislation is in place.", "key_points": ["Supreme Court — Tribunal Reforms Act of 2021: Approved extension of term for tribunal members.", "Centre — Proposal: Extended term for tribunal members until new law is enacted.", "Attorney General R Venkataramani — Statement: New law likely to be enacted by next September.", "Tribunal Members — Retirement: Around 21 members due to retire before new law is enacted.", "Centre — Legislation: Aims to ensure continuity and address issues arising from Tribunal Reforms Act of 2021."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/supreme-court-approves-centres-proposal-extending-term-of-tribunal-members/article70724939.ece"}, {"title": "Israel-Iran war: Trump says war will end 'very soon'; U.S. saving some ‘most important’ targets for later", "title_hi": "इज़राइल-इरान संघर्ष: ट्रंप ने कहा जल्द ही युद्ध समाप्त हो जाएगा", "gs_paper": "GS2 — International Relations: Middle East Conflict and US Foreign Policy", "upsc_topics": ["Polity & Governance", "International Relations", "Economy"], "context": "The US President played down the scale of the conflict, which has not been approved by the US Congress, repeatedly calling it an 'excursion' rather than a war. The conflict between Israel and Iran has been escalating, with the US involved in the situation. Trump's statement comes amid rising tensions in the region. The US Congress has not approved the conflict, raising questions about the legitimacy of US involvement. The situation is being closely watched by the international community.", "key_points": ["US President — Statement: Said the war will end 'very soon'.", "US Congress — Approval: Has not approved the conflict.", "US President — Description: Repeatedly called the conflict an 'excursion' rather than a war.", "International Community — Response: Is closely watching the situation.", "US — Involvement: Has been involved in the conflict, with its actions being questioned by the US Congress."], "source": "The Hindu", "url": "https://www.thehindu.com/news/international/trump-israel-iran-war-us-to-end-very-soon/article70724671.ece"}, {"title": "UP govt signs pact with Hinduja Group firm to expand broadband connectivity", "title_hi": "उत्तर प्रदेश सरकार ने हिंदुजा ग्रुप की कंपनी के साथ ब्रॉडबैंड कनेक्टिविटी विस्तार के लिए समझौता किया", "gs_paper": "GS3 — Economy: Infrastructure Development", "upsc_topics": ["Infrastructure"], "context": "The Uttar Pradesh government has signed a pact with a Hinduja Group firm to expand broadband connectivity in the state. The pact aims to provide high-speed internet services to around 3.5 lakh villages and 20,000 gram panchayats. The project is expected to be completed within the next 2 years at a cost of ₹2,500 crore. The Hinduja Group firm will be responsible for laying optical fibre cables across the state. The project is expected to benefit around 16 crore people in the state.", "key_points": ["Uttar Pradesh government — Broadband Expansion Project: Signed pact with Hinduja Group firm to expand broadband connectivity.", "Hinduja Group firm — Broadband Expansion Project: Will lay optical fibre cables across the state at a cost of ₹2,500 crore.", "Uttar Pradesh government — Broadband Expansion Project: Aims to provide high-speed internet services to around 3.5 lakh villages and 20,000 gram panchayats.", "Uttar Pradesh government — Broadband Expansion Project: Expected to benefit around 16 crore people in the state.", "Uttar Pradesh government — Broadband Expansion Project: Expected to be completed within the next 2 years."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/uttar-pradesh/up-govt-signs-pact-with-hinduja-group-firm-to-expand-broadband-connectivity/article70725159.ece"}], "2026-03-11": [{"title": "Union Cabinet approves international status for Madurai airport", "title_hi": "केंद्रीय मंत्रिमंडल ने मदुरै हवाई अड्डे को अंतरराष्ट्रीय दर्जा दिया", "gs_paper": "GS3 — Economy: Infrastructure Development", "upsc_topics": ["Polity & Governance", "Infrastructure", "Schemes & Initiatives"], "context": "The Union Cabinet has approved the international status for Madurai airport, which is expected to boost the airport's connectivity with foreign countries. This move is likely to increase the number of regular international routes and make it easier for foreign airlines to operate from the airport. The airport currently handles domestic flights and some international charter flights. The new status is expected to increase the airport's revenue and create more job opportunities. The approval is also expected to promote tourism and trade in the region.", "key_points": ["Union Cabinet — International Status: Approved for Madurai airport.", "Airports Authority of India (AAI) — Infrastructure Upgrade: Constructing a new terminal building and expanding the runway.", "Madurai Airport — International Routes: Expected to increase regular international routes.", "Foreign Airlines — Approval: Easier approvals for foreign airlines to operate from the airport.", "Airport Revenue — Increase: Expected to increase the airport's revenue and create more job opportunities."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/union-cabinet-approves-international-status-for-madurai-airport/article70727932.ece"}, {"title": "Kerala Cabinet approves new anti-narcotics bureau", "title_hi": "केरल कैबिनेट ने नई एन्टी नार्कोटिक्स ब्यूरो को मंजूरी दी", "gs_paper": "GS2 — Governance: Government Schemes and Initiatives", "upsc_topics": ["Polity & Governance", "Economy", "Schemes & Initiatives"], "context": "The Kerala Cabinet has given its nod to set up a new anti-narcotics bureau, which will be headed by an ADGP-rank officer. The bureau will have 3 units, including a narcotics intelligence unit, a narcotics investigation unit, and a narcotics prosecution unit. The state government has allocated ₹10 crore for the initial setup of the bureau. The move is aimed at curbing the increasing drug-related crimes in Kerala, which has seen a 25% rise in such cases over the past year.", "key_points": ["Kerala Cabinet — Anti-Narcotics Bureau: Approved formation of a new bureau to tackle drug menace.", "Kerala Government — Anti-Narcotics Bureau: Allocated ₹10 crore for initial setup.", "Kerala Police — Anti-Narcotics Bureau: Will have 3 units, including narcotics intelligence, investigation, and prosecution units.", "Kerala Government — Anti-Narcotics Bureau: Move aimed at curbing 25% rise in drug-related crimes.", "Kerala Cabinet — Anti-Narcotics Bureau: Bureau to be headed by an ADGP-rank officer."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/kerala/kerala-cabinet-approves-new-anti-narcotics-bureau/article70727783.ece"}, {"title": "Chhattisgarh Cabinet approves new anti-conversion law draft", "title_hi": "छत्तीसगढ़ कैबिनेट ने नए धर्म परिवर्तन विरोधी कानून के मसौदे को मंजूरी दी", "gs_paper": "GS2 — Polity: Parliament and Legislation", "upsc_topics": ["Polity & Governance", "Schemes & Initiatives"], "context": "The Chhattisgarh Cabinet has approved a draft of a new anti-conversion law, which will now be introduced in the State Assembly. The Bill aims to regulate religious conversions in the state. The approval comes during the ongoing session of the State Assembly. The law is expected to have significant implications for the state's population. The Chhattisgarh government has been working on the draft for several months.", "key_points": ["The Chhattisgarh Cabinet — Anti-Conversion Law: Approved draft for introduction in State Assembly.", "The Chhattisgarh government — Legislative Process: Introduced during ongoing State Assembly session.", "The State Assembly — Legislative Agenda: Expected to discuss and vote on the Bill.", "The Chhattisgarh government — Law and Order: Aims to regulate religious conversions in the state.", "The State Government — Policy Initiative: Expected to have significant implications for the state's population."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/chhattisgarh/chhattisgarh-cabinet-approves-new-anti-conversion-law-draft/article70728272.ece"}, {"title": "Cabinet approves two rail projects", "title_hi": "मंत्रिमंडल ने दो रेल परियोजनाओं को मंजूरी दी", "gs_paper": "GS2 — Governance: Government Schemes and Infrastructure Development", "upsc_topics": ["Polity & Governance", "Schemes & Initiatives"], "context": "The Cabinet has approved two new rail projects, which are expected to improve rail connectivity in the region. The first project involves the construction of a fourth rail line between Santragachi and Kharagpur in West Bengal, while the second project connects Sainthia in West Bengal and Pakur in Jharkhand. These projects will help in reducing congestion and increasing the speed of trains. The total cost of the projects is not specified in the summary.", "key_points": ["The Cabinet — Rail Project: Approved a fourth rail line between Santragachi and Kharagpur in West Bengal.", "The Cabinet — Rail Project: Approved a new rail line connecting Sainthia in West Bengal and Pakur in Jharkhand.", "The Indian Railways — Infrastructure Development: Aims to improve rail connectivity and reduce congestion in the region.", "The Indian Railways — Network Expansion: Has been focusing on increasing the speed and efficiency of trains.", "The Ministry of Railways — Project Implementation: Will be responsible for the implementation and monitoring of the projects."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/cabinet-approves-two-rail-projects/article70727729.ece"}, {"title": "Now, Rajasthan Assembly passes Bill to repeal two-child norm for ULB elections", "title_hi": "राजस्थान विधानसभा ने दो बच्चों की नियम को निरस्त करने वाला विधेयक पारित किया", "gs_paper": "GS2 — Polity: Parliament and Legislation", "upsc_topics": [], "context": "The Rajasthan Assembly has passed a Bill to repeal the two-child norm for Urban Local Body (ULB) elections. The two-child norm was introduced in 2019, which barred individuals with more than two children from contesting ULB elections. The Bill aims to remove this restriction, allowing individuals with more than two children to participate in ULB elections. The move is expected to impact approximately 10% of the total ULB seats in the state. The Rajasthan government has stated that the decision was made to promote inclusivity and increase participation in local governance.", "key_points": ["Rajasthan Assembly — Repeal Bill: Passed to remove two-child norm for ULB elections.", "Rajasthan Government — ULB Elections: Approximately 10% of total seats expected to be impacted.", "Rajasthan Panchayati Raj (Amendment) Act, 2019 — Two-Child Norm: Introduced in 2019 to promote family planning and population control.", "Rajasthan Assembly — Repeal Bill: Aims to promote inclusivity and increase participation in local governance.", "Rajasthan Government — ULB Elections: Decision made to remove restriction on individuals with more than two children."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/rajasthan/now-rajasthan-assembly-passes-bill-to-repeal-two-child-norm-forulbelections/article70727435.ece"}]};
 
-<main class="container">
+var TODAY_STR   = '2026-03-11';
+var TODAY_LABEL = '11 Mar 2026';
+var TODAY_ARTS  = 5;
+var LANG_LABEL  = 'EN + &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;';
 
-  <!-- Today's articles (default view) -->
-  <div id="today-view">
-    <!-- Table of Contents -->
-    <nav class='toc-bar'><div class='toc-title'>In This Issue — 5 Articles · 2026-03-11</div><ul class='toc-list'><li><a href='#art-1'>&#35;01 Union Cabinet approves international status for Madurai</a></li><li><a href='#art-2'>&#35;02 Kerala Cabinet approves new anti-narcotics bureau</a></li><li><a href='#art-3'>&#35;03 Chhattisgarh Cabinet approves new anti-conversion law d</a></li><li><a href='#art-4'>&#35;04 Cabinet approves two rail projects</a></li><li><a href='#art-5'>&#35;05 Now, Rajasthan Assembly passes Bill to repeal two-child</a></li></ul></nav>
 
-    <!-- Articles -->
-    <div id="articles-container">
-      
-<article class="article-card" id="art-1" data-topics="Polity &amp; Governance Infrastructure Schemes &amp; Initiatives" data-gs="GS3">
-  <div class="art-header">
-    <span class="art-num">#01</span>
-    <span class="topic-tag">Polity &amp; Governance</span> <span class="topic-tag">Infrastructure</span> <span class="topic-tag">Schemes &amp; Initiatives</span>
-    <span class="gs-badge">GS3 · Economy: Infrastructure Development</span>
-    <span class="conf-badge" style="color:#2ecc71" title="Fact confidence 4/5">★★★★☆</span>
-  </div>
-  <div class="why-in-news"><strong>&#128204; Why in News:</strong> The Union Cabinet has approved international status for Madurai airport, allowing for more regular international routes and easier approvals for foreign airlines.</div>
-  <h2 class="art-title">Union Cabinet approves international status for Madurai airport</h2>
-  <h3 class='art-title-hi'>केंद्रीय मंत्रिमंडल ने मदुरै हवाई अड्डे को अंतरराष्ट्रीय दर्जा दिया</h3>
-  <div class='tab-bar'><button class='tab-btn active' onclick='switchTab(this,"en",1)'>English</button><button class='tab-btn' onclick='switchTab(this,"hi",1)'>हिन्दी</button></div>
-  <div class="tab-content" id="tab-en-1">
-    <div class="section-label">Context</div><p>The Union Cabinet has approved the international status for Madurai airport, which is expected to boost the airport's connectivity with foreign countries. This move is likely to increase the number of regular international routes and make it easier for foreign airlines to operate from the airport. The airport currently handles domestic flights and some international charter flights. The new status is expected to increase the airport's revenue and create more job opportunities. The approval is also expected to promote tourism and trade in the region.</p>
-    <div class="section-label">Background</div><p class="background">The Madurai airport has been seeking international status for several years, and the approval is a significant milestone for the airport. The Airports Authority of India (AAI) has been working to upgrade the airport's infrastructure to meet international standards, including the construction of a new terminal building and the expansion of the runway.</p>
-    <div class="section-label">Key Points</div><ul class="kp-list"><li>Union Cabinet — International Status: Approved for Madurai airport.</li><li>Airports Authority of India (AAI) — Infrastructure Upgrade: Constructing a new terminal building and expanding the runway.</li><li>Madurai Airport — International Routes: Expected to increase regular international routes.</li><li>Foreign Airlines — Approval: Easier approvals for foreign airlines to operate from the airport.</li><li>Airport Revenue — Increase: Expected to increase the airport's revenue and create more job opportunities.</li></ul>
-    <div class="section-label">Implication</div><p class="implication"></p>
-    
-  </div>
-  <div class='tab-content hidden hindi' id='tab-hi-1'><div class='section-label'>संदर्भ</div><p>केंद्रीय मंत्रिमंडल ने मदुरै हवाई अड्डे को अंतरराष्ट्रीय दर्जा दिया है, जिससे हवाई अड्डे की विदेशी देशों के साथ जुड़ाव बढ़ने की उम्मीद है। यह कदम हवाई अड्डे से नियमित अंतरराष्ट्रीय मार्गों की संख्या बढ़ाने और विदेशी विमानों के लिए हवाई अड्डे से संचालित करना आसान बनाने की संभावना है। हवाई अड्डा वर्तमान में घरेलू उड़ानों और कुछ अंतरराष्ट्रीय चार्टर उड़ानों को संभालता है। नए दर्जे से हवाई अड्डे के राजस्व में वृद्धि और अधिक रोजगार के अवसर पैदा होने की उम्मीद है।</p><div class='section-label'>मुख्य बिंदु</div><ul class='kp-list'><li>केंद्रीय मंत्रिमंडल — अंतरराष्ट्रीय दर्जा: मदुरै हवाई अड्डे के लिए अनुमोदित।</li><li>भारतीय विमानपत्तन प्राधिकरण (एएआई) — बुनियादी ढांचे का उन्नयन: एक नए टर्मिनल भवन का निर्माण और रनवे का विस्तार।</li><li>मदुरै हवाई अड्डा — अंतरराष्ट्रीय मार्ग: नियमित अंतरराष्ट्रीय मार्गों की संख्या बढ़ने की उम्मीद है।</li><li>विदेशी विमान — अनुमोदन: विदेशी विमानों के लिए हवाई अड्डे से संचालित करना आसान होगा।</li><li>हवाई अड्डा राजस्व — वृद्धि: हवाई अड्डे के राजस्व में वृद्धि और अधिक रोजगार के अवसर पैदा होने की उम्मीद है।</li></ul><div class='section-label'>महत्त्व</div><p class='implication'></p></div>
-  <div class='art-footer'><a href="https://www.thehindu.com/news/national/union-cabinet-approves-international-status-for-madurai-airport/article70727932.ece" target="_blank" rel="noopener">&#128240; The Hindu &#8599;</a>&nbsp;&middot;&nbsp;<span style='color:#888'></span></div>
-</article>
+function fmtDate(d) {
+  var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var p = d.split('-');
+  return p.length < 3 ? d : parseInt(p[2]) + ' ' + m[parseInt(p[1])-1] + ' ' + p[0];
+}
 
-<article class="article-card" id="art-2" data-topics="Polity &amp; Governance Economy Schemes &amp; Initiatives" data-gs="GS2">
-  <div class="art-header">
-    <span class="art-num">#02</span>
-    <span class="topic-tag">Polity &amp; Governance</span> <span class="topic-tag">Economy</span> <span class="topic-tag">Schemes &amp; Initiatives</span>
-    <span class="gs-badge">GS2 · Governance: Government Schemes and Initiatives</span>
-    <span class="conf-badge" style="color:#e74c3c" title="Fact confidence 2/5">★★☆☆☆</span>
-  </div>
-  <div class="why-in-news"><strong>&#128204; Why in News:</strong> The Kerala Cabinet has approved the formation of a new anti-narcotics bureau to tackle the growing drug menace in the state.</div>
-  <h2 class="art-title">Kerala Cabinet approves new anti-narcotics bureau</h2>
-  <h3 class='art-title-hi'>केरल कैबिनेट ने नई एन्टी नार्कोटिक्स ब्यूरो को मंजूरी दी</h3>
-  <div class='tab-bar'><button class='tab-btn active' onclick='switchTab(this,"en",2)'>English</button><button class='tab-btn' onclick='switchTab(this,"hi",2)'>हिन्दी</button></div>
-  <div class="tab-content" id="tab-en-2">
-    <div class="section-label">Context</div><p>The Kerala Cabinet has given its nod to set up a new anti-narcotics bureau, which will be headed by an ADGP-rank officer. The bureau will have 3 units, including a narcotics intelligence unit, a narcotics investigation unit, and a narcotics prosecution unit. The state government has allocated ₹10 crore for the initial setup of the bureau. The move is aimed at curbing the increasing drug-related crimes in Kerala, which has seen a 25% rise in such cases over the past year.</p>
-    <div class="section-label">Background</div><p class="background">The decision to set up the anti-narcotics bureau comes in the wake of a significant rise in drug-related cases in Kerala, with the state witnessing a 25% increase in such cases over the past year. The Kerala Police had been pushing for a dedicated agency to tackle the issue, and the state government had announced its intention to set up the bureau in the 2022 state budget.</p>
-    <div class="section-label">Key Points</div><ul class="kp-list"><li>Kerala Cabinet — Anti-Narcotics Bureau: Approved formation of a new bureau to tackle drug menace.</li><li>Kerala Government — Anti-Narcotics Bureau: Allocated ₹10 crore for initial setup.</li><li>Kerala Police — Anti-Narcotics Bureau: Will have 3 units, including narcotics intelligence, investigation, and prosecution units.</li><li>Kerala Government — Anti-Narcotics Bureau: Move aimed at curbing 25% rise in drug-related crimes.</li><li>Kerala Cabinet — Anti-Narcotics Bureau: Bureau to be headed by an ADGP-rank officer.</li></ul>
-    <div class="section-label">Implication</div><p class="implication"></p>
-    <div class="flags"><strong>⚑ Verify:</strong><ul><li>Validation: NUMBERS MISSING from context_hi: ₹10 crore</li></ul></div>
-  </div>
-  <div class='tab-content hidden hindi' id='tab-hi-2'><div class='section-label'>संदर्भ</div><p>केरल कैबिनेट ने एक नए एन्टी नार्कोटिक्स ब्यूरो की स्थापना को मंजूरी दे दी है, जो राज्य में बढ़ते नशीली दवाओं के मामलों से निपटने के लिए बनाया जाएगा। यह ब्यूरो एक एडीजीपी रैंक के अधिकारी के नेतृत्व में काम करेगा और इसमें 3 इकाइयाँ होंगी, जिनमें नार्कोटिक्स इंटेलिजेंस यूनिट, नार्कोटिक्स जांच यूनिट और नार्कोटिक्स अभियोजन यूनिट शामिल हैं। राज्य सरकार ने ब्यूरो की प्रारंभिक स्थापना के लिए ₹10 करोड़ आवंटित किए हैं। यह कदम केरल में बढ़ते नशीली दवाओं से संबंधित अपराधों को रोकने के लिए उठाया गया है, जिसमें पिछले साल की तुलना में 25% की वृद्धि हुई है।</p><div class='section-label'>मुख्य बिंदु</div><ul class='kp-list'><li>केरल कैबिनेट — एन्टी नार्कोटिक्स ब्यूरो: नए ब्यूरो की स्थापना को मंजूरी दी।</li><li>केरल सरकार — एन्टी नार्कोटिक्स ब्यूरो: प्रारंभिक स्थापना के लिए ₹10 करोड़ आवंटित किए।</li><li>केरल पुलिस — एन्टी नार्कोटिक्स ब्यूरो: 3 इकाइयाँ होंगी, जिनमें नार्कोटिक्स इंटेलिजेंस, जांच और अभियोजन इकाइयाँ शामिल हैं।</li><li>केरल सरकार — एन्टी नार्कोटिक्स ब्यूरो: 25% की वृद्धि को रोकने के लिए कदम उठाया गया है।</li><li>केरल कैबिनेट — एन्टी नार्कोटिक्स ब्यूरो: ब्यूरो का नेतृत्व एक एडीजीपी रैंक के अधिकारी करेंगे।</li></ul><div class='section-label'>महत्त्व</div><p class='implication'></p></div>
-  <div class='art-footer'><a href="https://www.thehindu.com/news/national/kerala/kerala-cabinet-approves-new-anti-narcotics-bureau/article70727783.ece" target="_blank" rel="noopener">&#128240; The Hindu &#8599;</a>&nbsp;&middot;&nbsp;<span style='color:#888'></span></div>
-</article>
-
-<article class="article-card" id="art-3" data-topics="Polity &amp; Governance Schemes &amp; Initiatives" data-gs="GS2">
-  <div class="art-header">
-    <span class="art-num">#03</span>
-    <span class="topic-tag">Polity &amp; Governance</span> <span class="topic-tag">Schemes &amp; Initiatives</span>
-    <span class="gs-badge">GS2 · Polity: Parliament and Legislation</span>
-    <span class="conf-badge" style="color:#2ecc71" title="Fact confidence 4/5">★★★★☆</span>
-  </div>
-  <div class="why-in-news"><strong>&#128204; Why in News:</strong> The Chhattisgarh Cabinet has approved a new anti-conversion law draft, paving the way for its introduction in the State Assembly.</div>
-  <h2 class="art-title">Chhattisgarh Cabinet approves new anti-conversion law draft</h2>
-  <h3 class='art-title-hi'>छत्तीसगढ़ कैबिनेट ने नए धर्म परिवर्तन विरोधी कानून के मसौदे को मंजूरी दी</h3>
-  <div class='tab-bar'><button class='tab-btn active' onclick='switchTab(this,"en",3)'>English</button><button class='tab-btn' onclick='switchTab(this,"hi",3)'>हिन्दी</button></div>
-  <div class="tab-content" id="tab-en-3">
-    <div class="section-label">Context</div><p>The Chhattisgarh Cabinet has approved a draft of a new anti-conversion law, which will now be introduced in the State Assembly. The Bill aims to regulate religious conversions in the state. The approval comes during the ongoing session of the State Assembly. The law is expected to have significant implications for the state's population. The Chhattisgarh government has been working on the draft for several months.</p>
-    <div class="section-label">Background</div><p class="background">The issue of religious conversion has been a contentious one in Chhattisgarh, with several cases of forced conversions being reported in the past. The state government has been under pressure to introduce a law to regulate such conversions, with the previous draft being introduced in 2020.</p>
-    <div class="section-label">Key Points</div><ul class="kp-list"><li>The Chhattisgarh Cabinet — Anti-Conversion Law: Approved draft for introduction in State Assembly.</li><li>The Chhattisgarh government — Legislative Process: Introduced during ongoing State Assembly session.</li><li>The State Assembly — Legislative Agenda: Expected to discuss and vote on the Bill.</li><li>The Chhattisgarh government — Law and Order: Aims to regulate religious conversions in the state.</li><li>The State Government — Policy Initiative: Expected to have significant implications for the state's population.</li></ul>
-    <div class="section-label">Implication</div><p class="implication"></p>
-    
-  </div>
-  <div class='tab-content hidden hindi' id='tab-hi-3'><div class='section-label'>संदर्भ</div><p>छत्तीसगढ़ कैबिनेट ने नए धर्म परिवर्तन विरोधी कानून के मसौदे को मंजूरी दे दी है, जिसे अब राज्य विधानसभा में पेश किया जाएगा। यह विधेयक राज्य में धार्मिक परिवर्तनों को विनियमित करने के लिए है। मंजूरी राज्य विधानसभा के चल रहे सत्र के दौरान दी गई है। इस कानून के राज्य की आबादी पर महत्वपूर्ण परिणाम होने की उम्मीद है। छत्तीसगढ़ सरकार कई महीनों से मसौदे पर काम कर रही है।</p><div class='section-label'>मुख्य बिंदु</div><ul class='kp-list'><li>छत्तीसगढ़ कैबिनेट — धर्म परिवर्तन विरोधी कानून: राज्य विधानसभा में पेश करने के लिए मसौदे को मंजूरी दी।</li><li>छत्तीसगढ़ सरकार — विधायी प्रक्रिया: चल रहे राज्य विधानसभा सत्र के दौरान पेश किया जाएगा।</li><li>राज्य विधानसभा — विधायी एजेंडा: विधेयक पर चर्चा और मतदान करने की उम्मीद है।</li><li>छत्तीसगढ़ सरकार — कानून और व्यवस्था: राज्य में धार्मिक परिवर्तनों को विनियमित करने के लिए।</li><li>राज्य सरकार — नीति पहल: राज्य की आबादी पर महत्वपूर्ण परिणाम होने की उम्मीद है।</li></ul><div class='section-label'>महत्त्व</div><p class='implication'></p></div>
-  <div class='art-footer'><a href="https://www.thehindu.com/news/national/chhattisgarh/chhattisgarh-cabinet-approves-new-anti-conversion-law-draft/article70728272.ece" target="_blank" rel="noopener">&#128240; The Hindu &#8599;</a>&nbsp;&middot;&nbsp;<span style='color:#888'></span></div>
-</article>
-
-<article class="article-card" id="art-4" data-topics="Polity &amp; Governance Schemes &amp; Initiatives" data-gs="GS2">
-  <div class="art-header">
-    <span class="art-num">#04</span>
-    <span class="topic-tag">Polity &amp; Governance</span> <span class="topic-tag">Schemes &amp; Initiatives</span>
-    <span class="gs-badge">GS2 · Governance: Government Schemes and Infrastructure Development</span>
-    <span class="conf-badge" style="color:#2ecc71" title="Fact confidence 4/5">★★★★☆</span>
-  </div>
-  <div class="why-in-news"><strong>&#128204; Why in News:</strong> The Cabinet has approved two new rail projects, including a fourth rail line between Santragachi and Kharagpur in West Bengal and another connecting Sainthia in West Bengal and Pakur in Jharkhand.</div>
-  <h2 class="art-title">Cabinet approves two rail projects</h2>
-  <h3 class='art-title-hi'>मंत्रिमंडल ने दो रेल परियोजनाओं को मंजूरी दी</h3>
-  <div class='tab-bar'><button class='tab-btn active' onclick='switchTab(this,"en",4)'>English</button><button class='tab-btn' onclick='switchTab(this,"hi",4)'>हिन्दी</button></div>
-  <div class="tab-content" id="tab-en-4">
-    <div class="section-label">Context</div><p>The Cabinet has approved two new rail projects, which are expected to improve rail connectivity in the region. The first project involves the construction of a fourth rail line between Santragachi and Kharagpur in West Bengal, while the second project connects Sainthia in West Bengal and Pakur in Jharkhand. These projects will help in reducing congestion and increasing the speed of trains. The total cost of the projects is not specified in the summary.</p>
-    <div class="section-label">Background</div><p class="background">The Indian Railways has been focusing on improving its infrastructure and connectivity across the country. In recent years, several new rail lines and projects have been approved and implemented to enhance the efficiency and capacity of the rail network. The Railways Act of 1989 provides the framework for the development and regulation of the rail sector in India.</p>
-    <div class="section-label">Key Points</div><ul class="kp-list"><li>The Cabinet — Rail Project: Approved a fourth rail line between Santragachi and Kharagpur in West Bengal.</li><li>The Cabinet — Rail Project: Approved a new rail line connecting Sainthia in West Bengal and Pakur in Jharkhand.</li><li>The Indian Railways — Infrastructure Development: Aims to improve rail connectivity and reduce congestion in the region.</li><li>The Indian Railways — Network Expansion: Has been focusing on increasing the speed and efficiency of trains.</li><li>The Ministry of Railways — Project Implementation: Will be responsible for the implementation and monitoring of the projects.</li></ul>
-    <div class="section-label">Implication</div><p class="implication"></p>
-    
-  </div>
-  <div class='tab-content hidden hindi' id='tab-hi-4'><div class='section-label'>संदर्भ</div><p>मंत्रिमंडल ने दो नई रेल परियोजनाओं को मंजूरी दी है, जो क्षेत्र में रेल संपर्क में सुधार करेंगी। पहली परियोजना में पश्चिम बंगाल के संतरागाची और खड़गपुर के बीच एक चौथी रेल लाइन का निर्माण शामिल है, जबकि दूसरी परियोजना पश्चिम बंगाल के सainthia और झारखंड के पाकुर को जोड़ती है। इन परियोजनाओं से भीड़भाड़ कम होगी और ट्रेनों की गति बढ़ेगी। परियोजनाओं की कुल लागत समाचार सारांश में निर्दिष्ट नहीं है।</p><div class='section-label'>मुख्य बिंदु</div><ul class='kp-list'><li>मंत्रिमंडल — रेल परियोजना: संतरागाची और खड़गपुर के बीच एक चौथी रेल लाइन को मंजूरी दी।</li><li>मंत्रिमंडल — रेल परियोजना: सainthia और पाकुर को जोड़ने वाली एक नई रेल लाइन को मंजूरी दी।</li><li>भारतीय रेलवे — बुनियादी ढांचा विकास: क्षेत्र में रेल संपर्क में सुधार और भीड़भाड़ कम करने का लक्ष्य है।</li><li>भारतीय रेलवे — नेटवर्क विस्तार: ट्रेनों की गति और दक्षता में वृद्धि पर ध्यान केंद्रित किया है।</li><li>रेल मंत्रालय — परियोजना कार्यान्वयन: परियोजनाओं के कार्यान्वयन और निगरानी के लिए जिम्मेदार होगा।</li></ul><div class='section-label'>महत्त्व</div><p class='implication'></p></div>
-  <div class='art-footer'><a href="https://www.thehindu.com/news/national/cabinet-approves-two-rail-projects/article70727729.ece" target="_blank" rel="noopener">&#128240; The Hindu &#8599;</a>&nbsp;&middot;&nbsp;<span style='color:#888'></span></div>
-</article>
-
-<article class="article-card" id="art-5" data-topics="" data-gs="GS2">
-  <div class="art-header">
-    <span class="art-num">#05</span>
-    
-    <span class="gs-badge">GS2 · Polity: Parliament and Legislation</span>
-    <span class="conf-badge" style="color:#e74c3c" title="Fact confidence 2/5">★★☆☆☆</span>
-  </div>
-  <div class="why-in-news"><strong>&#128204; Why in News:</strong> The Rajasthan Assembly has passed a Bill to repeal the two-child norm for Urban Local Body (ULB) elections.</div>
-  <h2 class="art-title">Now, Rajasthan Assembly passes Bill to repeal two-child norm for ULB elections</h2>
-  <h3 class='art-title-hi'>राजस्थान विधानसभा ने दो बच्चों की नियम को निरस्त करने वाला विधेयक पारित किया</h3>
-  <div class='tab-bar'><button class='tab-btn active' onclick='switchTab(this,"en",5)'>English</button><button class='tab-btn' onclick='switchTab(this,"hi",5)'>हिन्दी</button></div>
-  <div class="tab-content" id="tab-en-5">
-    <div class="section-label">Context</div><p>The Rajasthan Assembly has passed a Bill to repeal the two-child norm for Urban Local Body (ULB) elections. The two-child norm was introduced in 2019, which barred individuals with more than two children from contesting ULB elections. The Bill aims to remove this restriction, allowing individuals with more than two children to participate in ULB elections. The move is expected to impact approximately 10% of the total ULB seats in the state. The Rajasthan government has stated that the decision was made to promote inclusivity and increase participation in local governance.</p>
-    <div class="section-label">Background</div><p class="background">The two-child norm was introduced in 2019 as part of the Rajasthan Panchayati Raj (Amendment) Act, 2019. The Act aimed to promote family planning and population control, but it was met with criticism from various quarters, with many arguing that it was an unfair restriction on individuals' rights to participate in the democratic process.</p>
-    <div class="section-label">Key Points</div><ul class="kp-list"><li>Rajasthan Assembly — Repeal Bill: Passed to remove two-child norm for ULB elections.</li><li>Rajasthan Government — ULB Elections: Approximately 10% of total seats expected to be impacted.</li><li>Rajasthan Panchayati Raj (Amendment) Act, 2019 — Two-Child Norm: Introduced in 2019 to promote family planning and population control.</li><li>Rajasthan Assembly — Repeal Bill: Aims to promote inclusivity and increase participation in local governance.</li><li>Rajasthan Government — ULB Elections: Decision made to remove restriction on individuals with more than two children.</li></ul>
-    <div class="section-label">Implication</div><p class="implication"></p>
-    <div class="flags"><strong>⚑ Verify:</strong><ul><li>Validation: NUMBERS MISSING from context_hi: 2019,</li></ul></div>
-  </div>
-  <div class='tab-content hidden hindi' id='tab-hi-5'><div class='section-label'>संदर्भ</div><p>राजस्थान विधानसभा ने शहरी स्थानीय निकाय (ULB) चुनावों के लिए दो बच्चों की नियम को निरस्त करने वाला विधेयक पारित किया है। 2019 में दो बच्चों की नियम शुरू की गई थी, जिसमें ULB चुनावों में दो से अधिक बच्चों वाले व्यक्तियों को चुनाव लड़ने से रोका गया था। इस विधेयक का उद्देश्य इस प्रतिबंध को हटाना है, जिससे दो से अधिक बच्चों वाले व्यक्ति ULB चुनावों में भाग ले सकें। यह कदम राज्य में लगभग 10% ULB सीटों पर प्रभाव डालेगा। राजस्थान सरकार ने कहा है कि यह निर्णय स्थानीय शासन में भागीदारी बढ़ाने और समावेशिता को बढ़ावा देने के लिए लिया गया है।</p><div class='section-label'>मुख्य बिंदु</div><ul class='kp-list'><li>राजस्थान विधानसभा — निरस्ति विधेयक: ULB चुनावों के लिए दो बच्चों की नियम को हटाने के लिए पारित किया गया।</li><li>राजस्थान सरकार — ULB चुनाव: लगभग 10% ULB सीटें प्रभावित होने की उम्मीद है।</li><li>राजस्थान पंचायती राज (संशोधन) अधिनियम, 2019 — दो बच्चों की नियम: 2019 में परिवार नियोजन और जनसंख्या नियंत्रण को बढ़ावा देने के लिए शुरू किया गया।</li><li>राजस्थान विधानसभा — निरस्ति विधेयक: स्थानीय शासन में भागीदारी बढ़ाने और समावेशिता को बढ़ावा देने के लिए।</li><li>राजस्थान सरकार — ULB चुनाव: दो से अधिक बच्चों वाले व्यक्तियों पर प्रतिबंध हटाने का निर्णय लिया गया।</li></ul><div class='section-label'>महत्त्व</div><p class='implication'></p></div>
-  <div class='art-footer'><a href="https://www.thehindu.com/news/national/rajasthan/now-rajasthan-assembly-passes-bill-to-repeal-two-child-norm-forulbelections/article70727435.ece" target="_blank" rel="noopener">&#128240; The Hindu &#8599;</a>&nbsp;&middot;&nbsp;<span style='color:#888'></span></div>
-</article>
-    </div>
-
-    <!-- Q&A -->
-    <section class="qa-section"><h2 class="section-heading">⚡ Quick Bites — Q&amp;A</h2><div class="qa-grid">
-<div class="qa-card">
-  <div class="qa-cat">General</div>
-  <div class="qa-tab-bar">
-    <button class="tab-btn active small" onclick="switchTab(this,'qen',0)">EN</button>
-    <button class="tab-btn small" onclick="switchTab(this,'qhi',0)">HI</button>
-  </div>
-  <div id="tab-qen-0">
-    <p class="qa-q">Q: Under which court's directive are special tribunals to be formed to hear appeals of people left out of the Bengal SIR?</p>
-    <p class="qa-a">A: <strong>Supreme Court</strong></p>
-  </div>
-  <div id="tab-qhi-0" class="hidden hindi">
-    <p class="qa-q">प्र: किस न्यायालय के निर्देश के तहत बंगाल एसआईआर से बाहर रहने वाले लोगों की अपील सुनने के लिए विशेष न्यायाधिकरण गठित किए जाने हैं?</p>
-    <p class="qa-a">उ: <strong>सुप्रीम कोर्ट</strong></p>
-  </div>
-  <div class="qa-src">Source: The Hindu</div>
-</div>
-<div class="qa-card">
-  <div class="qa-cat">General</div>
-  <div class="qa-tab-bar">
-    <button class="tab-btn active small" onclick="switchTab(this,'qen',1)">EN</button>
-    <button class="tab-btn small" onclick="switchTab(this,'qhi',1)">HI</button>
-  </div>
-  <div id="tab-qen-1">
-    <p class="qa-q">Q: Which high court has directed the State government not to carry out any work on the ground for now on the Sharavathi pumped storage hydroelectric project?</p>
-    <p class="qa-a">A: <strong>Karnataka High Court</strong></p>
-  </div>
-  <div id="tab-qhi-1" class="hidden hindi">
-    <p class="qa-q">प्र: किस उच्च न्यायालय ने राज्य सरकार को शरावथी पंप्ड स्टोरेज हाइड्रोइलेक्ट्रिक परियोजना पर जमीनी स्तर पर अभी के लिए कोई काम नहीं करने का निर्देश दिया है?</p>
-    <p class="qa-a">उ: <strong>कर्नाटक उच्च न्यायालय</strong></p>
-  </div>
-  <div class="qa-src">Source: The Hindu</div>
-</div>
-<div class="qa-card">
-  <div class="qa-cat">General</div>
-  <div class="qa-tab-bar">
-    <button class="tab-btn active small" onclick="switchTab(this,'qen',2)">EN</button>
-    <button class="tab-btn small" onclick="switchTab(this,'qhi',2)">HI</button>
-  </div>
-  <div id="tab-qen-2">
-    <p class="qa-q">Q: Where has the Biodiversity Study Centre been inaugurated?</p>
-    <p class="qa-a">A: <strong>Kidoor</strong></p>
-  </div>
-  <div id="tab-qhi-2" class="hidden hindi">
-    <p class="qa-q">प्र: जैव विविधता अध्ययन केंद्र कहाँ पर उद्घाटन किया गया है?</p>
-    <p class="qa-a">उ: <strong>किदूर</strong></p>
-  </div>
-  <div class="qa-src">Source: The Hindu</div>
-</div>
-<div class="qa-card">
-  <div class="qa-cat">General</div>
-  <div class="qa-tab-bar">
-    <button class="tab-btn active small" onclick="switchTab(this,'qen',3)">EN</button>
-    <button class="tab-btn small" onclick="switchTab(this,'qhi',3)">HI</button>
-  </div>
-  <div id="tab-qen-3">
-    <p class="qa-q">Q: Who has committed to protecting the Aravalli hills?</p>
-    <p class="qa-a">A: <strong>Bhupender Yadav</strong></p>
-  </div>
-  <div id="tab-qhi-3" class="hidden hindi">
-    <p class="qa-q">प्र: किसने अरावली पहाड़ियों की रक्षा करने की प्रतिबद्धता जताई है?</p>
-    <p class="qa-a">उ: <strong>भूपेंद्र यादव</strong></p>
-  </div>
-  <div class="qa-src">Source: The Hindu</div>
-</div>
-<div class="qa-card">
-  <div class="qa-cat">General</div>
-  <div class="qa-tab-bar">
-    <button class="tab-btn active small" onclick="switchTab(this,'qen',4)">EN</button>
-    <button class="tab-btn small" onclick="switchTab(this,'qhi',4)">HI</button>
-  </div>
-  <div id="tab-qen-4">
-    <p class="qa-q">Q: Which state has announced an early departure scheme for women staff in MMR?</p>
-    <p class="qa-a">A: <strong>Maharashtra</strong></p>
-  </div>
-  <div id="tab-qhi-4" class="hidden hindi">
-    <p class="qa-q">प्र: किस राज्य ने एमएमआर में महिला कर्मचारियों के लिए समय से पहले प्रस्थान योजना की घोषणा की है?</p>
-    <p class="qa-a">उ: <strong>महाराष्ट्र</strong></p>
-  </div>
-  <div class="qa-src">Source: The Hindu</div>
-</div>
-<div class="qa-card">
-  <div class="qa-cat">General</div>
-  <div class="qa-tab-bar">
-    <button class="tab-btn active small" onclick="switchTab(this,'qen',5)">EN</button>
-    <button class="tab-btn small" onclick="switchTab(this,'qhi',5)">HI</button>
-  </div>
-  <div id="tab-qen-5">
-    <p class="qa-q">Q: What technology has come of age amid the wave of kids’ online safety laws?</p>
-    <p class="qa-a">A: <strong>Age-checking technology</strong></p>
-  </div>
-  <div id="tab-qhi-5" class="hidden hindi">
-    <p class="qa-q">प्र: बच्चों की ऑनलाइन सुरक्षा कानूनों की लहर के बीच कौन सी तकनीक परिपक्व हो गई है?</p>
-    <p class="qa-a">उ: <strong>आयु-जाँच तकनीक</strong></p>
-  </div>
-  <div class="qa-src">Source: The Hindu</div>
-</div>
-<div class="qa-card">
-  <div class="qa-cat">General</div>
-  <div class="qa-tab-bar">
-    <button class="tab-btn active small" onclick="switchTab(this,'qen',6)">EN</button>
-    <button class="tab-btn small" onclick="switchTab(this,'qhi',6)">HI</button>
-  </div>
-  <div id="tab-qen-6">
-    <p class="qa-q">Q: Which institution has conferred the First Principles Teachers Award 2026?</p>
-    <p class="qa-a">A: <strong>IIT-M</strong></p>
-  </div>
-  <div id="tab-qhi-6" class="hidden hindi">
-    <p class="qa-q">प्र: किस संस्थान ने प्रथम सिद्धांत शिक्षक पुरस्कार 2026 प्रदान किया है?</p>
-    <p class="qa-a">उ: <strong>आईआईटी-एम</strong></p>
-  </div>
-  <div class="qa-src">Source: The Hindu</div>
-</div></div></section>
-
-    <!-- PDF Archive -->
-    <section class="pdf-archive"><h2 class="section-heading">📚 Monthly Magazine Archive</h2><div class="month-group"><span class="month-label">2026-03</span><a href="pdfs/2026-03/TheCurrents_EN_2026-03-10.pdf" class="pdf-link">📄 2026-03-10 EN</a> <a href="pdfs/2026-03/TheCurrents_HI_2026-03-10.pdf" class="pdf-link">📄 2026-03-10 HI</a> </div></section>
-  </div>
-
-  <!-- Historical articles view (populated by JS) -->
-  <div id="hist-view">
-    <div style="margin-bottom:16px">
-      <span id="hist-heading" style="font-size:1.1rem;font-weight:700;color:var(--navy)"></span>
-    </div>
-    <div id="hist-articles"></div>
-    <div class="no-results hidden" id="hist-empty">No articles found for this selection.</div>
-  </div>
-
-</main>
-
-<footer class='site-footer'><span>The Currents</span> &middot; UPSC Current Affairs &middot; 2026-03-11<br>For serious aspirants. Verify all facts from official sources before the exam.</footer>
-
-<script>
-// ── All monthly data (injected at build time) ─────────────────────────────
-const MONTHLY_DATA = {"2026-03-10": [{"title": "West Bengal SIR test: reading the Supreme Court’s order", "title_hi": "पश्चिम बंगाल में चुनावी मतदाता सूची विवाद: सुप्रीम कोर्ट के आदेश की व्याख्या", "gs_paper": "GS2 — Polity: Election Commission and Electoral Process", "upsc_topics": ["Polity & Governance", "International Relations", "Schemes & Initiatives"], "context": "The Supreme Court's order comes amidst 60 lakh pending cases in West Bengal, which has sparked a discussion on the Election Commission's need for permanent staff to handle electoral roll disputes. The publication of final rolls is also a crucial aspect of this issue. The Supreme Court's decision aims to address the backlog of cases and ensure the integrity of the electoral process. The Election Commission's current staffing structure has been questioned, with some arguing that it needs permanent staff to effectively manage electoral disputes. The Supreme Court's order is seen as a step towards strengthening the electoral process in West Bengal.", "key_points": ["The Supreme Court — Electoral Roll Disputes: Ordered deployment of judicial officers to decide cases.", "Election Commission — Staffing: Equipped with permanent staff to handle electoral roll disputes.", "West Bengal — Pending Cases: 60 lakh cases pending adjudication.", "The Supreme Court — Publication of Final Rolls: Crucial aspect of electoral process.", "Election Commission — Electoral Process: Aims to ensure integrity and transparency."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/west-bengal/west-bengal-sir-test-reading-the-supreme-courts-order/article70722401.ece"}, {"title": "Prime Minister to launch projects worth ₹10,800 crore at Kochi event", "title_hi": "प्रधान मंत्री ₹10,800 करोड़ की परियोजनाओं का कोच्चि में शुभारंभ करेंगे", "gs_paper": "GS2 — Governance: Government Schemes and Initiatives", "upsc_topics": ["Polity & Governance", "Agriculture & Rural", "Schemes & Initiatives"], "context": "The Prime Minister will lay the foundation stone for a polypropylene unit at Kochi Refinery, a project worth ₹10,800 crore. This initiative is expected to boost the region's infrastructure and economy. The event will also see the inauguration of 23 rural roads constructed under the Pradhan Mantri Gram Sadak Yojana in the State. The Kochi Refinery is a significant contributor to the region's industrial growth. The Pradhan Mantri Gram Sadak Yojana aims to improve rural connectivity across the country.", "key_points": ["The Prime Minister — Polypropylene Unit: Laying foundation stone at Kochi Refinery (₹10,800 crore).", "The Prime Minister — Pradhan Mantri Gram Sadak Yojana: Inaugurating 23 rural roads in the State.", "The Government — Kochi Refinery: Boosting regional infrastructure and economy through the polypropylene unit.", "The Government — Pradhan Mantri Gram Sadak Yojana: Improving rural connectivity across the country.", "The Prime Minister — Kochi Event: Launching projects worth ₹10,800 crore."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/kerala/prime-minister-to-launch-projects-worth-10800-crore-at-kochi-event/article70723929.ece"}, {"title": "Supreme Court approves Centre's proposal extending term of tribunal members", "title_hi": "सुप्रीम कोर्ट ने केंद्र के प्रस्ताव को मंजूरी दी, ट्रिब्यूनल सदस्यों की अवधि बढ़ाई", "gs_paper": "GS2 — Polity: Judiciary and Tribunal Reforms", "upsc_topics": ["Polity & Governance", "International Relations", "Economy"], "context": "The Supreme Court has given its nod to the Centre's proposal to extend the term of tribunal members. This move will affect those appointed under the Tribunal Reforms Act of 2021. According to Attorney General R Venkataramani, a new law is likely to be enacted by next September, either in the upcoming Budget session or the Monsoon session. Around 21 members are due to retire before the new law is enacted. The extension is intended to ensure continuity until the new legislation is in place.", "key_points": ["Supreme Court — Tribunal Reforms Act of 2021: Approved extension of term for tribunal members.", "Centre — Proposal: Extended term for tribunal members until new law is enacted.", "Attorney General R Venkataramani — Statement: New law likely to be enacted by next September.", "Tribunal Members — Retirement: Around 21 members due to retire before new law is enacted.", "Centre — Legislation: Aims to ensure continuity and address issues arising from Tribunal Reforms Act of 2021."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/supreme-court-approves-centres-proposal-extending-term-of-tribunal-members/article70724939.ece"}, {"title": "Israel-Iran war: Trump says war will end 'very soon'; U.S. saving some ‘most important’ targets for later", "title_hi": "इज़राइल-इरान संघर्ष: ट्रंप ने कहा जल्द ही युद्ध समाप्त हो जाएगा", "gs_paper": "GS2 — International Relations: Middle East Conflict and US Foreign Policy", "upsc_topics": ["Polity & Governance", "International Relations", "Economy"], "context": "The US President played down the scale of the conflict, which has not been approved by the US Congress, repeatedly calling it an 'excursion' rather than a war. The conflict between Israel and Iran has been escalating, with the US involved in the situation. Trump's statement comes amid rising tensions in the region. The US Congress has not approved the conflict, raising questions about the legitimacy of US involvement. The situation is being closely watched by the international community.", "key_points": ["US President — Statement: Said the war will end 'very soon'.", "US Congress — Approval: Has not approved the conflict.", "US President — Description: Repeatedly called the conflict an 'excursion' rather than a war.", "International Community — Response: Is closely watching the situation.", "US — Involvement: Has been involved in the conflict, with its actions being questioned by the US Congress."], "source": "The Hindu", "url": "https://www.thehindu.com/news/international/trump-israel-iran-war-us-to-end-very-soon/article70724671.ece"}, {"title": "UP govt signs pact with Hinduja Group firm to expand broadband connectivity", "title_hi": "उत्तर प्रदेश सरकार ने हिंदुजा ग्रुप की कंपनी के साथ ब्रॉडबैंड कनेक्टिविटी विस्तार के लिए समझौता किया", "gs_paper": "GS3 — Economy: Infrastructure Development", "upsc_topics": ["Infrastructure"], "context": "The Uttar Pradesh government has signed a pact with a Hinduja Group firm to expand broadband connectivity in the state. The pact aims to provide high-speed internet services to around 3.5 lakh villages and 20,000 gram panchayats. The project is expected to be completed within the next 2 years at a cost of ₹2,500 crore. The Hinduja Group firm will be responsible for laying optical fibre cables across the state. The project is expected to benefit around 16 crore people in the state.", "key_points": ["Uttar Pradesh government — Broadband Expansion Project: Signed pact with Hinduja Group firm to expand broadband connectivity.", "Hinduja Group firm — Broadband Expansion Project: Will lay optical fibre cables across the state at a cost of ₹2,500 crore.", "Uttar Pradesh government — Broadband Expansion Project: Aims to provide high-speed internet services to around 3.5 lakh villages and 20,000 gram panchayats.", "Uttar Pradesh government — Broadband Expansion Project: Expected to benefit around 16 crore people in the state.", "Uttar Pradesh government — Broadband Expansion Project: Expected to be completed within the next 2 years."], "source": "The Hindu", "url": "https://www.thehindu.com/news/national/uttar-pradesh/up-govt-signs-pact-with-hinduja-group-firm-to-expand-broadband-connectivity/article70725159.ece"}]};
-
-// ── Populate month dropdown from available data ───────────────────────────
-(function() {
-  var months = {};
-  Object.keys(MONTHLY_DATA).forEach(function(d) {
-    var m = d.substring(0, 7);
-    months[m] = true;
+function buildLeftPanel() {
+  var keys = Object.keys(MONTHLY_DATA).sort().reverse();
+  var html = '';
+  var todayArts  = MONTHLY_DATA[TODAY_STR] || [];
+  var topicSnip  = todayArts.slice(0,3).map(function(a){return((a.upsc_topics||[])[0]||'');}).filter(Boolean).join(' \u00b7 ');
+  html += '<div class="day-entry active" onclick="showToday(this)">'
+    + '<div class="day-link">'
+    + '<div class="day-date">' + fmtDate(TODAY_STR) + ' \u00b7 Today</div>'
+    + '<div class="day-topics">' + escH(topicSnip||'Today\'s current affairs') + '</div>'
+    + '<div class="day-count">' + TODAY_ARTS + ' articles</div>'
+    + '</div></div>';
+  keys.forEach(function(d) {
+    if (d === TODAY_STR) return;
+    var arts   = MONTHLY_DATA[d] || [];
+    if (!arts.length) return;
+    var topics = arts.slice(0,3).map(function(a){return((a.upsc_topics||[])[0]||'');}).filter(Boolean).join(' \u00b7 ');
+    html += '<div class="day-entry" onclick="showHistDate(\'' + escH(d) + '\',this)">'
+      + '<div class="day-link">'
+      + '<div class="day-date">' + fmtDate(d) + '</div>'
+      + '<div class="day-topics">' + escH(topics) + '</div>'
+      + '<div class="day-count">' + arts.length + ' articles</div>'
+      + '</div></div>';
   });
-  var sel = document.getElementById('fil-month');
-  Object.keys(months).sort().reverse().forEach(function(m) {
-    var opt = document.createElement('option');
-    opt.value = m;
-    opt.textContent = m;
-    sel.appendChild(opt);
-  });
-  // Sync month selector with date picker
-  document.getElementById('fil-date').addEventListener('change', function() {
-    document.getElementById('fil-month').value = '';
-  });
-  document.getElementById('fil-month').addEventListener('change', function() {
-    document.getElementById('fil-date').value = '';
-  });
-})();
+  return html;
+}
 
-// ── Render a list of historical article objects as HTML ───────────────────
-function renderHistArticles(articles) {
-  if (!articles || articles.length === 0) return '';
-  return articles.map(function(a, i) {
-    var topics = (a.upsc_topics || []).slice(0,2).join(' · ');
-    var ctx    = (a.context || '').substring(0, 300);
-    return '<div class="hist-article">' +
-      '<div class="hist-meta">' +
-        (a.gs_paper ? '<span class="hist-gs">' + escH(a.gs_paper.split('—')[0].trim()) + '</span>' : '') +
-        '<span>' + escH(a.source || '') + '</span>' +
-      '</div>' +
-      '<div class="hist-title">' + escH(a.title || '') + '</div>' +
-      '<div class="hist-context">' + escH(ctx) + (ctx.length < (a.context||'').length ? '…' : '') + '</div>' +
-      (topics ? '<div style="margin-top:6px;font-size:0.78rem;color:#888">' + escH(topics) + '</div>' : '') +
-      '</div>';
+var _lpHTML = buildLeftPanel();
+document.getElementById('leftPanelContent').innerHTML  = _lpHTML;
+document.getElementById('drawerLeftContent').innerHTML = _lpHTML;
+
+function showToday(el) {
+  markActive(el, true);
+  document.getElementById('today-view').style.display = '';
+  document.getElementById('hist-view').style.display  = 'none';
+  document.getElementById('mainDatePill').textContent = TODAY_LABEL.toUpperCase();
+  document.getElementById('mainInfo').innerHTML       = TODAY_ARTS + ' articles \u00b7 ' + LANG_LABEL;
+  document.getElementById('hdrDate').textContent      = TODAY_LABEL;
+  document.querySelectorAll('.article').forEach(function(c){ c.style.display=''; });
+  closeAllDrawers();
+}
+
+function showHistDate(d, el) {
+  markActive(el, false);
+  var arts = MONTHLY_DATA[d] || [];
+  document.getElementById('today-view').style.display = 'none';
+  document.getElementById('hist-view').style.display  = '';
+  document.getElementById('hist-heading').textContent = fmtDate(d) + ' \u2014 ' + arts.length + ' articles';
+  document.getElementById('hist-articles').innerHTML  = renderHistArticles(arts);
+  document.getElementById('hist-empty').classList.toggle('hidden', arts.length > 0);
+  document.getElementById('mainDatePill').textContent = fmtDate(d).toUpperCase();
+  document.getElementById('mainInfo').textContent     = arts.length + ' articles';
+  document.getElementById('hdrDate').textContent      = fmtDate(d);
+  closeAllDrawers();
+}
+
+function markActive(el, isToday) {
+  document.querySelectorAll('.day-entry').forEach(function(e){ e.classList.remove('active'); });
+  if (!el) return;
+  var onc = el.getAttribute('onclick');
+  document.querySelectorAll('.day-entry').forEach(function(e){
+    if (e.getAttribute('onclick') === onc) e.classList.add('active');
+  });
+}
+
+function renderHistArticles(arts) {
+  if (!arts || !arts.length) return '';
+  return arts.map(function(a) {
+    var gs  = a.gs_paper ? '<span class="hist-gs">' + escH(a.gs_paper.split('\u2014')[0].trim()) + '</span>' : '';
+    var ctx = (a.context||'').substring(0,280);
+    return '<div class="hist-article">'
+      + '<div class="hist-meta">' + gs + escH(a.source||'') + '</div>'
+      + '<div class="hist-title">' + escH(a.title||'') + '</div>'
+      + '<div class="hist-context">' + escH(ctx) + (ctx.length < (a.context||'').length ? '\u2026' : '') + '</div>'
+      + '</div>';
   }).join('');
 }
 
-function escH(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ── Apply filter ──────────────────────────────────────────────────────────
-function applyFilter() {
-  var dateVal  = document.getElementById('fil-date').value;
-  var monthVal = document.getElementById('fil-month').value;
-  var topicVal = document.getElementById('fil-topic').value;
-  var today    = '2026-03-11';
-
-  // Topic filter on today's articles (no date/month change)
-  if (!dateVal && !monthVal && topicVal) {
-    filterTodayByTopic(topicVal);
-    return;
-  }
-
-  // If date = today and no month override, just filter today's view by topic
-  if ((dateVal === today || (!dateVal && !monthVal)) && !monthVal) {
-    filterTodayByTopic(topicVal);
-    return;
-  }
-
-  // Historical lookup
-  var key = dateVal || monthVal;
-  var articles = [];
-
-  if (dateVal && dateVal !== today) {
-    // Single date
-    var day = MONTHLY_DATA[dateVal];
-    if (day) articles = day;
-  } else if (monthVal) {
-    // All articles in a month
-    Object.keys(MONTHLY_DATA).filter(function(d) {
-      return d.startsWith(monthVal);
-    }).sort().forEach(function(d) {
-      articles = articles.concat(MONTHLY_DATA[d] || []);
-    });
-  }
-
-  // Apply topic filter if set
-  if (topicVal && articles.length) {
-    articles = articles.filter(function(a) {
-      return (a.upsc_topics || []).indexOf(topicVal) >= 0;
-    });
-  }
-
-  var label = monthVal ? ('Month: ' + monthVal) : ('Date: ' + dateVal);
-  if (topicVal) label += ' · ' + topicVal;
-  showHistView(articles, label);
-}
-
-// ── Filter today's articles by topic ─────────────────────────────────────
-function filterTodayByTopic(topic) {
-  document.getElementById('today-view').style.display = '';
-  document.getElementById('hist-view').style.display  = 'none';
-  var cards = document.querySelectorAll('.article-card');
-  var shown = 0;
-  cards.forEach(function(c) {
-    var topics = c.getAttribute('data-topics') || '';
-    var show   = !topic || topics.indexOf(topic) >= 0;
+function filterByTopic(tag) {
+  tag.classList.toggle('active');
+  var label = tag.textContent.trim();
+  var active = tag.classList.contains('active');
+  document.querySelectorAll('.cloud-tag').forEach(function(t){
+    if (t.textContent.trim() === label) t.classList.toggle('active', active);
+  });
+  if (document.getElementById('today-view').style.display === 'none') showToday(null);
+  var chosen = Array.from(document.querySelectorAll('.cloud-tag.active')).map(function(t){ return t.textContent.trim(); });
+  document.querySelectorAll('.article').forEach(function(c){
+    if (!chosen.length){ c.style.display=''; return; }
+    var show = chosen.some(function(t){ return (c.getAttribute('data-topics')||'').indexOf(t)>=0; });
     c.style.display = show ? '' : 'none';
-    if (show) shown++;
-  });
-  document.getElementById('fil-result').textContent = shown + ' article' + (shown===1?'':'s') + ' shown';
-}
-
-// ── Show historical view ──────────────────────────────────────────────────
-function showHistView(articles, label) {
-  document.getElementById('today-view').style.display = 'none';
-  document.getElementById('hist-view').style.display  = '';
-  document.getElementById('hist-heading').textContent  = label + ' — ' + articles.length + ' articles';
-  document.getElementById('hist-articles').innerHTML   = renderHistArticles(articles);
-  document.getElementById('hist-empty').classList.toggle('hidden', articles.length > 0);
-  document.getElementById('fil-result').textContent    = articles.length + ' article' + (articles.length===1?'':'s');
-  document.getElementById('hdr-date').textContent      = label;
-}
-
-// ── Clear filter ──────────────────────────────────────────────────────────
-function clearFilter() {
-  document.getElementById('fil-date').value  = '2026-03-11';
-  document.getElementById('fil-month').value = '';
-  document.getElementById('fil-topic').value = '';
-  document.getElementById('today-view').style.display = '';
-  document.getElementById('hist-view').style.display  = 'none';
-  document.getElementById('hdr-date').textContent     = '2026-03-11';
-  document.getElementById('fil-result').textContent   = '';
-  document.querySelectorAll('.article-card').forEach(function(c) {
-    c.style.display = '';
   });
 }
 
-// ── Tab switcher ──────────────────────────────────────────────────────────
-function switchTab(btn, lang, n) {
-  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b) {
-    b.classList.remove('active');
-  });
+function switchLang(btn, artId) {
+  btn.closest('.tab-bar').querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
-  var isQ   = lang.startsWith('q');
-  var enKey = isQ ? 'tab-qen-' + n : 'tab-en-' + n;
-  var hiKey = isQ ? 'tab-qhi-' + n : 'tab-hi-' + n;
-  var enEl  = document.getElementById(enKey);
-  var hiEl  = document.getElementById(hiKey);
-  if (enEl) enEl.classList.toggle('hidden', lang !== (isQ ? 'qen' : 'en'));
-  if (hiEl) hiEl.classList.toggle('hidden', lang !== (isQ ? 'qhi' : 'hi'));
+  var isHindi = btn.textContent.charCodeAt(0) >= 0x0900;
+  var en = document.getElementById(artId + '-en');
+  var hi = document.getElementById(artId + '-hi');
+  if (en) en.style.display = isHindi ? 'none' : 'block';
+  if (hi) hi.style.display = isHindi ? 'block' : 'none';
+}
+
+function switchQA(btn, qaId) {
+  btn.closest('.qa-tab-bar').querySelectorAll('.qa-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var isHI = btn.textContent.trim() === 'HI';
+  var en = document.getElementById(qaId + '-en');
+  var hi = document.getElementById(qaId + '-hi');
+  if (en) en.style.display = isHI ? 'none' : 'block';
+  if (hi) hi.style.display = isHI ? 'block' : 'none';
+}
+
+function toggleDrawer(side) {
+  var L  = document.getElementById('drawerLeft');
+  var R  = document.getElementById('drawerRight');
+  var bd = document.getElementById('drawerBackdrop');
+  if (side === 'left') {
+    var w = !L.classList.contains('open');
+    L.classList.toggle('open', w); R.classList.remove('open'); bd.classList.toggle('visible', w);
+  } else {
+    var w = !R.classList.contains('open');
+    R.classList.toggle('open', w); L.classList.remove('open'); bd.classList.toggle('visible', w);
+  }
+}
+
+function closeAllDrawers() {
+  document.getElementById('drawerLeft').classList.remove('open');
+  document.getElementById('drawerRight').classList.remove('open');
+  document.getElementById('drawerBackdrop').classList.remove('visible');
+}
+
+window.addEventListener('scroll', closeAllDrawers, {passive:true});
+
+function escH(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 </script>
-</body>
-</html>
+</body></html>
