@@ -1,22 +1,3 @@
-"""
-main.py — The Currents pipeline orchestrator.
-
-Stage order:
-  1.  Fetch RSS
-  2.  Filter & rank
-  2b. Scrape og:image (selected articles only)
-  3.  AI enrich
-  4.  Validate
-  5.  Stats log
-  6.  Social post images (Playwright HTML→PNG)
-  7.  PDF — EN + HI
-  8.  Web page (with date/month filter)
-  9.  Persist to repo (articles + PDFs + metrics)    ← replaces _accumulate_monthly()
-  10. Deliver (Telegram + Gmail via notify.py)
-  11. Metrics summary
-
-All path logic lives in core/output_manager.py — nothing is hardcoded here.
-"""
 from __future__ import annotations
 
 import contextlib, json, sys, os
@@ -90,6 +71,7 @@ def run() -> None:
     date_str = datetime.now().strftime("%Y-%m-%d")
 
     log.info(f"🚀 The Currents — {date_str}")
+    log.info(f"Offline cutoff: articles only till {OFFLINE_CUTOFF_HOUR_IST}:00 AM IST")
     log.info(f"   Temp workspace : {om.temp_root}")
     log.info(f"   Repo root      : {om.repo_root}")
 
