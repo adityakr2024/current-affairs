@@ -17,8 +17,10 @@ import feedparser
 import requests
 from config.settings import (
     RSS_SOURCES, MAX_RAW_ARTICLES, IMAGE_FETCH_TIMEOUT,
-    SCRAPE_IMAGE_SOURCES,
+    SCRAPE_IMAGE_SOURCES, OFFLINE_CUTOFF_HOUR_IST,
 )
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from core.image_fetcher import image_url_from_rss_entry, fetch_article_image
 from core.security import is_safe_url, sanitise_text, safe_for_prompt, MAX_TITLE_LEN, MAX_SUMMARY_LEN
 from core.logger import log
@@ -35,7 +37,7 @@ def _strip_html(text: str) -> str:
 
 def _fetch_feed(source: dict) -> list[dict]:
     """Fetch one RSS feed, extract and sanitise articles."""
-    url  = source["url"]
+    url = source["url"]
     name = source["name"]
 
     if not is_safe_url(url):
@@ -51,16 +53,29 @@ def _fetch_feed(source: dict) -> list[dict]:
         return []
 
     articles = []
-    for entry in feed.entries:
-        title   = sanitise_text((entry.get("title") or "").strip(), MAX_TITLE_LEN)
-        summary = sanitise_text(_strip_html(
-            (entry.get("summary") or entry.get("description") or "").strip()
-        ), MAX_SUMMARY_LEN)
-        url_art = entry.get("link") or ""
+    cutoff_ist = datetime.now(ZoneInfo("Asia/Kolkata")).replace(
+        hour=OFFLINE_CUTOFF_HOUR_IST, minute=0, second=0, microsecond=0
+    )   # ← moved outside loop for tiny speed
 
+    for entry in feed.entries:
+        title = sanitise_text((entry.get("title") or "").strip(), MAX_TITLE_LEN)
         if not title:
             continue
 
+        # === OFFLINE NEWSPAPER CUTOFF (2 AM IST) ===
+        if hasattr(entry, 'published_parsed') and entry.published_parsed:
+            pub_dt = datetime(*entry.published_parsed[:6], tzinfo=ZoneInfo("UTC"))
+            pub_ist = pub_dt.astimezone(ZoneInfo("Asia/Kolkata"))
+            if pub_ist > cutoff_ist:
+                log.info(f"Skipped fresh article from {name} (published after {OFFLINE_CUTOFF_HOUR_IST}:00 AM IST)")
+                continue
+        # === CUTOFF END ===
+
+        summary = sanitise_text(_strip_html(
+            (entry.get("summary") or entry.get("description") or "").strip()
+        ), MAX_SUMMARY_LEN)
+
+        url_art = entry.get("link") or ""
         if url_art and not is_safe_url(url_art):
             log.warning(f"Skipping article with unsafe URL: {url_art[:80]}")
             url_art = ""
@@ -77,14 +92,14 @@ def _fetch_feed(source: dict) -> list[dict]:
             rss_img_url = None
 
         articles.append({
-            "title":             title,
-            "summary":           summary[:MAX_SUMMARY_LEN],
-            "url":               url_art,
-            "source":            name,
-            "source_weight":     source.get("weight", 5),
-            "category":          "International" if name in _INTERNATIONAL_SOURCES else "India",
-            "_id":               hashlib.md5(title.encode()).hexdigest()[:12],
-            "article_image_url": rss_img_url or "",   # RSS thumbnail → inset circle fallback
+            "title": title,
+            "summary": summary[:MAX_SUMMARY_LEN],
+            "url": url_art,
+            "source": name,
+            "source_weight": source.get("weight", 5),
+            "category": "International" if name in _INTERNATIONAL_SOURCES else "India",
+            "_id": hashlib.md5(title.encode()).hexdigest()[:12],
+            "article_image_url": rss_img_url or "", # RSS thumbnail → inset circle fallback
         })
 
     return articles
