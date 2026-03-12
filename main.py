@@ -20,7 +20,7 @@ from generators.web_builder    import build_web
 from config.settings           import (
     FULL_ARTICLES_PER_RUN, QUICK_BITES_PER_RUN,
     MIN_ARTICLES_PER_RUN,  MIN_ONELINERS_PER_RUN,
-    OUTPUT_DIR,
+    OUTPUT_DIR, OFFLINE_CUTOFF_HOUR_IST,
 )
 from config.apis import active_providers, PROVIDERS
 
