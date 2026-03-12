@@ -72,23 +72,31 @@ jobs:
           GMAIL_SENDER:         ${{ secrets.GMAIL_SENDER }}
           GMAIL_APP_PASSWORD:   ${{ secrets.GMAIL_APP_PASSWORD }}
           GMAIL_RECIPIENT:      ${{ secrets.GMAIL_RECIPIENT }}
-          # ── Site URL — update this if you rename the repo ────────────────────
+          # ── Path config ─────────────────────────────────────────────────────
           SITE_URL:   https://adityakr2024.github.io/current-affairs/
           OUTPUT_DIR: /tmp/the_currents
         run: python main.py
 
-      # ── 6. Commit monthly data + PDFs back to main branch ───────────────────
-      - name: Commit monthly archive to main
+      # ── 6. Commit persistent data back to main ───────────────────────────────
+      # Commits three things that OutputManager writes to the repo:
+      #   data/YYYY-MM.json          — today's articles
+      #   data/metrics_history.jsonl — appended metrics line
+      #   pdfs/YYYY-MM/*.pdf         — today's PDFs
+      - name: Commit persistent data to main
         if: always()
         run: |
           DATE=$(date +%Y-%m-%d)
           git config user.name  "The Currents Bot"
           git config user.email "bot@thecurrents.in"
           git add data/ pdfs/ 2>/dev/null || true
-          git diff --staged --quiet || git commit -m "data: ${DATE} articles archived"
+          git diff --staged --quiet || git commit -m "data: ${DATE} — articles + metrics"
           git push origin main || echo "⚠ Push to main failed (non-fatal)"
 
-      # ── 7. Publish web page + PDFs to GitHub Pages ──────────────────────────
+      # ── 7. Deploy web page + PDFs + social images to GitHub Pages ────────────
+      # Three content types are merged into gh-pages:
+      #   index.html          — today's web page (from /tmp/the_currents/web/)
+      #   pdfs/YYYY-MM/*.pdf  — PDF archive (merged from repo/pdfs/ + today)
+      #   social/YYYY-MM/*.jpg — social images (new: for OG preview links)
       - name: Deploy to GitHub Pages
         if: always()
         run: |
@@ -103,51 +111,96 @@ jobs:
           git config user.name  "The Currents Bot"
           git config user.email "bot@thecurrents.in"
 
-          # Build a clean staging directory for gh-pages
+          # ── Build a clean staging directory for gh-pages ──────────────────
           STAGE=$(mktemp -d)
 
           # Copy web page
           cp /tmp/the_currents/web/index.html "${STAGE}/index.html"
+          touch "${STAGE}/.nojekyll"
 
           # Copy today's PDFs into staging
           mkdir -p "${STAGE}/pdfs/${MONTH}"
           cp /tmp/the_currents/pdf/TheCurrents_EN_${DATE}.pdf "${STAGE}/pdfs/${MONTH}/" 2>/dev/null || true
           cp /tmp/the_currents/pdf/TheCurrents_HI_${DATE}.pdf "${STAGE}/pdfs/${MONTH}/" 2>/dev/null || true
 
-          # Merge existing PDF archive from current gh-pages branch (keep old issues)
+          # Copy social images into staging (OG preview images)
+          if [ -d /tmp/the_currents/web/social ]; then
+            mkdir -p "${STAGE}/social"
+            cp -r /tmp/the_currents/web/social/. "${STAGE}/social/" 2>/dev/null || true
+            echo "✅ Social images staged: $(find ${STAGE}/social -name '*.jpg' 2>/dev/null | wc -l) images"
+          fi
+
+          # ── Merge existing PDF + social archive from gh-pages ─────────────
+          # We never overwrite old files — only add new ones.
           git fetch origin gh-pages 2>/dev/null || true
           if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
             git checkout origin/gh-pages -- pdfs/ 2>/dev/null || true
-            if [ -d pdfs ]; then
-              cp -rn pdfs/. "${STAGE}/pdfs/" 2>/dev/null || true
-            fi
+            git checkout origin/gh-pages -- social/ 2>/dev/null || true
+            if [ -d pdfs ];   then cp -rn pdfs/.   "${STAGE}/pdfs/"   2>/dev/null || true; fi
+            if [ -d social ]; then cp -rn social/. "${STAGE}/social/" 2>/dev/null || true; fi
             git checkout HEAD -- . 2>/dev/null || true
           fi
 
-          # Switch to gh-pages branch
+          # ── Switch to gh-pages and deploy ─────────────────────────────────
           git fetch origin gh-pages 2>/dev/null || true
           git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
 
-          # Clear branch content
+          # Clear branch content (keep .git)
           git rm -rf . --quiet 2>/dev/null || true
 
-          # Copy staged files
+          # Copy all staged files
           cp -r "${STAGE}/." .
-
-          # Add nojekyll so GitHub Pages serves as-is
-          touch .nojekyll
 
           git add -A
           git diff --staged --quiet || git commit -m "The Currents — ${DATE}"
           git push origin gh-pages --force
 
-          echo "✅ Deployed to gh-pages"
+          echo "✅ Deployed to gh-pages (web + PDFs + social images)"
 
-      # ── 8. Save all outputs as downloadable artifact (backup) ────────────────
+      # ── 8. Save all outputs as downloadable artifact (30-day backup) ─────────
+      # Catches everything in /tmp including logs, daily metrics JSON,
+      # and any outputs that didn't make it into the repo commit.
       - name: Upload run artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: aarambh-${{ github.run_id }}
+          name: the-currents-${{ github.run_id }}
           path: /tmp/the_currents/
           retention-days: 30
+
+      # ── 9. Alert on failure via Telegram ─────────────────────────────────────
+      # Sends a Telegram message if ANY step above failed.
+      # Requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID to be set.
+      - name: Alert on failure
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'EOF'
+          import os, requests, datetime
+
+          token   = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+          if not token or not chat_id:
+              print("⚠ Telegram not configured — skipping failure alert")
+              exit(0)
+
+          run_id  = "${{ github.run_id }}"
+          date    = datetime.date.today().isoformat()
+          run_url = f"https://github.com/${{ github.repository }}/actions/runs/{run_id}"
+
+          msg = (
+              f"🚨 <b>Pipeline FAILED</b> — {date}\n\n"
+              f"One or more stages failed in today's run.\n"
+              f"<a href='{run_url}'>View Actions Log</a>\n\n"
+              f"Run ID: <code>{run_id}</code>"
+          )
+
+          resp = requests.post(
+              f"https://api.telegram.org/bot{token}/sendMessage",
+              json={"chat_id": chat_id, "text": msg, "parse_mode": "HTML"},
+              timeout=15,
+          )
+          print("Alert sent:", resp.status_code)
+          EOF
