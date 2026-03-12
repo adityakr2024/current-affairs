@@ -1,14 +1,3 @@
-"""
-core/filter_engine.py — UPSC relevance scoring for The Currents.
-
-Every article passes through 3 gates:
-  Gate 1 — Hard exclusions (entertainment, sports, political drama)
-  Gate 2 — UPSC relevance scoring (keyword + event-type + source weight)
-  Gate 3 — Diversity cap (max 4 per topic)
-
-One-liner selection separately filters for prelims-worthy factual items,
-excluding casualty counts, electoral news, and vague "breaking" items.
-"""
 from __future__ import annotations
 import re, sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -43,6 +32,8 @@ EXCLUDE_PATTERNS: list[str] = [
 # — the heart of what UPSC considers "current affairs".
 
 EVENT_BONUSES: list[tuple[str, int]] = [
+    (r"\bsupreme\s+court\b.*?(landmark|historic|first-ever|upholds.*dignity|passive euthanasia|life support|vegetative state|right to die)", +18),
+
     # Highest — Parliament/Cabinet formal actions
     (r"\bcabinet\s+(approves?|clears?|nods?|okays?)\b",        +15),
     (r"\bparliament\s+passes?\b",                               +15),
@@ -51,25 +42,29 @@ EVENT_BONUSES: list[tuple[str, int]] = [
     (r"\bbill\s+(passed|cleared|enacted)\b",                   +15),
     (r"\bact\s+notified\b",                                    +15),
     (r"\bordinance\s+(promulgated|issued)\b",                  +14),
+
     # Court — formal orders
     (r"\bsupreme\s+court\s+(orders?|rules?|holds?|upholds?|strikes?\s+down)\b", +12),
     (r"\bhigh\s+court\s+(orders?|rules?|holds?)\b",            +10),
     (r"\bconstitution\s+bench\b",                              +12),
+
     # Official launches / inaugurations
     (r"\b(launches?|inaugurates?|rolls?\s+out)\b.*\b(scheme|mission|programme|yojana|portal|platform)\b", +12),
     (r"\bfoundation\s+stone\b",                                +8),
     (r"\bcommissioned\b",                                      +9),
+
     # Data / reports
     (r"\b(report|survey|data|index|census)\s+(released?|published|shows?|reveals?)\b", +10),
     (r"\bindia\s+(ranks?|ranked|rises?|slips?)\b",             +10),
+
     # Treaties / agreements
     (r"\b(mou|agreement|treaty|accord)\s+(signed|inked|finalised)\b", +10),
     (r"\bsigns?\s+(mou|agreement|treaty)\b",                   +10),
+
     # Budget / Finance
     (r"\bbudget\s+(allocates?|presents?|proposes?)\b",         +12),
     (r"\bfinance\s+commission\b",                              +10),
 ]
-
 # ── GATE 2B: Statement / drama penalties ──────────────────────────────────────
 # These signals in the TITLE indicate a statement/opinion — not a policy event.
 # Penalties applied only to title (not summary) to avoid false positives.
@@ -302,14 +297,15 @@ def filter_and_rank(articles: list[dict], top_n: int = FULL_ARTICLES_PER_RUN) ->
 
     for sc, topics, a in scored:
         primary = topics[0] if topics else "General"
-        if topic_count.get(primary, 0) >= MAX_PER_TOPIC:
+        if topic_count.get(primary, 0) >= MAX_PER_TOPIC and sc < 35:
             continue
+
         topic_count[primary] = topic_count.get(primary, 0) + 1
         selected.append(a)
         if len(selected) >= top_n:
             break
 
-    log.info(f"🎯 Selected {len(selected)} articles from {len(scored)} qualified")
+    log.info(f"Selected {len(selected)} articles from {len(scored)} qualified")
     for i, a in enumerate(selected, 1):
         log.info(f"  {i:02}. [{a['_score']:3d}] {a['source']:<16} {a['title'][:65]}")
     return selected
