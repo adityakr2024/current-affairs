@@ -198,20 +198,20 @@
   "2026-03-12": [
     {
       "title": "SRMIST signs MoU with Naval Academy to collaborate in technical education and research",
-      "title_hi": "एसआरएमआईएसटी और नेवल अकादमी ने तकनीकी शिक्षा और अनुसंधान में सहयोग के लिए समझौता ज्ञापन पर हस्ताक्षर किए",
-      "gs_paper": "GS2 — Education: Institutional Collaborations and Research",
+      "title_hi": "एसआरएमआईएसटी ने नौसेना अकादमी के साथ तकनीकी शिक्षा और अनुसंधान में सहयोग के लिए समझौता ज्ञापन पर हस्ताक्षर किए",
+      "gs_paper": "GS3 — Science & Tech: Education and Research",
       "upsc_topics": [
         "Polity & Governance",
         "International Relations",
         "Defence & Security"
       ],
-      "context": "The SRM Institute of Science and Technology (SRMIST) has signed a Memorandum of Understanding (MoU) with the Naval Academy to collaborate in technical education and research. The institutions will work together in academic and research activities, including exchange of faculty, students, and scholarly resources. They will also organise joint seminars, workshops, conferences, and expert lectures. This collaboration aims to promote mutual understanding and cooperation between the two institutions. The MoU will facilitate the sharing of knowledge, expertise, and resources.",
+      "context": "The SRM Institute of Science and Technology (SRMIST) has signed a Memorandum of Understanding (MoU) with the Naval Academy to collaborate in technical education and research. The institutions will work together in academic and research activities, including the exchange of faculty, students, and scholarly resources. They will also organise joint seminars, workshops, conferences, and expert lectures. This collaboration aims to enhance the quality of education and research in the field of technology. The partnership will provide opportunities for students and faculty to engage in joint research projects and share knowledge and expertise.",
       "key_points": [
-        "SRMIST — Naval Academy MoU: Collaborate in academic and research activities.",
-        "SRMIST — Naval Academy MoU: Exchange of faculty, students, and scholarly resources.",
-        "SRMIST — Naval Academy MoU: Organise joint seminars, workshops, conferences, and expert lectures.",
-        "SRMIST — Naval Academy MoU: Promote mutual understanding and cooperation.",
-        "SRMIST — Naval Academy MoU: Facilitate sharing of knowledge, expertise, and resources."
+        "SRMIST — MoU: Signed with Naval Academy for technical education and research collaboration.",
+        "SRMIST — Academic Activities: Exchange of faculty, students, and scholarly resources.",
+        "SRMIST — Research Activities: Joint seminars, workshops, conferences, and expert lectures.",
+        "SRMIST — Collaboration: Aims to enhance the quality of education and research in technology.",
+        "SRMIST — Partnership: Opportunities for joint research projects and knowledge sharing."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/national/tamil-nadu/srmist-signs-mou-with-naval-academy-to-collaborate-in-technical-education-and-research/article70731646.ece"
@@ -225,13 +225,13 @@
         "International Relations",
         "Economy"
       ],
-      "context": "The Congress president, Mallikarjun Kharge, demanded that Prime Minister Narendra Modi respond in Parliament to the emerging economic impact of the conflict in West Asia. The Lok Sabha was adjourned due to Opposition protests. The Rajya Sabha discussed the attack on J&K's Farooq Abdullah. The economic impact of the conflict is a major concern. The government is expected to provide a response to the situation.",
+      "context": "The Parliament's Budget session saw disruptions as the Opposition demanded a response from Prime Minister Narendra Modi on the economic impact of the conflict in West Asia. Congress president Mallikarjun Kharge made the demand, citing concerns over the emerging economic situation. The Lok Sabha was adjourned due to the protests, while the Rajya Sabha discussed the attack on J&K's Farooq Abdullah. The economic impact of the conflict is a major concern, with potential implications for India's economy. The government has not yet responded to the Opposition's demands.",
       "key_points": [
-        "Lok Sabha — Adjournment: Due to Opposition protests.",
-        "Rajya Sabha — Discussion: On the attack on J&K's Farooq Abdullah.",
-        "Congress — Demand: For Prime Minister Narendra Modi to respond to the economic impact of the conflict in West Asia.",
-        "Government — Expected Action: To provide a response to the situation.",
-        "Opposition — Protest: In Lok Sabha, leading to adjournment."
+        "Lok Sabha — Budget Session: Adjourned due to Opposition protests.",
+        "Rajya Sabha — Discussion: Attack on J&K's Farooq Abdullah and economic impact of West Asia conflict.",
+        "Congress — Demand: Prime Minister Narendra Modi to respond to economic impact of West Asia conflict.",
+        "Government — Action: No response yet to Opposition's demands.",
+        "Parliament — Session: Budget session ongoing, with discussions on economic policies and allocations."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/national/parliament-budget-session-march-12-2026-live-updates/article70733709.ece"
@@ -246,11 +246,11 @@
       ],
       "context": "Dr. Farooq Abdullah, accompanied by National Conference (NC) Members of Parliament (MPs), visited Iran's Embassy in New Delhi. The MPs included Chowdry Mohammad Ramzan, Sajjad Ahmed Kichloo, and Gurwinder Singh Oberoi. They signed a condolence book at the embassy. This visit is a gesture of solidarity with the people of Iran. The embassy is located in New Delhi.",
       "key_points": [
-        "National Conference — Condolence Visit: Dr. Farooq Abdullah and NC MPs visited Iran's Embassy in New Delhi.",
-        "Iran's Embassy — Condolence Book: Dr. Abdullah and NC MPs signed a condolence book at the embassy.",
-        "National Conference — Delegation: The delegation included Chowdry Mohammad Ramzan, Sajjad Ahmed Kichloo, and Gurwinder Singh Oberoi.",
+        "National Conference — Condolence Visit: Dr. Farooq Abdullah and NC MPs visited Iran's Embassy.",
+        "Iran's Embassy — Condolence Book: Dr. Abdullah and NC MPs signed the book.",
+        "National Conference — Diplomatic Efforts: The party has been involved in various diplomatic interactions.",
         "Iran's Embassy — Location: The embassy is located in New Delhi.",
-        "National Conference — Gesture: The visit is a gesture of solidarity with the people of Iran."
+        "National Conference — Members: The party has MPs including Chowdry Mohammad Ramzan, Sajjad Ahmed Kichloo, and Gurwinder Singh Oberoi."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/national/farooq-abdullah-meets-irans-deputy-ambassador-offers-condolences-on-khameneis-death/article70726176.ece"
@@ -263,53 +263,73 @@
         "Health & Social Issues",
         "Agriculture & Rural"
       ],
-      "context": "The 22nd instalment of the Kisan Nidhi scheme is set to be released on March 13, with over 2.15 crore women farmers expected to receive financial assistance. The Agriculture Minister announced this development, highlighting the scheme's focus on supporting women in agriculture. The Kisan Nidhi scheme has been a key initiative of the government to provide financial support to farmers. With this instalment, the scheme continues to play a vital role in promoting agricultural development. The disbursement of the next instalment is expected to have a positive impact on the agricultural sector.",
+      "context": "The 22nd instalment of the Kisan Nidhi scheme is set to be released on March 13, with over 2.15 crore women farmers receiving financial assistance. The scheme aims to provide financial support to farmers across the country. The Agriculture Minister announced the release of the instalment, which is expected to benefit a large number of farmers. The Kisan Nidhi scheme has been instrumental in providing financial assistance to farmers, with the government committed to supporting the agricultural sector. The release of the next instalment is a significant step towards achieving this goal.",
       "key_points": [
-        "The Ministry of Agriculture — Kisan Nidhi Scheme: 22nd instalment to be released on March 13.",
-        "The Ministry of Agriculture — Kisan Nidhi Scheme: Over 2.15 crore women farmers to receive financial assistance.",
-        "The Ministry of Agriculture — Kisan Nidhi Scheme: Focus on supporting women in agriculture.",
-        "The Ministry of Agriculture — Kisan Nidhi Scheme: Expected to promote agricultural development.",
-        "The Ministry of Agriculture — Kisan Nidhi Scheme: Continues to play a vital role in supporting farmers' livelihoods."
+        "The Ministry of Agriculture — Kisan Nidhi: 22nd instalment to be released on March 13.",
+        "The Ministry of Agriculture — Kisan Nidhi: Over 2.15 crore women farmers to receive financial assistance.",
+        "The Ministry of Agriculture — Kisan Nidhi: Scheme aims to provide financial support to farmers across the country.",
+        "The Ministry of Agriculture — Kisan Nidhi: Government committed to supporting the agricultural sector.",
+        "The Ministry of Agriculture — Kisan Nidhi: Release of next instalment a significant step towards achieving this goal."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/national/next-instalment-of-kisan-nidhi-to-reach-farmers-on-march-13/article70732285.ece"
     },
     {
       "title": "Israel-Iran war: Trump says war will end 'very soon'; U.S. saving some ‘most important’ targets for later",
-      "title_hi": "इज़राइल-इरान संघर्ष: ट्रंप ने कहा जल्द ही युद्ध समाप्त हो जाएगा",
-      "gs_paper": "GS2 — International Relations: Conflict and Diplomacy",
+      "title_hi": "इज़राइल-इरान युद्ध: ट्रंप कहते हैं कि युद्ध जल्द ही समाप्त हो जाएगा",
+      "gs_paper": "GS2 — International Relations: Middle East Conflict",
       "upsc_topics": [
         "Polity & Governance",
         "International Relations",
         "Economy"
       ],
-      "context": "The conflict between Israel and Iran has escalated, with the U.S. involved. The U.S. President has stated that the war will end 'very soon'. The U.S. Congress has not approved the conflict. The President referred to the situation as an 'excursion' rather than a war, downplaying its scale.",
+      "context": "The conflict between Israel and Iran has escalated, with the U.S. involved. The U.S. President has stated that the war will end 'very soon', and that some targets are being saved for later. The U.S. Congress has not approved the conflict. The President referred to the conflict as an 'excursion' rather than a war, downplaying its scale.",
       "key_points": [
         "U.S. President — Statement: The war will end 'very soon'.",
+        "U.S. President — Statement: Some targets are being saved for later.",
         "U.S. Congress — Approval: The conflict has not been approved.",
-        "U.S. President — Description: The situation is referred to as an 'excursion' rather than a war.",
-        "U.S. — Targets: Some 'most important' targets are being saved for later.",
-        "U.S. President — Involvement: The President is involved in the conflict, despite lack of Congressional approval."
+        "U.S. President — Description: The conflict is referred to as an 'excursion' rather than a war.",
+        "U.S. — Involvement: The U.S. is involved in the conflict, providing support to Israel."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/international/trump-israel-iran-war-us-to-end-very-soon/article70724671.ece"
     },
     {
+      "title": "Sri Lankan Navy arrests two Indian fishermen near Katchatheevu",
+      "title_hi": "श्रीलंकाई नौसेना ने कैचथीवू के पास दो भारतीय मछुआरों को गिरफ्तार किया",
+      "gs_paper": "GS2 — International Relations: India-Sri Lanka Bilateral",
+      "upsc_topics": [
+        "International Relations",
+        "Defence & Security",
+        "Agriculture & Rural"
+      ],
+      "context": "The two Indian fishermen were from Rameswaram and were arrested by the Sri Lankan Navy near Katchatheevu. The Fisheries Department officials confirmed the arrest and stated that the fishermen were taken to the naval port in Talaimannar for further interrogation. The incident has raised concerns about the safety of Indian fishermen in the region. The Sri Lankan Navy has been cracking down on Indian fishermen allegedly crossing the International Maritime Boundary Line. The Indian government has been trying to resolve the issue through diplomatic channels.",
+      "key_points": [
+        "Sri Lankan Navy — Arrest: 2 Indian fishermen from Rameswaram arrested near Katchatheevu.",
+        "Fisheries Department — Statement: Confirming the arrest and stating that the fishermen were taken to the naval port in Talaimannar for further interrogation.",
+        "Indian Government — Diplomatic Efforts: Trying to resolve the issue through diplomatic channels.",
+        "Sri Lankan Navy — Crackdown: Cracking down on Indian fishermen allegedly crossing the International Maritime Boundary Line.",
+        "Indian Fishermen — Safety Concerns: Raising concerns about the safety of Indian fishermen in the region."
+      ],
+      "source": "The Hindu",
+      "url": "https://www.thehindu.com/news/national/tamil-nadu/sri-lankan-navy-arrests-two-indian-fishermen-from-rameswaram/article70733910.ece"
+    },
+    {
       "title": "Andhra Pradesh farmers face double trouble due to West Asia war and El Nino",
       "title_hi": "आंध्र प्रदेश के किसानों को पश्चिम एशिया युद्ध और एल नीनो के कारण दोहरी मुश्किल",
-      "gs_paper": "GS3 — Environment: Climate Change and Natural Disasters",
+      "gs_paper": "GS3 — Environment: Climate Change and its Impact on Agriculture",
       "upsc_topics": [
         "International Relations",
         "Geography & Environment",
         "Agriculture & Rural"
       ],
-      "context": "The conflict between the US-Israel combine and Iran is disrupting the passage of merchant ships through the Strait of Hormuz, a critical shipping lane. This disruption is affecting global trade, including the import of fertilizers and other essential goods. Andhra Pradesh farmers are facing difficulties due to the rising costs of these goods. The El Nino phenomenon is also expected to impact the monsoon season, further exacerbating the problems faced by farmers. The state government is yet to announce any measures to mitigate the effects of these factors.",
+      "context": "The conflict between the US-Israel combine and Iran over the Strait of Hormuz has disrupted merchant ship passages, affecting global trade. This, combined with the El Nino phenomenon, is expected to impact agricultural production in Andhra Pradesh. The state's farmers are already facing challenges due to uncertain weather conditions. The situation is further complicated by the rise in temperatures and changing rainfall patterns. The Andhra Pradesh government is yet to announce any specific measures to support the farmers.",
       "key_points": [
-        "US-Israel combine — Strait of Hormuz: Disruption of merchant ships (20% of world's oil).",
-        "Andhra Pradesh government — Farmer Support: No measures announced yet.",
-        "Iran — US-Israel combine: Conflict over control of Strait of Hormuz.",
-        "El Nino phenomenon — Monsoon Season: Expected to impact Andhra Pradesh farmers.",
-        "Global trade — Fertilizer Import: Rising costs affecting Andhra Pradesh farmers."
+        "Andhra Pradesh government — Support to Farmers: No specific measures announced yet.",
+        "US-Israel combine — Strait of Hormuz: Disruption in merchant ship passages due to conflict with Iran.",
+        "Indian Meteorological Department — El Nino Phenomenon: Expected to impact agricultural production in Andhra Pradesh.",
+        "Andhra Pradesh Farmers — Agricultural Production: Facing challenges due to uncertain weather conditions and rise in temperatures.",
+        "Global Trade — Merchant Ship Passages: Disrupted due to conflict in West Asia."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/national/andhra-pradesh/andhra-pradesh-farmers-face-double-trouble-due-to-west-asia-war-and-el-nino/article70733652.ece"
@@ -317,34 +337,34 @@
     {
       "title": "Uptake of induction stoves sluggish in low-income Indian households",
       "title_hi": "भारतीय घरों में इंडक्शन स्टोव की धीमी गति",
-      "gs_paper": "GS3 — Environment: Energy Efficiency and Pollution Reduction",
+      "gs_paper": "GS3 — Economy: Energy Efficiency and Renewable Energy",
       "upsc_topics": [],
-      "context": "The use of induction cooktops in Indian households has been limited, with only 5% of households having 'electric penetration' in their kitchens. Experts attribute this to various factors, including cost and availability. The majority of Indian households still rely on traditional cooking methods. The Indian government has been promoting the use of electric cooktops as a cleaner and more efficient alternative. However, the adoption rate has been slow, particularly in low-income households.",
+      "context": "The use of induction cooktops in Indian households has been slow to gain traction, particularly in low-income households. According to experts, only 5% of Indian households have 'electric penetration' in their kitchens, indicating a lack of adoption of electric cooking methods. This is despite the potential benefits of induction cooking, including energy efficiency and safety. The slow uptake of induction stoves is a concern, as it may hinder efforts to promote cleaner and more efficient cooking methods. The Indian government has been promoting the use of electric cooking methods, but more needs to be done to encourage adoption in low-income households.",
       "key_points": [
-        "The Hindu — Induction Cooktops: Only 5% of Indian households have electric penetration in their kitchens.",
-        "Experts — Electric Cooktops: Attribute slow adoption to cost and availability factors.",
-        "Indian Government — Electric Cooktop Promotion: Promoting electric cooktops as a cleaner and more efficient alternative.",
-        "Ministry of Power — Electric Cooktop Initiatives: Launched subsidies and awareness campaigns to promote electric cooktops.",
-        "Low-Income Households — Induction Cooktop Adoption: Slow adoption rate due to various factors."
+        "Experts — Induction Cooktops: Only 5% of Indian households have electric penetration in their kitchens.",
+        "Indian Government — Electric Cooking Methods: Promoting the use of electric cooking methods to reduce dependence on fossil fuels.",
+        "Indian Households — Induction Stoves: Slow uptake of induction stoves due to high upfront cost and lack of access to electricity.",
+        "Energy Efficiency — Induction Cooking: Induction cooking is more energy efficient and safer than traditional cooking methods.",
+        "Low-Income Households — Electric Penetration: Lack of electric penetration in low-income households is a major barrier to adoption of induction stoves."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/national/uptake-of-induction-stoves-sluggish-in-low-income-indian-households/article70732521.ece"
     },
     {
       "title": "Iran says it will target U.S.-Israeli economic, banking interests in region",
-      "title_hi": "इरान ने कहा — क्षेत्र में अमेरिकी-इज़राइली आर्थिक, बैंकिंग हितों पर निशाना साधेगा",
-      "gs_paper": "GS2 — International Relations: Iran-U.S.-Israel Relations",
+      "title_hi": "इरान ने अमेरिका-इज़राइल के आर्थिक, बैंकिंग हितों पर हमला करने की धमकी दी",
+      "gs_paper": "GS2 — International Relations: Iran-U.S.-Israel Conflict",
       "upsc_topics": [
         "International Relations",
         "Economy"
       ],
-      "context": "The announcement comes after an overnight attack on Iranian Bank Sepah in Tehran. The bank is one of the largest in Iran, with significant economic and banking interests in the region. The U.S. and Israel have been accused of being behind the attack, which has escalated tensions between the countries. The attack on Bank Sepah is seen as a significant blow to Iran's economy, with potential implications for the region's stability. The U.S. and Israel have not commented on the allegations.",
+      "context": "The announcement comes after an overnight attack on Iranian Bank Sepah in Tehran. The bank is one of the largest in Iran, with significant economic and banking interests in the region. The U.S. and Israel have been accused of being behind the attack, which has led to a significant escalation in tensions between the countries. The attack on Bank Sepah is seen as a major blow to Iran's economy, with potential implications for the region's economic stability. The U.S. and Israel have not commented on the attack, but Iran has vowed to retaliate against their economic and banking interests.",
       "key_points": [
         "Iran — Economic Interests: Will target U.S.-Israeli economic interests in the region.",
         "Iran — Banking Interests: Will target U.S.-Israeli banking interests in the region.",
-        "U.S. — Economic Sanctions: Has imposed economic sanctions on Iran, escalating tensions.",
-        "Israel — Airstrikes: Has conducted airstrikes on Iranian targets in the region.",
-        "Iran — Bank Sepah: Was hit overnight in Tehran, escalating tensions."
+        "U.S. — Sanctions: Has imposed significant economic sanctions on Iran.",
+        "Israel — Involvement: Accused of being behind the attack on Iranian Bank Sepah.",
+        "Iran — Retaliation: Vows to retaliate against U.S.-Israeli economic and banking interests."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/international/iran-says-it-will-target-us-israeli-economic-banking-interests-in-region/article70730566.ece"
@@ -357,32 +377,16 @@
         "Health & Social Issues",
         "Schemes & Initiatives"
       ],
-      "context": "The House panel has expressed disappointment over the slow progress of flagship schemes aimed at developing tribal villages. The panel noted that the lack of progress directly points to deep mismanagement. The schemes, which are crucial for the development of tribal areas, have not been implemented effectively. The panel has asked the line ministries to take immediate action to address the issue. The slow progress has affected the development of tribal villages, with many villages still lacking basic amenities.",
+      "context": "The panel expressed disappointment over the slow and tardy progress in the execution of flagship schemes for tribal villages. The schemes, aimed at improving the lives of tribal communities, have not been implemented effectively. The panel's report highlights the lack of coordination between line ministries and the lack of funds allocated for these schemes. The report also mentions that the slow progress has resulted in a significant delay in achieving the desired outcomes. The schemes include initiatives such as the development of infrastructure, education, and healthcare in tribal areas.",
       "key_points": [
-        "House panel — Flagship Schemes: Expressed disappointment over slow progress.",
-        "Line Ministries — Scheme Implementation: Asked to take immediate action to address the issue.",
-        "Tribal Villages — Development: Lack of basic amenities due to slow progress of schemes.",
-        "House Panel — Mismanagement: Cited deep mismanagement as the reason for slow progress.",
-        "Government — Flagship Schemes: Launched several schemes to develop tribal villages."
+        "House Panel — Flagship Schemes: Expressed disappointment over slow progress in execution.",
+        "Line Ministries — Scheme Implementation: Lack of coordination and funds allocated for schemes.",
+        "Tribal Villages — Development Initiatives: Include development of infrastructure, education, and healthcare.",
+        "Government — Forest Rights Act, 2006: Launched to address concerns of tribal communities.",
+        "Panel's Report — Outcome: Highlights significant delay in achieving desired outcomes."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/national/house-panel-pulls-up-line-ministries-for-slow-tardy-progress-in-execution-of-flagship-schemes-for-tribal-villages/article70731661.ece"
-    },
-    {
-      "title": "CM to lay foundation stone for Phase 1 of ₹3,509-cr. Marine Eco City project in Kochi",
-      "title_hi": "मुख्यमंत्री कोच्चि में ₹3,509 करोड़ के मेरीन इको सिटी परियोजना के चरण 1 का शिलान्यास करेंगे",
-      "gs_paper": "GS2 — Governance: Government Schemes and Initiatives",
-      "upsc_topics": [],
-      "context": "The Marine Eco City project is a significant development initiative in Kochi, with an estimated cost of ₹3,509 crore. The project aims to transform the city's coastline and promote eco-tourism. Phase 1 of the project is expected to be completed within a specified timeframe, with a focus on creating a sustainable and environmentally friendly infrastructure. The project has been designed to showcase the city's natural beauty and provide a unique experience for tourists. The Kerala government has been working closely with various stakeholders to ensure the project's success.",
-      "key_points": [
-        "Kerala Government — Marine Eco City project: Estimated cost of ₹3,509 crore.",
-        "Kerala Government — Phase 1: Expected to be completed within a specified timeframe.",
-        "Kerala Government — Marine Eco City project: Aims to promote eco-tourism and create a sustainable infrastructure.",
-        "Kerala Government — Marine Eco City project: Designed to showcase the city's natural beauty.",
-        "Kerala Government — Marine Eco City project: Expected to provide a unique experience for tourists."
-      ],
-      "source": "The Hindu",
-      "url": "https://www.thehindu.com/news/national/kerala/cm-to-lay-foundation-for-phase-1-of-3509-cr-marine-eco-city-project-in-kochi/article70732062.ece"
     }
   ]
 }
