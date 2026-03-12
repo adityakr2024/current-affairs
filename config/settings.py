@@ -83,3 +83,8 @@ TELEGRAM_CHAT_ID_ENV     = "TELEGRAM_CHAT_ID"
 GMAIL_SENDER_ENV         = "GMAIL_SENDER"
 GMAIL_APP_PASSWORD_ENV   = "GMAIL_APP_PASSWORD"
 GMAIL_RECIPIENT_ENV      = "GMAIL_RECIPIENT"
+
+# ── Offline Newspaper Cutoff ─────────────────────────────────────────────────
+# Pipeline runs ~5:40 AM IST. We want only articles published till 2 AM same day
+# (i.e. complete "yesterday's edition"). Articles after 02:00 AM IST are ignored.
+OFFLINE_CUTOFF_HOUR_IST = 2
