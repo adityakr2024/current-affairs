@@ -423,7 +423,7 @@ def _toc_page(articles: list[dict], date_str: str, lang: str) -> str:
     return f"""
 <div class="toc-page">
   <div class="toc-masthead">
-    <div class="toc-name">THE CURRENTS</div>
+    <div class="toc-name">Aarambh Times</div>
     <div class="toc-tagline">{tagline} &nbsp;·&nbsp; {lang_label}</div>
     {"<div class='toc-date-badge'>" + _e(date_str) + "</div>" if F.show_toc_date_badge else ""}
   </div>
@@ -566,7 +566,7 @@ def _qa_section(oneliners: list[dict], lang: str) -> str:
 def _page_header(date_str: str, lang: str) -> str:
     edition = "हिन्दी संस्करण" if lang == "hi" else "English Edition"
     return (f'<div class="page-header">'
-            f'<span class="ph-pub">THE CURRENTS &nbsp;·&nbsp; {edition}</span>'
+            f'<span class="ph-pub">Aarambh Times &nbsp;·&nbsp; {edition}</span>'
             f'<span class="ph-date">{_e(date_str)}</span>'
             f'</div>')
 
