@@ -7,6 +7,7 @@ Tracks per-provider and total stats:
   - Latency per call
   - Errors and fallbacks
   - Pipeline step durations
+  - Tavily usage (MCP path, key rotation, credits, circuit breaker)
 
 All data is accumulated in a singleton and exported at end of pipeline
 for Telegram report and JSON logging.
@@ -17,6 +18,9 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from typing import Optional
+
+# ── Tavily integration (same flag & client as fetcher/enricher) ──────────────
+from core.tavily_client import tavily
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -143,9 +147,9 @@ class Metrics:
     def pipeline_duration(self) -> float:
         return time.time() - self._pipeline_start
 
-    # ── Formatted Telegram report ─────────────────────────────────────────────
+    # ── Formatted Telegram report (Tavily summary added) ──────────────────────
     def telegram_report(self) -> str:
-        """Return a compact Telegram-safe plain-text report (no MarkdownV2 special chars)."""
+        """Return a compact Telegram-safe plain-text report."""
         dur  = self.pipeline_duration
         mins = int(dur // 60)
         secs = int(dur % 60)
@@ -170,6 +174,20 @@ class Metrics:
             f"🔢 Total tokens  : {self.total_tokens:,}",
             "",
         ]
+
+        # ── Tavily status in Telegram report ─────────────────────────────────
+        tavily_status = tavily.status_report()
+        lines.append("── TAVILY REAL-TIME LAYER ───────")
+        lines.append(f"   Enabled       : {tavily_status['tavily_enabled']}")
+        lines.append(f"   MCP Remote    : {tavily_status.get('mcp_remote_ok', 'N/A')}")
+        lines.append(f"   Keys available: {tavily_status['keys_available']}/{tavily_status['total_keys']}")
+        for k in tavily_status.get("keys", []):
+            if k["calls_this_month"] > 0 or k["credits_used"] > 0:
+                lines.append(
+                    f"     KEY_{k['key_index']}: {k['credits_used']}/{k['credits_limit']} credits "
+                    f"({k['usage_pct']}%) • calls={k['calls_this_month']}"
+                )
+        lines.append("")
 
         if self._providers:
             lines.append("── PER PROVIDER ─────────────")
@@ -197,7 +215,7 @@ class Metrics:
         return "\n".join(lines)
 
     def to_dict(self) -> dict:
-        """Export as dict for JSON logging."""
+        """Export as dict for JSON logging (now includes full Tavily status)."""
         return {
             "pipeline_duration_s": round(self.pipeline_duration, 1),
             "articles_fetched":    self._articles_fetched,
@@ -230,6 +248,8 @@ class Metrics:
                 }
                 for s in self._steps
             ],
+            # ── Tavily real-time stats (MCP, keys, credits, circuit breaker) ──
+            "tavily": tavily.status_report(),
         }
 
 
