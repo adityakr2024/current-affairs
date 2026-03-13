@@ -117,6 +117,7 @@ jobs:
           # Copy web page
           cp /tmp/the_currents/web/index.html "${STAGE}/index.html"
           touch "${STAGE}/.nojekyll"
+          echo "current-affairs.aarambhtimes.in" > "${STAGE}/CNAME"
 
           # Copy today's PDFs into staging
           mkdir -p "${STAGE}/pdfs/${MONTH}"
