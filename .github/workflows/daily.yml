@@ -67,6 +67,13 @@ jobs:
           OPENROUTER_API_KEY_2: ${{ secrets.OPENROUTER_API_KEY_2 }}
           CEREBRAS_API_KEY_1:   ${{ secrets.CEREBRAS_API_KEY_1 }}
           ANTHROPIC_API_KEY_1:  ${{ secrets.ANTHROPIC_API_KEY_1 }}
+          # ── Tavily Real-Time Layer (MCP + 3-key rotation) ───────────────────
+          TAVILY_API_KEY_1:     ${{ secrets.TAVILY_API_KEY_1 }}
+          TAVILY_API_KEY_2:     ${{ secrets.TAVILY_API_KEY_2 }}
+          TAVILY_API_KEY_3:     ${{ secrets.TAVILY_API_KEY_3 }}
+          TAVILY_ENABLED:       ${{ secrets.TAVILY_ENABLED || 'true' }}
+          TAVILY_MCP_ENABLED:   "true"
+          ENABLE_TAVILY_FETCH_AUGMENT: ${{ secrets.ENABLE_TAVILY_FETCH_AUGMENT || 'false' }}
           # ── Delivery ────────────────────────────────────────────────────────
           TELEGRAM_BOT_TOKEN:   ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID:     ${{ secrets.TELEGRAM_CHAT_ID }}
