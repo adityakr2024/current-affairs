@@ -8,7 +8,7 @@ from config.settings import (
     RSS_SOURCES, MAX_RAW_ARTICLES, IMAGE_FETCH_TIMEOUT,
     SCRAPE_IMAGE_SOURCES, OFFLINE_CUTOFF_HOUR_IST,
 )
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from core.image_fetcher import image_url_from_rss_entry, fetch_article_image
 from core.security import is_safe_url, sanitise_text, safe_for_prompt, MAX_TITLE_LEN, MAX_SUMMARY_LEN
@@ -42,9 +42,14 @@ def _fetch_feed(source: dict) -> list[dict]:
         return []
 
     articles = []
-    cutoff_ist = datetime.now(ZoneInfo("Asia/Kolkata")).replace(
+    now_ist = datetime.now(ZoneInfo("Asia/Kolkata"))
+    cutoff_ist = now_ist.replace(
         hour=OFFLINE_CUTOFF_HOUR_IST, minute=0, second=0, microsecond=0
-    )   # ← moved outside loop for tiny speed
+    )
+    # Define the start of yesterday to filter out older content
+    start_of_yesterday_ist = (now_ist - timedelta(days=1)).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
 
     for entry in feed.entries:
         title = sanitise_text((entry.get("title") or "").strip(), MAX_TITLE_LEN)
@@ -57,6 +62,9 @@ def _fetch_feed(source: dict) -> list[dict]:
             pub_ist = pub_dt.astimezone(ZoneInfo("Asia/Kolkata"))
             if pub_ist > cutoff_ist:
                 log.info(f"Skipped fresh article from {name} (published after {OFFLINE_CUTOFF_HOUR_IST}:00 AM IST)")
+                continue
+            if pub_ist < start_of_yesterday_ist:
+                log.info(f"Skipped old article from {name} (published before yesterday)")
                 continue
         # === CUTOFF END ===
 
