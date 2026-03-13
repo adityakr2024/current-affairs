@@ -1,6 +1,6 @@
-
 from __future__ import annotations
 import json, re, time, sys, os
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from core.ai_client import chat, _get_pool
@@ -278,8 +278,17 @@ def enrich_article(article: dict) -> dict:
     )
 
     try:
-        raw    = chat(ARTICLE_SYSTEM, user_prompt,
-                      max_tokens=AI_MAX_TOKENS, temperature=AI_TEMPERATURE, task="enrich")
+        with ThreadPoolExecutor(max_workers=1) as ex:
+            future = ex.submit(
+                chat, ARTICLE_SYSTEM, user_prompt,
+                AI_MAX_TOKENS, AI_TEMPERATURE, "enrich"
+            )
+            try:
+                raw = future.result(timeout=45)
+            except FuturesTimeoutError:
+                log.warning(f"AI call TIMED OUT after 45s for: {title[:60]} — using fallback")
+                get_metrics().record_fallback()
+                return {**article, **fb}
         parsed = _parse_json(raw)
         fields = _merge(parsed, fb)
     except Exception as exc:
@@ -334,8 +343,18 @@ def enrich_oneliners(items: list[dict]) -> list[dict]:
     user_msg  = f"Generate Q&A pairs for these {len(items)} headlines:\n\n{headlines}"
 
     try:
-        raw    = chat(ONELINER_SYSTEM, user_msg, max_tokens=1400,
-                      temperature=AI_TEMPERATURE, task="oneliner")
+        with ThreadPoolExecutor(max_workers=1) as ex:
+            future = ex.submit(
+                chat, ONELINER_SYSTEM, user_msg, 1400, AI_TEMPERATURE, "oneliner"
+            )
+            try:
+                raw = future.result(timeout=45)
+            except FuturesTimeoutError:
+                log.warning("Q&A chat call TIMED OUT after 45s — using title as question")
+                for item in items:
+                    item.update({"q_en": item["title"], "q_hi": item["title"],
+                                 "a_en": "", "a_hi": ""})
+                return items
         parsed = _parse_json(raw)
         if not isinstance(parsed, list):
             raise ValueError(f"Expected JSON array, got {type(parsed)}")
