@@ -237,6 +237,21 @@ class OutputManager:
         _log(f"🖼  {len(copied)}/{len(social_paths)} social images staged for gh-pages")
         return copied
 
+    def copy_web_images_to_ghpages_staging(self, date_str: str, staging_dir: Path) -> None:
+        """
+        Copy web hero images to gh-pages so they appear on the website.
+        """
+        images_source = self.temp_root / "images" / date_str
+        if not images_source.exists():
+            return
+
+        month_key = date_str[:7]
+        images_dest = staging_dir / "images" / month_key
+        images_dest.mkdir(parents=True, exist_ok=True)
+
+        shutil.copytree(images_source, images_dest, dirs_exist_ok=True)
+        _log(f"✅ Web hero images copied: {date_str}")
+
     def persist_metrics(
         self,
         metrics_dict: dict,
