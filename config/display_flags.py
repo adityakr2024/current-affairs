@@ -123,7 +123,7 @@ class SocialFlags(SharedFlags):
 
     # ── Footer band ──────────────────────────────────────────────────────────
     show_bottom_cta:    bool = True   # "Daily. Curated. UPSC-Ready."
-    show_site_url:      bool = True   # "adityakr2024.github.io/aarambh"
+    show_site_url:      bool = False   # "adityakr2024.github.io/aarambh"
 
     # ── Caption text file ───────────────────────────────────────────────────
     show_why_in_caption:    bool = True   # Why-in-news in .txt caption
