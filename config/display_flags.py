@@ -43,8 +43,8 @@ class SharedFlags:
 
     # ── Sections ────────────────────────────────────────────────────────────
     show_toc:           bool = True   # Table of contents
-    show_qa_section:    bool = True   # Quick Bites / Q&A section
-    show_quick_bites:   bool = True   # One-liner quick bite cards
+    show_qa_section:    bool = False   # Quick Bites / Q&A section
+    show_quick_bites:   bool = False   # One-liner quick bite cards
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -100,7 +100,7 @@ class PDFFlags(SharedFlags):
     show_hindi_edition:     bool = True   # Generate HI PDF (uses generate_hindi too)
 
     # ── Quick bites in PDF ───────────────────────────────────────────────────
-    show_qa_in_pdf:         bool = True   # Include Q&A section at end of PDF
+    show_qa_in_pdf:         bool = False   # Include Q&A section at end of PDF
 
 
 # ══════════════════════════════════════════════════════════════════════════════
