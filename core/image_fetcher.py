@@ -1,18 +1,3 @@
-"""
-core/image_fetcher.py — Article image fetcher for The Currents.
-
-Strategy:
-  1. Scrape og:image from article page (hero photo, 1200px+)
-     — reject if it looks like a logo/brand image
-  2. RSS media tag URL (inset fallback only)
-  3. None → social_builder uses branded programmatic background
-
-NO Wikimedia search. Reasons:
-  - Returns historically prominent photos (past leaders dominate Wikipedia corpus)
-  - No recency or relevance guarantee
-  - Abstract keywords ("India governance") return garbage
-  - Branded programmatic backgrounds look better and are always correct
-"""
 from __future__ import annotations
 import io, re, sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -20,17 +5,16 @@ from config.settings import (
     IMAGE_FETCH_TIMEOUT, ARTICLE_IMAGE_MIN_WIDTH,
     ARTICLE_IMAGE_MIN_HEIGHT, ARTICLE_IMAGE_MAX_RATIO,
 )
-
 try:
     import requests
     from PIL import Image, ImageFile
     # Security: cap PIL decompression to prevent zip-bomb attacks
-    Image.MAX_IMAGE_PIXELS = 40_000_000   # ~40MP max (8000×5000)
-    ImageFile.LOAD_TRUNCATED_IMAGES = True  # don't crash on partial downloads
+    Image.MAX_IMAGE_PIXELS = 40_000_000 # ~40MP max (8000×5000)
+    ImageFile.LOAD_TRUNCATED_IMAGES = True # don't crash on partial downloads
     _DEPS_OK = True
 except ImportError:
     _DEPS_OK = False
-
+from pathlib import Path
 _HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -40,9 +24,8 @@ _HEADERS = {
 }
 _IMG_HEADERS = {
     "User-Agent": _HEADERS["User-Agent"],
-    "Accept":     "image/webp,image/jpeg,image/png,*/*",
+    "Accept": "image/webp,image/jpeg,image/png,*/*",
 }
-
 # ── Logo / brand image rejection ─────────────────────────────────────────────
 # URL patterns that indicate a logo, masthead, or brand placeholder
 _LOGO_URL_PATTERNS: list[str] = [
@@ -65,7 +48,6 @@ _LOGO_URL_PATTERNS: list[str] = [
     r"apple[\-_]touch",
     r"favicon",
 ]
-
 # Dominant color fingerprints of known publication mastheads
 # We check the top-left 100x30 region for brand colors
 _BRAND_COLOR_CHECKS: list[tuple[tuple[int,int,int], int]] = [
@@ -74,14 +56,10 @@ _BRAND_COLOR_CHECKS: list[tuple[tuple[int,int,int], int]] = [
     # Indian Express blue: ~(0, 84, 166)
     ((0, 84, 166), 40),
 ]
-
-
 def _is_logo_url(url: str) -> bool:
     """Return True if the URL looks like a logo/brand image."""
     u = url.lower()
     return any(re.search(p, u) for p in _LOGO_URL_PATTERNS)
-
-
 def _is_brand_image(img: "Image.Image") -> bool:
     """
     Heuristic: check if the image is a publication masthead/logo.
@@ -107,8 +85,6 @@ def _is_brand_image(img: "Image.Image") -> bool:
     except Exception:
         pass
     return False
-
-
 def download_image(url: str, timeout: int = IMAGE_FETCH_TIMEOUT) -> "Image.Image | None":
     """Download an image URL → PIL RGB Image, applying quality and logo checks."""
     if not url or not _DEPS_OK:
@@ -129,12 +105,10 @@ def download_image(url: str, timeout: int = IMAGE_FETCH_TIMEOUT) -> "Image.Image
         return img
     except Exception:
         return None
-
-
 def image_url_from_rss_entry(entry: object) -> "str | None":
     """Extract best image URL from a feedparser entry (no HTTP request)."""
     for media in getattr(entry, "media_content", []) or []:
-        url  = media.get("url", "")
+        url = media.get("url", "")
         mime = media.get("medium", "") or media.get("type", "")
         if url and ("image" in mime or url.lower().endswith(
                 (".jpg", ".jpeg", ".png", ".webp"))):
@@ -144,7 +118,7 @@ def image_url_from_rss_entry(entry: object) -> "str | None":
         if url:
             return url
     for enc in getattr(entry, "enclosures", []) or []:
-        url  = enc.get("url", "")
+        url = enc.get("url", "")
         mime = enc.get("type", "")
         if url and "image" in mime:
             return url
@@ -162,8 +136,6 @@ def image_url_from_rss_entry(entry: object) -> "str | None":
         if m:
             return m.group(1)
     return None
-
-
 def _find_og_image(html: str) -> "str | None":
     # property before content
     m = re.search(
@@ -184,8 +156,6 @@ def _find_og_image(html: str) -> "str | None":
     if m:
         return m.group(1).strip()
     return None
-
-
 def fetch_article_image(article_url: str, source: str = "") -> "Image.Image | None":
     """Scrape og:image from article page. Rejects logos and brand images."""
     if not article_url or not _DEPS_OK:
@@ -194,7 +164,7 @@ def fetch_article_image(article_url: str, source: str = "") -> "Image.Image | No
         resp = requests.get(article_url, headers=_HEADERS,
                             timeout=IMAGE_FETCH_TIMEOUT, allow_redirects=True)
         resp.raise_for_status()
-        html    = resp.text
+        html = resp.text
         img_url = _find_og_image(html)
         # The Hindu article body fallback
         if not img_url and "thehindu" in article_url:
@@ -207,15 +177,12 @@ def fetch_article_image(article_url: str, source: str = "") -> "Image.Image | No
         return download_image(img_url) if img_url else None
     except Exception:
         return None
-
-
 def get_best_image(article: dict) -> "Image.Image | None":
     """
     Try all image sources in priority order.
     Returns PIL Image or None (caller uses branded programmatic background).
-
     Priority:
-      1. article["_article_img"]      — PIL Image scraped by fetcher (og:image)
+      1. article["_article_img"] — PIL Image scraped by fetcher (og:image)
       2. article["article_image_url"] — RSS media URL → download + logo check
       3. None → branded programmatic background in social_builder
     """
@@ -228,15 +195,18 @@ def get_best_image(article: dict) -> "Image.Image | None":
         if img:
             return img
     return None
-
-def save_article_image(image: Image.Image | None, article_id: str, date_str: str) -> str | None:
-    """Save hero image for web (web-accessible). Returns relative path or None."""
-    if not image:
+def save_web_hero_image(article: dict, date_str: str) -> str | None:
+    """Save PIL hero image to disk for website + return relative path.
+    Uses month folder (2026-03) for consistency with pdfs/social.
+    Called only from enrich_images — no other code touched."""
+    img = article.get("_article_img") or get_best_image(article)
+    if not img:
         return None
-    
-    images_dir = Path("images") / date_str
+
+    month_key = date_str[:7]          # 2026-03
+    images_dir = Path("images") / month_key
     images_dir.mkdir(parents=True, exist_ok=True)
-    filepath = images_dir / f"{article_id}.jpg"
-    
-    image.convert("RGB").save(filepath, "JPEG", quality=85, optimize=True)
-    return f"./images/{date_str}/{article_id}.jpg"   # relative for GitHub Pages
+    filepath = images_dir / f"{article['_id']}.jpg"
+
+    img.convert("RGB").save(filepath, "JPEG", quality=85, optimize=True)
+    return f"./images/{month_key}/{article['_id']}.jpg"
