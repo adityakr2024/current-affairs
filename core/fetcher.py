@@ -19,6 +19,15 @@ _HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"}
 _INTERNATIONAL_SOURCES = {"Reuters", "BBC", "Al Jazeera", "AP"}
 
 
+def _is_devanagari(text: str, threshold: float = 0.4) -> bool:
+    """Return True if >threshold fraction of letters are Devanagari script."""
+    if not text:
+        return False
+    devanagari = sum(1 for c in text if "\u0900" <= c <= "\u097F")
+    letters    = sum(1 for c in text if c.isalpha())
+    return (devanagari / letters) > threshold if letters else False
+
+
 def _strip_html(text: str) -> str:
     text = re.sub(r"<[^>]+>", " ", text)
     return re.sub(r"\s+", " ", text).strip()
@@ -54,6 +63,11 @@ def _fetch_feed(source: dict) -> list[dict]:
     for entry in feed.entries:
         title = sanitise_text((entry.get("title") or "").strip(), MAX_TITLE_LEN)
         if not title:
+            continue
+
+        # ── Language guard: skip Hindi-script articles at source ──────────────
+        if _is_devanagari(title):
+            log.info(f"Skipped Hindi-script article from {name}: {title[:60]}")
             continue
 
         # === OFFLINE NEWSPAPER CUTOFF (2 AM IST) ===
