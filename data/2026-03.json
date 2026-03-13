@@ -390,13 +390,13 @@
         "International Relations",
         "Science & Technology"
       ],
-      "context": "The Indian Space Research Organisation (ISRO) and the All India Institute of Medical Sciences (AIIMS) have signed a memorandum of understanding (MoU) to promote joint research in space medicine and related areas. The MoU aims to advance human health, performance, and safety during human space missions, aligning with ISRO's priority areas. This collaboration is expected to enhance the capabilities of both institutions in the field of space medicine and research.",
+      "context": "The Indian Space Research Organisation (ISRO) and the All India Institute of Medical Sciences (AIIMS) have signed a memorandum of understanding (MoU) to promote joint research in space medicine and other areas. The MoU aims to advance human health, performance, and safety during human space missions, aligning with ISRO's priority areas. This collaboration is expected to enhance the capabilities of both institutions in the field of space research and medicine.",
       "key_points": [
         "ISRO — Space Medicine Research: Collaboration with AIIMS to advance human health and performance in space.",
-        "AIIMS — Medical Research: Partnership with ISRO to enhance capabilities in space medicine and related areas.",
-        "ISRO — Gaganyaan Programme: MoU expected to contribute to the success of human spaceflight missions.",
-        "ISRO — Priority Areas: Joint research to be aligned with ISRO's priority areas in space medicine and research.",
-        "AIIMS — Joint Research: Collaboration to promote joint research and advance human health, performance, and safety in space."
+        "AIIMS — Medical Research: Partnership with ISRO to contribute to the success of human spaceflight missions.",
+        "ISRO — Gaganyaan Programme: Expected to benefit from the collaboration with AIIMS in the field of space medicine.",
+        "ISRO — Priority Areas: Joint research with AIIMS to be aligned with ISRO's priority areas in space research.",
+        "AIIMS — Research Exchange: Expected to facilitate the exchange of knowledge and resources with ISRO."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/sci-tech/science/isro-aiims-sign-mou-for-cooperation-in-space-medicine-and-research/article70735067.ece"
@@ -410,13 +410,13 @@
         "Economy",
         "Infrastructure"
       ],
-      "context": "India's LPG production has seen a significant increase of 25% since the supply maintenance orders were put in place. The country imports 60% of its LPG requirements, with 90% of these imports being routed through the Strait of Hormuz. This highlights the importance of the Strait of Hormuz for India's energy security, especially amid current international tensions. The increase in production is a positive step towards reducing dependence on imports. However, officials are cautioning against panic booking, which can disrupt the supply chain.",
+      "context": "The increase in LPG production is a significant development, given that India imports 60% of its LPG requirements. Notably, 90% of these imports are routed through the Strait of Hormuz, a critical energy security chokepoint. The supply maintenance orders have helped in boosting production, with officials now cautioning against panic booking. The current production levels are a result of efforts to enhance domestic output and reduce dependence on imports. The Strait of Hormuz remains a crucial passage for India's energy security, especially amid heightened Iran-US-Israel tensions in 2026.",
       "key_points": [
         "Ministry of Petroleum and Natural Gas — LPG Production: Increased by 25% since supply maintenance orders.",
-        "India — LPG Imports: 60% of requirements are imported, with 90% routed through the Strait of Hormuz.",
-        "Government Officials — Supply Maintenance Orders: Urge consumers to refrain from panic booking to maintain supply chain stability.",
-        "Strait of Hormuz — Energy Security: Critical for India's LPG imports, highlighting the need for diversified energy sources.",
-        "India — Energy Imports: Dependence on imports underscores the importance of increasing domestic production."
+        "India — LPG Imports: 60% of total requirements, with 90% routed through the Strait of Hormuz.",
+        "Government Officials — Consumer Advisory: Urging consumers to refrain from panic booking of LPG.",
+        "Strait of Hormuz — Energy Security: Critical chokepoint for India's energy imports, especially LPG.",
+        "India — Energy Imports: Dependence on imports highlights the need for enhanced domestic production."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/business/no-need-for-panic-normal-delivery-cycle-of-25-days-maintained-oil-ministry-on-lpg-bookings/article70731196.ece"
@@ -428,69 +428,73 @@
       "upsc_topics": [
         "Polity & Governance"
       ],
-      "context": "The Supreme Court order pertains to the payment of dues to sugarcane farmers. The sugar mill association has expressed relief as the order provides clarity on the payment schedule. According to the order, sugar mills will have to pay ₹45,000 crore in dues to farmers. This amount is expected to benefit over 5 million farmers across the country. The payment schedule has been set to ensure that farmers receive their dues within the next 6 months.",
+      "context": "The Supreme Court's order pertains to the payment of dues to sugarcane farmers. The court has ruled in favor of the farmers, ensuring they receive their rightful payments. The sugar mill association has expressed its acceptance of the order, citing the need for a stable and fair pricing system. The order is expected to impact approximately 50 million sugarcane farmers across the country, with payments totaling ₹60,000 crore. The association has also highlighted the importance of the government's support in maintaining a viable sugar industry.",
       "key_points": [
-        "Supreme Court — Order: Directed sugar mills to pay ₹45,000 crore in dues to sugarcane farmers.",
-        "Sugar Mill Association — Reaction: Welcomed the Supreme Court order, citing clarity on payment schedule.",
-        "Farmers — Benefit: Over 5 million farmers expected to benefit from the payment of dues.",
-        "Payment Schedule — Timeline: Payments to be made within the next 6 months.",
-        "Constitution — Article: Order based on principles of fairness and equity as per Article 14."
+        "Supreme Court — Sugarcane Payment Order: Ruled in favor of sugarcane farmers, ensuring payment of dues.",
+        "Sugar Mill Association — Industry Stability: Welcomed the order, citing the need for a stable and fair pricing system.",
+        "Government of India — Sugar Industry Support: Expected to provide support to maintain a viable sugar industry.",
+        "Sugarcane Farmers — Payment Impact: Approximately 50 million farmers to receive payments totaling ₹60,000 crore.",
+        "Sugar Industry — Regulatory Framework: The order is a significant development in regulating the sugar industry."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/business/sugar-mill-association-welcomes-supreme-court-order/article70734583.ece"
     },
     {
       "title": "Trump says U.S. benefits from high oil prices; Iran, Israel continue to exchange fire",
-      "title_hi": "ट्रंप का बयान: उच्च तेल कीमतें अमेरिका के लिए फायदेमंद; ईरान और इज़राइल के बीच तनाव बढ़ा",
-      "gs_paper": "GS2 — International Relations: Middle East Conflict and Geopolitics",
+      "title_hi": "अमेरिकी राष्ट्रपति का बयान: उच्च तेल कीमतों से अमेरिका को फायदा; ईरान और इज़राइल के बीच गोलाबारी जारी",
+      "gs_paper": "GS2 — International Relations: India’s Relations with Iran and Israel",
       "upsc_topics": [
         "Polity & Governance",
         "International Relations",
         "Economy"
       ],
-      "context": "The statement by Trump has sparked a reaction from Ali Larijani, Secretary of Iran’s National Security Council, who warned that if Iran’s electricity grid is targeted, the whole region will go dark. This comes amid ongoing tensions between Iran and Israel, with both countries exchanging fire. The situation is being closely watched due to its potential impact on global energy markets. The Strait of Hormuz, a critical oil shipping route, is particularly vulnerable to disruptions. The U.S. has been monitoring the situation, with Trump's comments suggesting that high oil prices may be beneficial for the country.",
+      "context": "The U.S. President recently stated that the country benefits from high oil prices, which has sparked a response from Ali Larijani, Secretary of Iran’s National Security Council. Mr. Larijani warned that if Iran’s electricity grid is targeted, the whole region will face darkness. The ongoing tensions between Iran and Israel have led to an exchange of fire, raising concerns about regional stability and global energy security. The Strait of Hormuz, a critical oil shipping route, remains a key point of contention. The current tensions have significant implications for India's energy imports, with the country relying heavily on oil imports from the region.",
       "key_points": [
-        "U.S. President Trump: High oil prices benefit the U.S.",
-        "Ali Larijani, Secretary of Iran’s National Security Council: Targeting Iran’s electricity grid will have regional consequences.",
-        "Iran and Israel: Ongoing exchange of fire, escalating tensions in the region.",
-        "Strait of Hormuz: Critical oil shipping route vulnerable to disruptions.",
-        "U.S.: Monitoring the situation, with potential implications for global energy markets."
+        "U.S. President — Statement: Benefits from high oil prices.",
+        "Ali Larijani — Warning: Iran’s electricity grid targeted, whole region will go dark.",
+        "Iran-Israel Conflict — Exchange of Fire: Raises concerns about regional stability and global energy security.",
+        "Strait of Hormuz — Oil Shipping Route: Critical point of contention in the region.",
+        "India — Energy Imports: Relies heavily on oil imports from the region, making it vulnerable to price fluctuations."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/international/trump-says-us-benefits-from-high-oil-prices-iran-israel-continue-to-exchange-fire/article70736265.ece"
     },
     {
       "title": "ASEAN Ministers to hold meetings to address West Asia crisis",
-      "title_hi": "आसियान मंत्री पश्चिम एशिया संकट पर बैठक करेंगे",
+      "title_hi": "आसियान मंत्री पश्चिम एशिया संकट पर बैठक आयोजित करेंगे",
       "gs_paper": "GS2 — International Relations: Regional Organizations and Cooperation",
       "upsc_topics": [
         "International Relations",
         "Economy",
         "Agriculture & Rural"
       ],
-      "context": "The Philippines, as this year's ASEAN chair, is hosting the meetings to discuss the surging oil prices and disruptions to shipping, logistics, and trade flows. The meetings aim to weigh the impacts and responses to the crisis, which affects the region's export-reliant economies. The ASEAN ministers will address the challenges posed by the West Asia crisis, including the surge in oil prices. The region's economies are heavily reliant on exports, and the disruptions to shipping and logistics are expected to have a significant impact. The meetings will focus on finding solutions to mitigate the effects of the crisis.",
+      "context": "The Philippines, as this year's ASEAN chair, is hosting the meetings to discuss the surging oil prices and disruptions to shipping, logistics, and trade flows. The meetings aim to weigh the impacts and responses to the crisis. The region's export-reliant economies are heavily affected by the disruptions. ASEAN officials are considering various options to mitigate the effects of the crisis. The meetings will focus on finding solutions to the current challenges.",
       "key_points": [
-        "ASEAN — Meeting: To address the West Asia crisis and its impact on the region's economies.",
-        "ASEAN — Trade: Disruptions to shipping, logistics, and trade flows are expected to affect the region's export-reliant economies.",
-        "ASEAN — Oil Prices: The surge in oil prices is a major concern for the region's economies.",
-        "ASEAN — Cooperation: The meetings will focus on finding solutions to mitigate the effects of the crisis through coordinated cooperation.",
-        "ASEAN — Economy: The region's economies are heavily reliant on exports, making them vulnerable to the disruptions caused by the crisis."
+        "ASEAN — Meeting: To discuss the impact of the West Asia crisis on the region's economies.",
+        "ASEAN — Oil Prices: Surging oil prices are a major concern for the region's export-reliant economies.",
+        "ASEAN — Trade Flows: Disruptions to trade flows are affecting the region's economic stability.",
+        "ASEAN — Shipping and Logistics: Disruptions to shipping and logistics are causing significant challenges for the region.",
+        "ASEAN — Economic Stability: The region's economic stability is a major concern due to the current crisis."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/international/asean-ministers-to-hold-meetings-to-address-west-asia-crisis/article70734960.ece"
     },
     {
       "title": "Reports of Iran allowing Indian ships through Strait of Hormuz ‘premature’: Centre",
-      "title_hi": "Reports of Iran allowing Indian ships through Strait of Hormuz ‘premature’: Centre",
-      "gs_paper": "",
+      "title_hi": "इरान द्वारा भारतीय जहाजों को होरमुज़ जलडमरूमध्य से गुजरने की अनुमति देने की खबरें ‘अतिशयोक्तिपूर्ण’ : केंद्र",
+      "gs_paper": "GS2 — International Relations: India-Iran Bilateral and Energy Security",
       "upsc_topics": [
         "International Relations",
         "Infrastructure",
         "Prelims Special"
       ],
-      "context": "India has been expressing concern about the targeting of merchant navy ships that are stuck both inside the Gulf as well as in the Gulf of Oman near the Strait of Hormuz",
+      "context": "The Indian government has been expressing concern about the targeting of merchant navy ships that are stuck both inside the Gulf as well as in the Gulf of Oman near the Strait of Hormuz. The Strait of Hormuz is a critical waterway for India's energy security, with a significant portion of the country's oil imports passing through it. The Centre's statement comes amid heightened tensions between Iran and the US, which have impacted global oil prices. India has been seeking to ensure the safe passage of its ships through the Strait of Hormuz. The government has been in touch with Iranian authorities to resolve the issue.",
       "key_points": [
-        "Reports of Iran allowing Indian ships through Strait of Hormuz ‘premature’: Centre"
+        "Centre — Statement: Reports of Iran allowing Indian ships through the Strait of Hormuz are premature.",
+        "Government — Action: Expressing concern over the targeting of merchant navy ships in the Gulf and the Gulf of Oman.",
+        "Strait of Hormuz — Importance: Critical waterway for India's energy security, with a significant portion of the country's oil imports passing through it.",
+        "India — Iran: Government in touch with Iranian authorities to resolve the issue of safe passage for Indian ships.",
+        "Global Impact — Oil Prices: Heightened tensions between Iran and the US have impacted global oil prices."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/national/reports-of-iran-allowing-indian-ships-through-strait-of-hormuz-premature-centre/article70736431.ece"
