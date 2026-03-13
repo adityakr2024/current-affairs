@@ -194,7 +194,7 @@ def _qa_section(oneliners: list[dict]) -> str:
         )
         rows += (
             '<div class="qa-item">'
-            '<span class="qa-n">' + str(i + 1).zfill(2) + ".</span>'
+            '<span class="qa-n">' + str(i + 1).zfill(2) + ".</span>"
             "<div>"
             '<span class="qa-cat">' + cat + "</span>"
             + tab_bar
