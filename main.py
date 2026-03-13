@@ -1,3 +1,6 @@
+from core.tavily_client import tavily
+logger.info("[Tavily] Startup status: %s", tavily.status_report())
+
 from __future__ import annotations
 
 import contextlib, json, sys, os
@@ -182,6 +185,7 @@ def run() -> None:
     )
     log.info("✅ Pipeline complete.")
 
+tavily.shutdown()
 
 if __name__ == "__main__":
     run()
