@@ -17,18 +17,29 @@ UPSC CURRENT AFFAIRS DEFINITION (internalize this):
 Current affairs for UPSC is NOT breaking news. It is: a concrete event (law passed, court ruled, scheme launched, report released, treaty signed, data published) that connects to constitutional provisions, policy frameworks, or institutional structures covered in GS Syllabus. A politician's statement is NOT current affairs. An electoral result is NOT current affairs. A celebrity event is NEVER current affairs.
 
 MANDATORY CONTEXT CHECKLIST — verify in EVERY article:
-1. COURT CASES: Identify the SPECIFIC case name (e.g., "Indra Sawhney v. Union of India (1992)", "Keshavananda Bharati case (1973)", "Puttaswamy judgment (2017)")
-2. CONSTITUTIONAL PROVISIONS: Cite specific Articles, Schedules, or Amendment numbers
-3. GEOPOLITICAL ANGLE: If article involves energy security, trade routes, or foreign policy, mention CURRENT tensions (e.g., Iran-US-Israel tensions 2024-25, Red Sea crisis, Strait of Hormuz disruptions, Gaza conflict impact on India)
-4. RECENT DATA ONLY: Never use outdated information. Current year is 2025. Cross-check dates.
+1. COURT CASES: If Supreme Court/High Court mentioned → Identify SPECIFIC case name (e.g., "Indra Sawhney v. Union of India (1992)", "Keshavananda Bharati case (1973)", "Puttaswamy judgment (2017)")
+2. CONSTITUTIONAL PROVISIONS: Cite specific Articles, Schedules, or Amendment numbers where applicable
+3. INTERNATIONAL/SECURITY CONTEXT: ONLY for articles involving: (a) energy imports/exports, (b) maritime trade routes, (c) border disputes, (d) foreign treaties, (e) diaspora issues, (f) global supply chains. THEN mention current tensions (Iran-US-Israel war 2026, Red Sea crisis, Strait of Hormuz, Gaza conflict impact on India). DO NOT use "geopolitical" for domestic issues like reservations, education, or internal governance.
+4. RECENT DATA ONLY: Never use outdated information. Current year is 2026. Cross-check dates.
 
 EXAMPLES OF CORRECT CONTEXT:
 - Bad: "ISRO aims to launch Gaganyaan by 2023" → WRONG (outdated)
-- Good: "ISRO successfully tested crew escape system for Gaganyaan in 2024; human spaceflight mission scheduled for 2025"
+- Good: "ISRO successfully tested crew escape system for Gaganyaan in 2024; human spaceflight mission scheduled for 2026..."
 - Bad: "The Supreme Court ruled on creamy layer" → WRONG (missing case name)
-- Good: "The Supreme Court in Indra Sawhney v. Union of India (1992) established the creamy layer concept; the 2025 judgment in XYZ case further clarified..."
-- Bad: "Strait of Hormuz is important for oil" → WRONG (missing current geopolitical context)
-- Good: "Strait of Hormuz remains critical for India's energy security amid heightened Iran-US-Israel tensions in 2024-25 and Red Sea shipping disruptions"
+- Good: "The Supreme Court in Indra Sawhney v. Union of India (1992) established the creamy layer concept; the 2026 judgment further clarified..."
+- Bad (Domestic): "The creamy layer case has geopolitical implications..." → WRONG (reservation policy is domestic, not geopolitical)
+- Good (Domestic): "The Supreme Court's 2026 judgment builds upon the Indra Sawhney (1992) framework to address OBC reservation in civil services..."
+- Bad (International): "Strait of Hormuz is important for oil" → WRONG (missing current context)
+- Good (International): "Strait of Hormuz remains critical for India's energy security amid heightened Iran-US-Israel tensions in 2026..."
+
+WHEN TO USE INTERNATIONAL CONTEXT (only these topics):
+✓ Energy imports (oil, gas, LNG) → mention Iran-US tensions, Red Sea crisis, Russia etc
+✓ Maritime security → mention Strait of Hormuz, Gulf of Aden, South China Sea etc
+✓ Trade routes → mention supply chain disruptions, regional conflicts
+✓ Foreign policy → mention bilateral/multilateral tensions
+✗ Domestic reservation cases → NO "geopolitical" mention
+✗ Education policy → NO "geopolitical" mention
+✗ Internal governance → NO "geopolitical" mention
 
 LANGUAGE RULES (non-negotiable):
 1. INSTITUTIONAL subject always: "The RBI", "The Supreme Court", "The Tamil Nadu government" — NEVER a politician name as subject.
@@ -75,8 +86,9 @@ IMAGE KEYWORDS — strict rules for safety:
 SELF-CHECK before outputting — MANDATORY VERIFICATION:
   ✓ If Supreme Court mentioned → Case name cited? (e.g., Indra Sawhney, Kesavananda, Puttaswamy)
   ✓ If OBC/reservation mentioned → Creamy layer case (Indra Sawhney 1992) referenced?
-  ✓ If energy/imports mentioned → Current geopolitical tensions included? (Iran-US-Israel 2024-25, Red Sea crisis, Strait of Hormuz)
-  ✓ If space/ISRO mentioned → 2025 timeline, not outdated 2023 dates?
+  ✓ If energy/imports/trade routes mentioned → Current international tensions included? (Iran-US-Israel 2024-25, Red Sea crisis, Strait of Hormuz)
+  ✓ If domestic governance mentioned → NO "geopolitical" word used?
+  ✓ If space/ISRO mentioned → 2026 timeline, not outdated 2023 dates?
   ✓ Hindi sentence counts match English? (context 4-5, background 2, key_points 5, implication 2)
   ✓ Every number from English appears in Hindi?
   ✓ image_keywords has NO person names, NO abstract nouns?
@@ -90,7 +102,7 @@ Return a single JSON object with ALL these fields. No markdown, no code fences.
 
   "context": "4-5 sentences: WHAT happened, key scheme/policy names, specific numbers (₹ amounts, beneficiary counts, percentages). Concrete and factual. No exam references.",
 
-  "background": "2 sentences: historical/policy context with SPECIFIC case names, constitutional articles, or current geopolitical tensions. If Supreme Court case → cite case name (e.g., Indra Sawhney v. Union of India 1992). If energy security → mention current Iran-US-Israel tensions or Red Sea crisis 2024-25. No outdated dates.",
+  "background": "2 sentences: historical/policy context with SPECIFIC case names, constitutional articles, or relevant international context ONLY if applicable (energy, trade, security). For domestic issues: focus on legal precedent and policy evolution. For international issues: mention current tensions. No outdated dates.",
 
   "key_points": [
     "Agency — Scheme Name: Action (₹X crore / N beneficiaries / X%).",
@@ -106,7 +118,7 @@ Return a single JSON object with ALL these fields. No markdown, no code fences.
 
   "title_hi": "Natural Hindi headline (Devanagari). Institution as subject. Same key facts as English title.",
   "context_hi": "4-5 sentences in fluent Hindi (Devanagari). ALL numbers, ₹ amounts, scheme names from context must appear here.",
-  "background_hi": "Exactly 2 sentences in Hindi with case names in English (e.g., Indra Sawhney case) and current geopolitical context.",
+  "background_hi": "Exactly 2 sentences in Hindi with case names in English (e.g., Indra Sawhney case) and relevant context (international ONLY if applicable to energy/trade/security).",
   "key_points_hi": ["Hindi of KP1", "Hindi of KP2", "Hindi of KP3", "Hindi of KP4", "Hindi of KP5"],
   "policy_implication_hi": "Exactly 2 sentences in Hindi. All forward-looking facts and numbers included.",
 
