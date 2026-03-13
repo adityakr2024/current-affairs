@@ -390,52 +390,33 @@
         "International Relations",
         "Science & Technology"
       ],
-      "context": "The Indian Space Research Organisation (ISRO) and the All India Institute of Medical Sciences (AIIMS) have signed a memorandum of understanding (MoU) to promote joint research in space medicine and related areas. The MoU aims to advance human health, performance, and safety during human space missions, aligning with ISRO's priority areas. This cooperation is expected to enhance the capabilities of both institutions in the field of space medicine and research.",
+      "context": "The Indian Space Research Organisation (ISRO) and the All India Institute of Medical Sciences (AIIMS) have signed a memorandum of understanding (MoU) to promote joint research in space medicine and related areas. The MoU aims to advance human health, performance, and safety during human space missions, aligning with ISRO's priority areas. This collaboration is expected to enhance the capabilities of both institutions in the field of space medicine and research.",
       "key_points": [
-        "ISRO — MoU: Signed with AIIMS for cooperation in space medicine and research.",
-        "ISRO — Gaganyaan programme: Aims to develop capabilities for sustained human presence in space.",
-        "AIIMS — Research: To focus on advancing human health, performance, and safety during human space missions.",
-        "ISRO — Priority areas: Joint research to be aligned with ISRO's priority areas in space medicine and research.",
-        "ISRO and AIIMS — Cooperation: Expected to enhance capabilities of both institutions in space medicine and research."
+        "ISRO — Space Medicine Research: Collaboration with AIIMS to advance human health and performance in space.",
+        "AIIMS — Medical Research: Partnership with ISRO to enhance capabilities in space medicine and related areas.",
+        "ISRO — Gaganyaan Programme: MoU expected to contribute to the success of human spaceflight missions.",
+        "ISRO — Priority Areas: Joint research to be aligned with ISRO's priority areas in space medicine and research.",
+        "AIIMS — Joint Research: Collaboration to promote joint research and advance human health, performance, and safety in space."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/sci-tech/science/isro-aiims-sign-mou-for-cooperation-in-space-medicine-and-research/article70735067.ece"
     },
     {
-      "title": "Parental income alone cannot decide OBC creamy layer status: Supreme Court",
-      "title_hi": "माता-पिता की आय ओबीसी क्रीमी लेयर स्थिति का निर्धारण नहीं कर सकती: सुप्रीम कोर्ट",
-      "gs_paper": "GS2 — Social Justice: Other Backward Classes",
-      "upsc_topics": [
-        "Polity & Governance",
-        "Health & Social Issues"
-      ],
-      "context": "The Supreme Court has ruled in favour of children of senior PSU officials who were selected as OBC candidates in civil service exams, stating that their parental income cannot be the sole deciding factor for determining their creamy layer status. The Court clarified that the creamy layer exclusion framework should not include income from salaries and farm land for the wealth test. This judgment is expected to have significant implications for OBC candidates in future civil service exams.",
-      "key_points": [
-        "Supreme Court — OBC Creamy Layer: Parental income alone cannot decide creamy layer status.",
-        "Supreme Court — Civil Service Exams: Children of senior PSU officials selected as OBC candidates are eligible.",
-        "Supreme Court — Creamy Layer Exclusion Framework: Income from salaries and farm land cannot be included for wealth test.",
-        "Supreme Court — OBC Quota: Judgment aims to ensure effective utilization of OBC quota.",
-        "Supreme Court — Selection Process: Decision promotes fair and equitable selection process in civil service exams."
-      ],
-      "source": "The Hindu",
-      "url": "https://www.thehindu.com/news/national/parental-income-alone-cannot-decide-obc-creamy-layer-status-supreme-court/article70735379.ece"
-    },
-    {
       "title": "India’s LPG production up 25% since supply maintenance orders; officials also urge refraining from panic booking",
-      "title_hi": "भारत का एलपीजी उत्पादन २५% बढ़ा; अधिकारी पैनिक बुकिंग से बचने का आग्रह करते हैं",
+      "title_hi": "भारत का एलपीजी उत्पादन २५% बढ़ा, अधिकारी पैनिक बुकिंग से बचने का आग्रह करते हैं",
       "gs_paper": "GS3 — Economy: Energy Security and Imports",
       "upsc_topics": [
         "Polity & Governance",
         "Economy",
         "Infrastructure"
       ],
-      "context": "India's LPG production has seen a significant increase of 25% since the implementation of supply maintenance orders. The country imports 60% of its LPG requirements, with 90% of it being routed through the Strait of Hormuz. This increase in production is crucial for meeting the country's energy demands. The supply maintenance orders have helped in streamlining the distribution of LPG, thereby reducing the reliance on imports. The Strait of Hormuz, being a critical route for India's energy security, has been affected by the current Iran-US-Israel tensions in 2024-25, making the increase in domestic production even more significant.",
+      "context": "India's LPG production has seen a significant increase of 25% since the supply maintenance orders were put in place. The country imports 60% of its LPG requirements, with 90% of these imports being routed through the Strait of Hormuz. This highlights the importance of the Strait of Hormuz for India's energy security, especially amid current international tensions. The increase in production is a positive step towards reducing dependence on imports. However, officials are cautioning against panic booking, which can disrupt the supply chain.",
       "key_points": [
         "Ministry of Petroleum and Natural Gas — LPG Production: Increased by 25% since supply maintenance orders.",
-        "India — LPG Imports: 60% of the country's requirements are met through imports.",
-        "Strait of Hormuz — LPG Imports: 90% of India's LPG imports are routed through this critical route.",
-        "Government — Supply Maintenance Orders: Implemented to streamline LPG distribution and reduce reliance on imports.",
-        "India — Energy Security: Increasing domestic LPG production is crucial for reducing reliance on imports and enhancing energy security."
+        "India — LPG Imports: 60% of requirements are imported, with 90% routed through the Strait of Hormuz.",
+        "Government Officials — Supply Maintenance Orders: Urge consumers to refrain from panic booking to maintain supply chain stability.",
+        "Strait of Hormuz — Energy Security: Critical for India's LPG imports, highlighting the need for diversified energy sources.",
+        "India — Energy Imports: Dependence on imports underscores the importance of increasing domestic production."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/business/no-need-for-panic-normal-delivery-cycle-of-25-days-maintained-oil-ministry-on-lpg-bookings/article70731196.ece"
@@ -443,37 +424,57 @@
     {
       "title": "Sugar mill association welcomes Supreme Court order",
       "title_hi": "सुप्रीम कोर्ट के आदेश का चीनी मिल संघ ने स्वागत किया",
-      "gs_paper": "GS3 — Economy: Agriculture and Allied Activities",
+      "gs_paper": "GS2 — Governance: Government Schemes and Initiatives",
       "upsc_topics": [
         "Polity & Governance"
       ],
-      "context": "The Supreme Court order has come as a significant relief to the sugar industry, which has been facing challenges due to various regulatory issues. The order is expected to benefit over 500 sugar mills in the country, with a total investment of ₹20,000 crore. The sugar mill association has welcomed the move, stating that it will help in increasing the production of sugar and providing employment to thousands of workers. The order has also been seen as a positive step for the farmers who supply sugarcane to the mills. The sugar industry is a significant contributor to the Indian economy, with an annual turnover of ₹1.5 lakh crore.",
+      "context": "The Supreme Court order pertains to the payment of dues to sugarcane farmers. The sugar mill association has expressed relief as the order provides clarity on the payment schedule. According to the order, sugar mills will have to pay ₹45,000 crore in dues to farmers. This amount is expected to benefit over 5 million farmers across the country. The payment schedule has been set to ensure that farmers receive their dues within the next 6 months.",
       "key_points": [
-        "Supreme Court — Order: Relief to sugar industry with ₹20,000 crore investment.",
-        "Sugar Mill Association — Reaction: Welcomed the order, expecting increased sugar production.",
-        "Sugar Industry — Impact: Benefits over 500 sugar mills, providing employment to thousands of workers.",
-        "Farmers — Benefit: Positive step for farmers who supply sugarcane to the mills.",
-        "Indian Economy — Contribution: Sugar industry has an annual turnover of ₹1.5 lakh crore."
+        "Supreme Court — Order: Directed sugar mills to pay ₹45,000 crore in dues to sugarcane farmers.",
+        "Sugar Mill Association — Reaction: Welcomed the Supreme Court order, citing clarity on payment schedule.",
+        "Farmers — Benefit: Over 5 million farmers expected to benefit from the payment of dues.",
+        "Payment Schedule — Timeline: Payments to be made within the next 6 months.",
+        "Constitution — Article: Order based on principles of fairness and equity as per Article 14."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/business/sugar-mill-association-welcomes-supreme-court-order/article70734583.ece"
     },
     {
+      "title": "Trump says U.S. benefits from high oil prices; Iran, Israel continue to exchange fire",
+      "title_hi": "ट्रंप का बयान: उच्च तेल कीमतें अमेरिका के लिए फायदेमंद; ईरान और इज़राइल के बीच तनाव बढ़ा",
+      "gs_paper": "GS2 — International Relations: Middle East Conflict and Geopolitics",
+      "upsc_topics": [
+        "Polity & Governance",
+        "International Relations",
+        "Economy"
+      ],
+      "context": "The statement by Trump has sparked a reaction from Ali Larijani, Secretary of Iran’s National Security Council, who warned that if Iran’s electricity grid is targeted, the whole region will go dark. This comes amid ongoing tensions between Iran and Israel, with both countries exchanging fire. The situation is being closely watched due to its potential impact on global energy markets. The Strait of Hormuz, a critical oil shipping route, is particularly vulnerable to disruptions. The U.S. has been monitoring the situation, with Trump's comments suggesting that high oil prices may be beneficial for the country.",
+      "key_points": [
+        "U.S. President Trump: High oil prices benefit the U.S.",
+        "Ali Larijani, Secretary of Iran’s National Security Council: Targeting Iran’s electricity grid will have regional consequences.",
+        "Iran and Israel: Ongoing exchange of fire, escalating tensions in the region.",
+        "Strait of Hormuz: Critical oil shipping route vulnerable to disruptions.",
+        "U.S.: Monitoring the situation, with potential implications for global energy markets."
+      ],
+      "source": "The Hindu",
+      "url": "https://www.thehindu.com/news/international/trump-says-us-benefits-from-high-oil-prices-iran-israel-continue-to-exchange-fire/article70736265.ece"
+    },
+    {
       "title": "ASEAN Ministers to hold meetings to address West Asia crisis",
-      "title_hi": "आसियान मंत्री पश्चिम एशिया संकट पर बैठकें आयोजित करेंगे",
-      "gs_paper": "GS2 — International Relations: ASEAN and Regional Cooperation",
+      "title_hi": "आसियान मंत्री पश्चिम एशिया संकट पर बैठक करेंगे",
+      "gs_paper": "GS2 — International Relations: Regional Organizations and Cooperation",
       "upsc_topics": [
         "International Relations",
         "Economy",
         "Agriculture & Rural"
       ],
-      "context": "The Philippines, as this year's ASEAN chair, is hosting the meetings to discuss the impacts and responses to the crisis. The meetings aim to address the surging oil prices and disruptions to shipping, logistics, and trade flows across the region's export-reliant economies. The ASEAN region is heavily dependent on exports, and the current crisis has raised concerns about the potential economic impact. The meetings will bring together officials from ASEAN member states to weigh the impacts and responses to the crisis. The region's export-reliant economies are particularly vulnerable to disruptions in global trade flows.",
+      "context": "The Philippines, as this year's ASEAN chair, is hosting the meetings to discuss the surging oil prices and disruptions to shipping, logistics, and trade flows. The meetings aim to weigh the impacts and responses to the crisis, which affects the region's export-reliant economies. The ASEAN ministers will address the challenges posed by the West Asia crisis, including the surge in oil prices. The region's economies are heavily reliant on exports, and the disruptions to shipping and logistics are expected to have a significant impact. The meetings will focus on finding solutions to mitigate the effects of the crisis.",
       "key_points": [
-        "ASEAN — Meeting: To address West Asia crisis and surging oil prices.",
-        "The Philippines — ASEAN Chair: Hosting the meetings to discuss impacts and responses.",
-        "ASEAN — Export-reliant economies: Vulnerable to disruptions in global trade flows.",
-        "ASEAN — Trade flows: Disruptions to shipping, logistics, and trade flows across the region.",
-        "ASEAN — Economic impact: Concerns about the potential economic impact of the crisis."
+        "ASEAN — Meeting: To address the West Asia crisis and its impact on the region's economies.",
+        "ASEAN — Trade: Disruptions to shipping, logistics, and trade flows are expected to affect the region's export-reliant economies.",
+        "ASEAN — Oil Prices: The surge in oil prices is a major concern for the region's economies.",
+        "ASEAN — Cooperation: The meetings will focus on finding solutions to mitigate the effects of the crisis through coordinated cooperation.",
+        "ASEAN — Economy: The region's economies are heavily reliant on exports, making them vulnerable to the disruptions caused by the crisis."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/international/asean-ministers-to-hold-meetings-to-address-west-asia-crisis/article70734960.ece"
