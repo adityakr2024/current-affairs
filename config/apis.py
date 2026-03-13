@@ -1,17 +1,3 @@
-"""
-config/apis.py — API provider registry for The Currents.
-
-TO ADD A NEW KEY: copy a block, change name + key_env. Zero other files change.
-
-tasks field controls which work each provider is used for:
-  "enrich"   — main article enrichment (heavy reasoning, Hindi parity)
-  "oneliner" — Q&A quick-bites (light, high volume)
-  "caption"  — social post captions
-  "filter"   — AI-assisted filter scoring
-  Empty/absent tasks list = provider used for ALL tasks (single-key fallback).
-
-Single-key mode: if only one provider is active, it handles all tasks automatically.
-"""
 import os
 
 PROVIDERS: dict[str, dict] = {
