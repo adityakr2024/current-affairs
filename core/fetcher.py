@@ -14,6 +14,9 @@ from core.image_fetcher import image_url_from_rss_entry, fetch_article_image
 from core.security import is_safe_url, sanitise_text, safe_for_prompt, MAX_TITLE_LEN, MAX_SUMMARY_LEN
 from core.logger import log
 
+# ── Tavily integration ────────────────────────────────────────────────────────
+from core.tavily_client import tavily
+
 _HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"}
 
 _INTERNATIONAL_SOURCES = {"Reuters", "BBC", "Al Jazeera", "AP"}
@@ -116,6 +119,89 @@ def _fetch_feed(source: dict) -> list[dict]:
     return articles
 
 
+def _fetch_tavily_augmentation() -> list[dict]:
+    """
+    Optional Tavily real-time boost.
+    Returns small set of fresh UPSC-relevant articles or [] on any failure.
+    """
+    if not os.getenv("ENABLE_TAVILY_FETCH_AUGMENT", "false").lower() == "true":
+        log.info("[fetcher] Tavily augmentation disabled via env flag")
+        return []
+
+    if not tavily.is_available:
+        log.info("[fetcher] Tavily client not available — skipping augmentation")
+        return []
+
+    queries = [
+        "India government schemes policy court judgment PIB 2026",
+        "UPSC current affairs today India foreign affairs economy climate",
+        "major India news last 48 hours policy diplomacy budget",
+    ]
+
+    all_tavily = []
+    seen = set()
+
+    for q in queries:
+        result = tavily.search(
+            query           = q,
+            search_depth    = "advanced",
+            topic           = "news",
+            days            = 2,                     # very recent only
+            max_results     = 6,
+            include_domains = [
+                "pib.gov.in", "mea.gov.in", "prsindia.org",
+                "thehindu.com", "indianexpress.com", "livemint.com"
+            ],
+            exclude_domains = ["twitter.com", "youtube.com", "facebook.com"],
+        )
+
+        if result is None:
+            log.warning(f"[fetcher] Tavily search failed for '{q}' — skipping this query")
+            continue
+
+        for r in result.data.get("results", []):
+            title = sanitise_text((r.get("title") or "").strip(), MAX_TITLE_LEN)
+            if not title or _is_devanagari(title):
+                continue
+
+            title_hash = hashlib.md5(title.encode()).hexdigest()[:12]
+            if title_hash in seen:
+                continue
+            seen.add(title_hash)
+
+            summary = sanitise_text(_strip_html(r.get("content", "")), MAX_SUMMARY_LEN)
+
+            url = r.get("url", "")
+            if url and not is_safe_url(url):
+                url = ""
+
+            art = {
+                "title": title,
+                "summary": summary[:MAX_SUMMARY_LEN],
+                "url": url,
+                "source": f"Tavily/{result.source}",
+                "source_weight": 11,  # higher than most RSS Tier-1 (10)
+                "category": "India",  # or detect if international
+                "_id": title_hash,
+                "article_image_url": result.images[0] if result.images else "",  # optional Tavily image
+            }
+
+            try:
+                safe_for_prompt(title, "title")
+                safe_for_prompt(summary, "summary")
+            except ValueError as e:
+                log.warning(f"Tavily prompt injection detected, skipping: {e}")
+                continue
+
+            all_tavily.append(art)
+
+        if len(all_tavily) >= 8:  # small cap to avoid overload
+            break
+
+    log.info(f"[fetcher] Tavily augmentation added {len(all_tavily)} unique articles")
+    return all_tavily
+
+
 def enrich_images(articles: list[dict]) -> None:
     """
     For SCRAPE_IMAGE_SOURCES, ALWAYS scrape og:image regardless of whether
@@ -149,7 +235,8 @@ def enrich_images(articles: list[dict]) -> None:
 
 def fetch_all() -> list[dict]:
     """
-    Fetch all RSS sources, deduplicate by title hash, enrich with images.
+    Fetch all RSS sources, optionally augment with Tavily real-time articles,
+    deduplicate by title hash, enrich with images.
     Returns flat deduplicated list capped at MAX_RAW_ARTICLES.
     """
     all_articles: list[dict] = []
@@ -168,5 +255,20 @@ def fetch_all() -> list[dict]:
         if len(all_articles) >= MAX_RAW_ARTICLES:
             break
 
-    log.info(f"   Total unique: {len(all_articles)}")
+    log.info(f"   Total unique from RSS: {len(all_articles)}")
+
+    # ── Optional real-time Tavily boost ───────────────────────────────────────
+    tavily_arts = _fetch_tavily_augmentation()
+
+    # Merge & deduplicate (Tavily might overlap with RSS)
+    for ta in tavily_arts:
+        if ta["_id"] not in seen:
+            seen.add(ta["_id"])
+            all_articles.append(ta)
+
+    log.info(f"   Final unique after Tavily: {len(all_articles)}")
+
+    # Optional image enrichment (still present — harmless if downstream not using)
+    enrich_images(all_articles)
+
     return all_articles[:MAX_RAW_ARTICLES]
