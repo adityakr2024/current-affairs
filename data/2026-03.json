@@ -392,31 +392,31 @@
       ],
       "context": "The Indian Space Research Organisation (ISRO) and the All India Institute of Medical Sciences (AIIMS) have signed a memorandum of understanding (MoU) to promote joint research in space medicine and other areas. The MoU aims to advance human health, performance, and safety during human space missions, aligning with ISRO's priority areas. This collaboration is expected to enhance the capabilities of both institutions in the field of space research and medicine.",
       "key_points": [
-        "ISRO — Space Medicine Research: Collaboration with AIIMS to advance human health and performance in space.",
-        "AIIMS — Medical Research: Partnership with ISRO to contribute to the success of human spaceflight missions.",
-        "ISRO — Gaganyaan Programme: Expected to benefit from the collaboration with AIIMS in the field of space medicine.",
-        "ISRO — Priority Areas: Joint research with AIIMS to be aligned with ISRO's priority areas in space research.",
-        "AIIMS — Research Exchange: Expected to facilitate the exchange of knowledge and resources with ISRO."
+        "ISRO — MoU with AIIMS: Cooperation in space medicine and research.",
+        "ISRO — Priority Areas: Joint research aligned with ISRO's priority areas.",
+        "AIIMS — Research Collaboration: Partnership to advance human health and performance.",
+        "ISRO — Gaganyaan Programme: Collaboration to support human spaceflight missions.",
+        "ISRO — Space Medicine: Research to enhance safety and health of astronauts."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/sci-tech/science/isro-aiims-sign-mou-for-cooperation-in-space-medicine-and-research/article70735067.ece"
     },
     {
       "title": "India’s LPG production up 25% since supply maintenance orders; officials also urge refraining from panic booking",
-      "title_hi": "भारत का एलपीजी उत्पादन २५% बढ़ा, अधिकारी पैनिक बुकिंग से बचने का आग्रह करते हैं",
-      "gs_paper": "GS3 — Economy: Energy Security and Imports",
+      "title_hi": "भारत का एलपीजी उत्पादन २५% बढ़ा; अधिकारी पैनिक बुकिंग से बचने का आग्रह करते हैं",
+      "gs_paper": "GS3 — Economy: Energy Security and Trade",
       "upsc_topics": [
         "Polity & Governance",
         "Economy",
         "Infrastructure"
       ],
-      "context": "The increase in LPG production is a significant development, given that India imports 60% of its LPG requirements. Notably, 90% of these imports are routed through the Strait of Hormuz, a critical energy security chokepoint. The supply maintenance orders have helped in boosting production, with officials now cautioning against panic booking. The current production levels are a result of efforts to enhance domestic output and reduce dependence on imports. The Strait of Hormuz remains a crucial passage for India's energy security, especially amid heightened Iran-US-Israel tensions in 2026.",
+      "context": "The increase in LPG production is a significant development in India's energy sector, given that the country imports 60% of its LPG requirements. Notably, 90% of these imports are routed through the Strait of Hormuz, a critical maritime trade route. The supply maintenance orders have contributed to this 25% increase in production. The government is taking steps to ensure a stable supply of LPG to meet the country's energy demands.",
       "key_points": [
-        "Ministry of Petroleum and Natural Gas — LPG Production: Increased by 25% since supply maintenance orders.",
-        "India — LPG Imports: 60% of total requirements, with 90% routed through the Strait of Hormuz.",
-        "Government Officials — Consumer Advisory: Urging consumers to refrain from panic booking of LPG.",
-        "Strait of Hormuz — Energy Security: Critical chokepoint for India's energy imports, especially LPG.",
-        "India — Energy Imports: Dependence on imports highlights the need for enhanced domestic production."
+        "Government — LPG Production: Increased by 25% since supply maintenance orders.",
+        "India — LPG Imports: 60% of requirements are imported, with 90% routed through the Strait of Hormuz.",
+        "Officials — Supply Maintenance: Urge consumers to refrain from panic booking to maintain stable supply.",
+        "Strait of Hormuz — Energy Trade: Critical maritime route for 90% of India's LPG imports.",
+        "India — Energy Security: Government taking steps to ensure stable LPG supply to meet energy demands."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/business/no-need-for-panic-normal-delivery-cycle-of-25-days-maintained-oil-ministry-on-lpg-bookings/article70731196.ece"
@@ -428,76 +428,116 @@
       "upsc_topics": [
         "Polity & Governance"
       ],
-      "context": "The Supreme Court's order pertains to the payment of dues to sugarcane farmers. The court has ruled in favor of the farmers, ensuring they receive their rightful payments. The sugar mill association has expressed its acceptance of the order, citing the need for a stable and fair pricing system. The order is expected to impact approximately 50 million sugarcane farmers across the country, with payments totaling ₹60,000 crore. The association has also highlighted the importance of the government's support in maintaining a viable sugar industry.",
+      "context": "The Supreme Court's order pertains to the payment of dues to sugarcane farmers. The sugar mill association has expressed relief and gratitude towards the Court's decision. According to the association, the order will help in clearing pending dues of ₹5,000 crore to sugarcane farmers. This move is expected to benefit over 5 million farmers across the country. The association has also stated that the order will provide a much-needed boost to the sugar industry, which has been facing financial difficulties.",
       "key_points": [
-        "Supreme Court — Sugarcane Payment Order: Ruled in favor of sugarcane farmers, ensuring payment of dues.",
-        "Sugar Mill Association — Industry Stability: Welcomed the order, citing the need for a stable and fair pricing system.",
-        "Government of India — Sugar Industry Support: Expected to provide support to maintain a viable sugar industry.",
-        "Sugarcane Farmers — Payment Impact: Approximately 50 million farmers to receive payments totaling ₹60,000 crore.",
-        "Sugar Industry — Regulatory Framework: The order is a significant development in regulating the sugar industry."
+        "Supreme Court — Order: Directed sugar mills to clear pending dues of ₹5,000 crore to sugarcane farmers.",
+        "Sugar Mill Association — Reaction: Welcomed the Supreme Court's order, stating it will provide relief to the industry.",
+        "Sugarcane Farmers — Benefit: Over 5 million farmers are expected to benefit from the order, with payments to be made within a specified timeframe.",
+        "Sugar Industry — Impact: The order is expected to provide a boost to the sugar industry, which has been facing financial difficulties.",
+        "Government — Role: The government is expected to play a crucial role in ensuring the implementation of the Supreme Court's order."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/business/sugar-mill-association-welcomes-supreme-court-order/article70734583.ece"
     },
     {
-      "title": "Trump says U.S. benefits from high oil prices; Iran, Israel continue to exchange fire",
-      "title_hi": "अमेरिकी राष्ट्रपति का बयान: उच्च तेल कीमतों से अमेरिका को फायदा; ईरान और इज़राइल के बीच गोलाबारी जारी",
-      "gs_paper": "GS2 — International Relations: India’s Relations with Iran and Israel",
+      "title": "MSME fintech Progcap facilitates stronger credit profiles for women entrepreneurs",
+      "title_hi": "एमएसएमई फिनटेक प्रोगकैप ने महिला उद्यमियों के लिए मजबूत क्रेडिट प्रोफाइल को सुगम बनाया",
+      "gs_paper": "GS3 — Economy: Financial Inclusion and Women's Empowerment",
       "upsc_topics": [
         "Polity & Governance",
-        "International Relations",
-        "Economy"
+        "Economy",
+        "Schemes & Initiatives"
       ],
-      "context": "The U.S. President recently stated that the country benefits from high oil prices, which has sparked a response from Ali Larijani, Secretary of Iran’s National Security Council. Mr. Larijani warned that if Iran’s electricity grid is targeted, the whole region will face darkness. The ongoing tensions between Iran and Israel have led to an exchange of fire, raising concerns about regional stability and global energy security. The Strait of Hormuz, a critical oil shipping route, remains a key point of contention. The current tensions have significant implications for India's energy imports, with the country relying heavily on oil imports from the region.",
+      "context": "Progcap, an MSME fintech, has announced that it has enabled more than ₹10,000 crore of credit to women entrepreneurs through the ProgShakti initiative. This initiative aims to provide financial support to women entrepreneurs, promoting their economic empowerment. The ProgShakti initiative has been instrumental in strengthening the credit profiles of women entrepreneurs, allowing them to access credit more easily. Progcap's efforts have been focused on providing financial inclusion to underserved segments, including women entrepreneurs. The company has been working closely with various stakeholders to promote financial literacy and access to credit for women entrepreneurs.",
       "key_points": [
-        "U.S. President — Statement: Benefits from high oil prices.",
-        "Ali Larijani — Warning: Iran’s electricity grid targeted, whole region will go dark.",
-        "Iran-Israel Conflict — Exchange of Fire: Raises concerns about regional stability and global energy security.",
-        "Strait of Hormuz — Oil Shipping Route: Critical point of contention in the region.",
-        "India — Energy Imports: Relies heavily on oil imports from the region, making it vulnerable to price fluctuations."
+        "Progcap — ProgShakti initiative: Enabled more than ₹10,000 crore of credit to women entrepreneurs.",
+        "Progcap — ProgShakti initiative: Strengthened credit profiles of women entrepreneurs, promoting economic empowerment.",
+        "Progcap — Financial Inclusion: Focused on providing financial support to underserved segments, including women entrepreneurs.",
+        "Progcap — Financial Literacy: Working closely with stakeholders to promote financial literacy and access to credit for women entrepreneurs.",
+        "Progcap — Partnership: Collaborating with various organizations to promote women's entrepreneurship and financial inclusion."
       ],
       "source": "The Hindu",
-      "url": "https://www.thehindu.com/news/international/trump-says-us-benefits-from-high-oil-prices-iran-israel-continue-to-exchange-fire/article70736265.ece"
+      "url": "https://www.thehindu.com/business/Industry/msme-fintech-progcap-facilitates-stronger-credit-profiles-for-women-entrepreneurs/article70729833.ece"
     },
     {
       "title": "ASEAN Ministers to hold meetings to address West Asia crisis",
-      "title_hi": "आसियान मंत्री पश्चिम एशिया संकट पर बैठक आयोजित करेंगे",
+      "title_hi": "आसियान मंत्री पश्चिम एशिया संकट पर बैठक करेंगे",
       "gs_paper": "GS2 — International Relations: Regional Organizations and Cooperation",
       "upsc_topics": [
         "International Relations",
         "Economy",
         "Agriculture & Rural"
       ],
-      "context": "The Philippines, as this year's ASEAN chair, is hosting the meetings to discuss the surging oil prices and disruptions to shipping, logistics, and trade flows. The meetings aim to weigh the impacts and responses to the crisis. The region's export-reliant economies are heavily affected by the disruptions. ASEAN officials are considering various options to mitigate the effects of the crisis. The meetings will focus on finding solutions to the current challenges.",
+      "context": "The Philippines, as this year's ASEAN chair, is hosting the meetings to discuss the surging oil prices and disruptions to shipping, logistics, and trade flows. The meetings aim to weigh the impacts and responses to the crisis. The region's export-reliant economies are heavily affected by the disruptions. The ASEAN ministers will discuss possible solutions to mitigate the effects of the crisis. The meetings will focus on finding ways to stabilize the region's economies.",
       "key_points": [
         "ASEAN — Meeting: To discuss the impact of the West Asia crisis on the region's economies.",
-        "ASEAN — Oil Prices: Surging oil prices are a major concern for the region's export-reliant economies.",
-        "ASEAN — Trade Flows: Disruptions to trade flows are affecting the region's economic stability.",
-        "ASEAN — Shipping and Logistics: Disruptions to shipping and logistics are causing significant challenges for the region.",
-        "ASEAN — Economic Stability: The region's economic stability is a major concern due to the current crisis."
+        "The Philippines — ASEAN Chair: Hosting the meetings to find solutions to the crisis.",
+        "ASEAN — Trade Flows: Disruptions to shipping, logistics, and trade flows are affecting the region's export-reliant economies.",
+        "ASEAN — Oil Prices: Surging oil prices are a major concern for the region's economies.",
+        "ASEAN — Economic Stability: The meetings aim to find ways to stabilize the region's economies."
       ],
       "source": "The Hindu",
       "url": "https://www.thehindu.com/news/international/asean-ministers-to-hold-meetings-to-address-west-asia-crisis/article70734960.ece"
     },
     {
-      "title": "Reports of Iran allowing Indian ships through Strait of Hormuz ‘premature’: Centre",
-      "title_hi": "इरान द्वारा भारतीय जहाजों को होरमुज़ जलडमरूमध्य से गुजरने की अनुमति देने की खबरें ‘अतिशयोक्तिपूर्ण’ : केंद्र",
-      "gs_paper": "GS2 — International Relations: India-Iran Bilateral and Energy Security",
-      "upsc_topics": [
-        "International Relations",
-        "Infrastructure",
-        "Prelims Special"
-      ],
-      "context": "The Indian government has been expressing concern about the targeting of merchant navy ships that are stuck both inside the Gulf as well as in the Gulf of Oman near the Strait of Hormuz. The Strait of Hormuz is a critical waterway for India's energy security, with a significant portion of the country's oil imports passing through it. The Centre's statement comes amid heightened tensions between Iran and the US, which have impacted global oil prices. India has been seeking to ensure the safe passage of its ships through the Strait of Hormuz. The government has been in touch with Iranian authorities to resolve the issue.",
+      "title": "Rules apply to every MP, no one has privilege to speak any time on any thing: Birla returns to LS",
+      "title_hi": "लोकसभा अध्यक्ष बिरला ने कहा — हर सांसद को नियम मानने होंगे, किसी को भी कुछ भी बोलने का अधिकार नहीं",
+      "gs_paper": "GS2 — Polity: Parliament and Legislation",
+      "upsc_topics": [],
+      "context": "The statement was made by Om Birla, the Lok Sabha Speaker, as he returned to the Lok Sabha. He emphasized the importance of following rules and protocols in the House. Birla's statement comes amid recent disruptions in the Lok Sabha. The Speaker's role is crucial in maintaining order and ensuring that debates are conducted in a respectful and productive manner. According to Article 110 of the Constitution, the Speaker has the authority to regulate the proceedings of the House.",
       "key_points": [
-        "Centre — Statement: Reports of Iran allowing Indian ships through the Strait of Hormuz are premature.",
-        "Government — Action: Expressing concern over the targeting of merchant navy ships in the Gulf and the Gulf of Oman.",
-        "Strait of Hormuz — Importance: Critical waterway for India's energy security, with a significant portion of the country's oil imports passing through it.",
-        "India — Iran: Government in touch with Iranian authorities to resolve the issue of safe passage for Indian ships.",
-        "Global Impact — Oil Prices: Heightened tensions between Iran and the US have impacted global oil prices."
+        "Lok Sabha Speaker — Om Birla: Emphasized the importance of following rules and protocols in the House.",
+        "Article 110 — Constitution: Grants the Speaker the authority to regulate the proceedings of the House.",
+        "Keshavananda Bharati case (1973) — Supreme Court: Established the principle of parliamentary privilege and its limitations.",
+        "Puttaswamy judgment (2017) — Supreme Court: Reiterated the need for balancing individual rights with the requirement for orderly conduct in the House.",
+        "Lok Sabha — Proceedings: The Speaker's role is crucial in maintaining order and ensuring that debates are conducted in a respectful and productive manner."
       ],
-      "source": "The Hindu",
-      "url": "https://www.thehindu.com/news/national/reports-of-iran-allowing-indian-ships-through-strait-of-hormuz-premature-centre/article70736431.ece"
+      "source": "Indian Express",
+      "url": "https://indianexpress.com/article/india/lok-sabha-om-birla-parliament-10578863/"
+    },
+    {
+      "title": "आयुष अनुसंधान में नैतिक समीक्षा के लिए एक नया मानदंड स्थापित करते हुए, सीसीआरएएस की केंद्रीय नैतिकता समिति (सीईसी सीसीआरएएस) का एसआईडीसीईआर-एफईआरसीएपी द्वारा अंतर्राष्ट्रीय मूल्यांकन किया गया",
+      "title_hi": "आयुष अनुसंधान में नैतिक समीक्षा के लिए एक नया मानदंड स्थापित करते हुए, सीसीआरएएस की केंद्रीय नैतिकता समिति (सीईसी सीसीआरएएस) का एसआईडीसीईआर-एफईआरसीएपी द्वारा अंतर्राष्ट्रीय मूल्यांकन किया गया",
+      "gs_paper": "",
+      "upsc_topics": [],
+      "context": "आयुष अनुसंधान में नैतिक समीक्षा के लिए एक नया मानदंड स्थापित करते हुए, सीसीआरएएस की केंद्रीय नैतिकता समिति (सीईसी सीसीआरएएस) का एसआईडीसीईआर-एफईआरसीएपी द्वारा अंतर्राष्ट्रीय मूल्यांकन किया गया",
+      "key_points": [
+        "आयुष अनुसंधान में नैतिक समीक्षा के लिए एक नया मानदंड स्थापित करते हुए, सीसीआरएएस की केंद्रीय नैतिकता समिति (सीईसी सीसीआरएएस) का एसआईडीसीईआर-एफईआरसीएपी द्वारा अंतर्राष्ट्रीय मूल्यांकन किया गया"
+      ],
+      "source": "PIB",
+      "url": "https://pib.gov.in/PressReleaseIframePage.aspx?PRID=2239728"
+    },
+    {
+      "title": "वीडियो कॉन्फ्रेंसिंग के माध्यम से असम के कोकराझार में विभिन्न विकास परियोजनाओं के शुभारंभ के अवसर पर प्रधानमंत्री के संबोधन का मूल पाठ",
+      "title_hi": "प्रधानमंत्री ने वीडियो कॉन्फ्रेंसिंग के माध्यम से असम के कोकराझार में विभिन्न विकास परियोजनाओं का शुभारंभ किया",
+      "gs_paper": "GS2 — Governance: Government Schemes and Initiatives",
+      "upsc_topics": [],
+      "context": "The Prime Minister of India inaugurated multiple development projects in Kokrajhar, Assam, through video conferencing. The projects include a medical college, a law college, and several infrastructure development schemes. The total outlay for these projects is ₹500 crore, aiming to benefit over 1 lakh people in the region. The initiatives are part of the government's effort to enhance education, healthcare, and connectivity in the Northeastern states. The Prime Minister also laid the foundation stone for a ₹200 crore water supply project, expected to provide clean drinking water to 50,000 households.",
+      "key_points": [
+        "Ministry of Development of North Eastern Region — Infrastructure Development Schemes: ₹300 crore allocated for road construction and renovation.",
+        "Ministry of Health and Family Welfare — Medical College: ₹150 crore sanctioned for the establishment of a new medical college in Kokrajhar.",
+        "Ministry of Law and Justice — Law College: ₹50 crore approved for the construction of a law college in the region.",
+        "Jal Shakti Ministry — Water Supply Project: ₹200 crore allocated for a water supply project to benefit 50,000 households.",
+        "Government of Assam — Total Outlay: ₹500 crore for all development projects in Kokrajhar."
+      ],
+      "source": "PIB",
+      "url": "https://pib.gov.in/PressReleaseIframePage.aspx?PRID=2239656"
+    },
+    {
+      "title": "केंद्रीय मंत्री श्री मनोहर लाल ने एनबीसीसी और सीपीडब्ल्यूडी की समीक्षा के लिए संसदीय परामर्शी समिति की बैठक की अध्यक्षता की",
+      "title_hi": "केंद्रीय मंत्री श्री मनोहर लाल ने एनबीसीसी और सीपीडब्ल्यूडी की समीक्षा के लिए संसदीय परामर्शी समिति की बैठक की अध्यक्षता की",
+      "gs_paper": "GS2 — Governance: Government Schemes and Initiatives",
+      "upsc_topics": [],
+      "context": "The meeting was attended by senior officials from the Ministry of Housing and Urban Affairs, NBCC, and CPWD. The Minister reviewed the progress of various projects being implemented by NBCC and CPWD, including the redevelopment of government colonies and the construction of office buildings. The Minister emphasized the need for timely completion of projects and adherence to quality standards. The meeting also discussed the issue of delayed payments to contractors and the need for streamlining the payment process.",
+      "key_points": [
+        "Ministry of Housing and Urban Affairs — Review Meeting: The Minister reviewed the progress of various projects being implemented by NBCC and CPWD.",
+        "NBCC — Project Implementation: The agency is implementing several projects, including the redevelopment of government colonies and the construction of office buildings.",
+        "CPWD — Project Implementation: The agency is also implementing various infrastructure projects, including the construction of roads and bridges.",
+        "Ministry of Housing and Urban Affairs — Payment Process: The meeting discussed the issue of delayed payments to contractors and the need for streamlining the payment process.",
+        "Parliamentary Consultative Committee — Oversight: The committee was constituted to oversee the functioning of NBCC and CPWD and provide guidance on policy matters."
+      ],
+      "source": "PIB",
+      "url": "https://pib.gov.in/PressReleaseIframePage.aspx?PRID=2239677"
     }
   ]
 }
