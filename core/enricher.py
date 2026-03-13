@@ -108,7 +108,7 @@ Return a single JSON object with ALL these fields. No markdown, no code fences.
 
   "title_hi": "Natural Hindi headline (Devanagari). Institution as subject. Same key facts as English title.",
   "context_hi": "4-5 sentences in fluent Hindi (Devanagari). ALL numbers, ₹ amounts, scheme names from context must appear here.",
-  "background_hi": "Exactly 2 sentences in Hindi with case names in English (e.g., Indra Sawhney case) and relevant context (international ONLY if applicable to energy/trade/security).",
+  "background_hi": "Exactly 2 sentences in Hindi with case names in English (e.g., Indra Sawhney case applicable to law/supreme court related articles) and relevant context (international ONLY if applicable to energy/trade/security).",
   "key_points_hi": ["Hindi of KP1", "Hindi of KP2", "Hindi of KP3", "Hindi of KP4", "Hindi of KP5"],
   "policy_implication_hi": "Exactly 2 sentences in Hindi. All forward-looking facts and numbers included.",
 
