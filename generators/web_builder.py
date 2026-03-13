@@ -444,6 +444,15 @@ def build_web(
         "background:var(--light);padding:4px 10px;border-radius:4px;"
         "border:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px}"
 
+        # hero_image
+        ".hero-image {"
+        "width: 100%;"
+        "max-height: 220px;"
+        "object-fit: cover;"
+        "border-radius: 8px;"
+        "margin-bottom: 12px;"
+        "}"
+        
         # layout
         ".layout{display:grid;"
         "grid-template-columns:var(--sidebar-w) 1fr var(--right-w);"
