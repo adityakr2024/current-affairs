@@ -8,6 +8,10 @@ from core.logger import log
 from core.metrics import get_metrics
 from config.settings import INTER_ARTICLE_SLEEP, PRE_ONELINER_SLEEP, AI_MAX_TOKENS, AI_TEMPERATURE
 
+# ── Tavily grounding support (same flag as fetcher.py) ───────────────────────
+from core.tavily_client import tavily
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # MAIN ARTICLE ENRICHMENT PROMPT
 # ─────────────────────────────────────────────────────────────────────────────
@@ -259,6 +263,45 @@ def _merge(parsed: dict, fallback: dict) -> dict:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Tavily Grounding Helper
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _get_tavily_grounding_block(title: str) -> str:
+    """
+    Fetch verified recent context/facts via Tavily (same flag as fetcher.py).
+    Returns formatted block or empty string on any failure / flag off.
+    """
+    if not os.getenv("ENABLE_TAVILY_FETCH_AUGMENT", "false").lower() == "true":
+        return ""
+
+    if not tavily.is_available:
+        log.debug("[enricher] Tavily client not available — skipping grounding")
+        return ""
+
+    result = tavily.grounding_search(title)
+
+    if result is None:
+        log.debug(f"[enricher] grounding_search returned None for '{title[:60]}…'")
+        return ""
+
+    snippets = [
+        f"- {r.get('content', '').strip()}  [src: {r.get('url', 'no-url')}]"
+        for r in result.data.get("results", [])[:4]
+        if r.get("content", "").strip()
+    ]
+
+    if not snippets:
+        return ""
+
+    return (
+        "\n\nVerified recent facts and context from reliable sources "
+        "(prioritise these facts; do NOT hallucinate or contradict them):\n"
+        + "\n".join(snippets)
+        + "\n"
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Public functions
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -268,10 +311,14 @@ def enrich_article(article: dict) -> dict:
     source  = article.get("source", "")
     fb      = _fallback(article)
 
+    # ── Tavily grounding (optional — skipped if flag off or Tavily unavailable) ──
+    grounding_block = _get_tavily_grounding_block(title)
+
     user_prompt = (
         f"Headline: {title}\n"
         f"Source: {source}\n"
-        f"Summary: {summary}\n\n"
+        f"Summary: {summary}\n"
+        f"{grounding_block}\n\n"
         "After writing all English fields, verify each Hindi field: every number, "
         "₹ amount, percentage, scheme name, and organisation from the English field "
         "must appear in the Hindi field. Hindi readers deserve identical depth."
