@@ -3,76 +3,61 @@ import html as _html, json
 from pathlib import Path
 from datetime import datetime
 import sys, os
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from core.logger import log
 from config.settings import OUTPUT_DIR, SITE_URL
 from config.display_flags import WEB as F
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # Small helpers
 # ══════════════════════════════════════════════════════════════════════════════
-
 def _e(t) -> str:
     """HTML-escape a value."""
     return _html.escape(str(t or ""), quote=False)
-
-
 def _stars(conf: int) -> str:
     return "&#9733;" * conf + "&#9734;" * (5 - conf)
-
-
 def _gs_badge(gs: str) -> str:
     if not gs:
         return ""
     label = " · ".join(p.strip() for p in gs.replace("—", "·").split("·")[:2])
     return '<span class="gs-badge">' + _e(label) + "</span>"
-
-
 def _topic_chips(topics: list[str]) -> str:
     return "".join(
         '<span class="topic-chip">' + _e(t) + "</span>" for t in topics[:3]
     )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # Article card (v4)
 # ══════════════════════════════════════════════════════════════════════════════
-
 def _article_card(n: int, art: dict) -> str:
-    conf   = art.get("fact_confidence", 3)
-    flags  = art.get("fact_flags", [])
+    conf = art.get("fact_confidence", 3)
+    flags = art.get("fact_flags", [])
     topics = art.get("upsc_topics", [])
     kps_en = [str(k) for k in art.get("key_points", []) if k]
     kps_hi = [str(k) for k in art.get("key_points_hi", []) if k]
-    aid    = "art" + str(n)
-
+    aid = "art" + str(n)
     # meta row
-    num_html  = '<span class="art-num">#' + str(n).zfill(2) + "</span>" if F.show_article_number else ""
-    gs_html   = _gs_badge(art.get("gs_paper", "")) if F.show_gs_badge else ""
+    num_html = '<span class="art-num">#' + str(n).zfill(2) + "</span>" if F.show_article_number else ""
+    gs_html = _gs_badge(art.get("gs_paper", "")) if F.show_gs_badge else ""
     chip_html = _topic_chips(topics) if F.show_topic_tags else ""
     conf_html = '<span class="conf">' + _stars(conf) + "</span>" if F.show_conf_badge else ""
-
     # why in news
-    why      = _e(art.get("why_in_news", ""))
+    why = _e(art.get("why_in_news", ""))
     why_html = (
         '<div class="art-why">&#128204; ' + why + "</div>"
         if (why and F.show_why_in_news) else ""
     )
-
     # titles
-    title_html    = '<h2 class="art-title">' + _e(art.get("title", "")) + "</h2>"
+    title_html = '<h2 class="art-title">' + _e(art.get("title", "")) + "</h2>"
     title_hi_html = (
         '<h3 class="art-title-hi">' + _e(art.get("title_hi", "")) + "</h3>"
         if F.show_title_hindi else ""
     )
-  
-    # Inside the loop where you build each article HTML
-    hero_path = article.get("hero_image_path")  # we'll pass this from enricher
-        if hero_path:
-            html += f'<img src="{hero_path}" alt="{article["title"]}" loading="lazy" class="hero-image">\n'
-  
+    # ── Hero image for GitHub Pages (website) ──
+    hero_path = art.get("hero_image_path")
+    hero_html = (
+        f'<img src="{hero_path}" alt="{_e(art.get("title", ""))}" '
+        f'class="hero-image" loading="lazy">'
+        if hero_path else ""
+    )
     # language tab bar
     if F.show_hindi_tab:
         tab_bar_html = (
@@ -86,71 +71,60 @@ def _article_card(n: int, art: dict) -> str:
         )
     else:
         tab_bar_html = ""
-
     # English content block
     ctx_html = (
         '<div class="sect-label">Context</div>'
         '<p class="art-context">' + _e(art.get("context", "")) + "</p>"
     ) if F.show_context else ""
-
     bg_html = (
         '<div class="sect-label">Background</div>'
         '<p class="art-bg">' + _e(art.get("background", "")) + "</p>"
     ) if F.show_background else ""
-
     kp_li = "".join("<li>" + _e(k) + "</li>" for k in kps_en)
     kp_html = (
         '<div class="sect-label">Key Points</div>'
         '<ul class="kp-list">' + kp_li + "</ul>"
     ) if F.show_key_points else ""
-
-    impl_en  = art.get("policy_implication", art.get("implication", ""))
+    impl_en = art.get("policy_implication", art.get("implication", ""))
     imp_html = (
         '<div class="sect-label">Implication</div>'
         '<p class="art-context">' + _e(impl_en) + "</p>"
     ) if F.show_implication else ""
-
     en_div = (
         '<div class="content-en" id="' + aid + '-en">'
         + ctx_html + bg_html + kp_html + imp_html + "</div>"
     )
-
     # Hindi content block
     if F.generate_hindi:
         ctx_hi = (
             '<div class="sect-label">&#2360;&#2306;&#2342;&#2352;&#2381;&#2349;</div>'
             '<p class="art-context">' + _e(art.get("context_hi", "")) + "</p>"
         ) if F.show_context else ""
-
         kp_hi_li = "".join("<li>" + _e(k) + "</li>" for k in kps_hi)
         kp_hi = (
             '<div class="sect-label">&#2350;&#2369;&#2326;&#2381;&#2351; '
             '&#2348;&#2367;&#2306;&#2342;&#2369;</div>'
             '<ul class="kp-list">' + kp_hi_li + "</ul>"
         ) if F.show_key_points else ""
-
         impl_hi = art.get("policy_implication_hi", art.get("implication_hi", ""))
-        imp_hi  = (
+        imp_hi = (
             '<div class="sect-label">&#2350;&#2361;&#2340;&#2381;&#2357;</div>'
             '<p class="art-context">' + _e(impl_hi) + "</p>"
         ) if F.show_implication else ""
-
         hi_div = (
             '<div class="content-hi" id="' + aid + '-hi">'
             + ctx_hi + kp_hi + imp_hi + "</div>"
         )
     else:
         hi_div = ""
-
     # verify flags
     flags_html = ""
     if F.show_verify_flags and flags:
-        items      = "".join("<li>" + _e(f) + "</li>" for f in flags)
+        items = "".join("<li>" + _e(f) + "</li>" for f in flags)
         flags_html = (
             '<div class="verify-flag">&#9873; <strong>Verify:</strong>'
             "<ul>" + items + "</ul></div>"
         )
-
     # footer
     if F.show_source_link:
         src_inner = (
@@ -161,7 +135,6 @@ def _article_card(n: int, art: dict) -> str:
         src_inner = "<span>" + _e(art.get("source", "")) + "</span>"
     else:
         src_inner = ""
-
     date_span = (
         "<span>" + _e(art.get("published", "")) + "</span>"
         if F.show_date else ""
@@ -171,42 +144,35 @@ def _article_card(n: int, art: dict) -> str:
         '<span class="art-src">&#128240; ' + src_inner + "</span>"
         + date_span + "</div>"
     )
-
     topic_attr = " ".join(topics[:3])
-    gs_attr    = (art.get("gs_paper") or "").split("—")[0].strip()
-
+    gs_attr = (art.get("gs_paper") or "").split("—")[0].strip()
     return (
         '<div class="article" id="' + aid + '"'
         ' data-topics="' + _e(topic_attr) + '"'
         ' data-gs="' + _e(gs_attr) + '">'
         '<div class="art-meta">' + num_html + gs_html + chip_html + conf_html + "</div>"
-        + why_html + title_html + title_hi_html
+        + why_html + title_html + title_hi_html + hero_html
         + tab_bar_html + en_div + hi_div
         + flags_html + footer_html + "</div>"
     )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # Q&A section (v4 list style)
 # ══════════════════════════════════════════════════════════════════════════════
-
 def _qa_section(oneliners: list[dict]) -> str:
     if not oneliners:
         return ""
-
     rows = ""
     for i, ol in enumerate(oneliners):
-        qid    = "qa" + str(i + 1)
+        qid = "qa" + str(i + 1)
         topics = ol.get("upsc_topics") or []
-        cat    = _e(topics[0] if topics else ol.get("oneliner_type", "General"))
-        q_en   = _e(ol.get("q_en", ol.get("title", "")))
-        a_en   = _e(ol.get("a_en", ""))
-        q_hi   = _e(ol.get("q_hi", ol.get("title", "")))
-        a_hi   = _e(ol.get("a_hi", ""))
-        src    = _e(ol.get("source", ""))
-
+        cat = _e(topics[0] if topics else ol.get("oneliner_type", "General"))
+        q_en = _e(ol.get("q_en", ol.get("title", "")))
+        a_en = _e(ol.get("a_en", ""))
+        q_hi = _e(ol.get("q_hi", ol.get("title", "")))
+        a_hi = _e(ol.get("a_hi", ""))
+        src = _e(ol.get("source", ""))
         if F.show_qa_hindi_tab and F.generate_hindi:
-            tab_bar  = (
+            tab_bar = (
                 '<div class="qa-tab-bar">'
                 '<button class="qa-tab active" onclick="switchQA(this,\'' + qid + '\')">EN</button>'
                 '<button class="qa-tab" onclick="switchQA(this,\'' + qid + '\')">HI</button>'
@@ -219,18 +185,16 @@ def _qa_section(oneliners: list[dict]) -> str:
                 "</div>"
             )
         else:
-            tab_bar  = ""
+            tab_bar = ""
             hi_block = ""
-
         src_line = (
             '<div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: '
             + src + "</div>"
             if (src and F.show_qa_source) else ""
         )
-
         rows += (
             '<div class="qa-item">'
-            '<span class="qa-n">' + str(i + 1).zfill(2) + ".</span>"
+            '<span class="qa-n">' + str(i + 1).zfill(2) + ".</span>'
             "<div>"
             '<span class="qa-cat">' + cat + "</span>"
             + tab_bar
@@ -241,18 +205,14 @@ def _qa_section(oneliners: list[dict]) -> str:
             + hi_block + src_line +
             "</div></div>"
         )
-
     return (
         '<div class="qa-section">'
         '<div class="qa-head">&#9889; Quick Bites &mdash; Q&amp;A</div>'
         + rows + "</div>"
     )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # Data helpers
 # ══════════════════════════════════════════════════════════════════════════════
-
 def _build_month_data_js(repo_root: Path) -> str:
     """Build JS var with all historical article data for left panel + filtering."""
     data_dir = repo_root / "data"
@@ -265,8 +225,6 @@ def _build_month_data_js(repo_root: Path) -> str:
         except Exception:
             pass
     return "var MONTHLY_DATA = " + json.dumps(all_data, ensure_ascii=False) + ";"
-
-
 def _build_pdf_entries(repo_root: Path, date_str: str) -> str:
     """Build v4-style pdf-day entries (right panel + mobile drawer)."""
     pdfs_root = repo_root / "pdfs"
@@ -284,8 +242,8 @@ def _build_pdf_entries(repo_root: Path, date_str: str) -> str:
             reverse=True,
         )
         for day in days[:6]:
-            is_today  = (day == date_str)
-            cls       = " today" if is_today else ""
+            is_today = (day == date_str)
+            cls = " today" if is_today else ""
             today_lbl = " &middot; Today" if is_today else ""
             en_f = month_dir / ("TheCurrents_EN_" + day + ".pdf")
             hi_f = month_dir / ("TheCurrents_HI_" + day + ".pdf")
@@ -306,42 +264,34 @@ def _build_pdf_entries(repo_root: Path, date_str: str) -> str:
                 "</div>"
             )
     return "".join(entries)
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # Main builder
 # ══════════════════════════════════════════════════════════════════════════════
-
 def build_web(
     articles: list[dict],
     date_str: str,
     oneliners: list[dict] | None = None,
 ) -> Path | None:
     """Build self-contained index.html (v4 three-column layout). Returns path or None."""
-    out_dir  = Path(OUTPUT_DIR) / "web"
+    out_dir = Path(OUTPUT_DIR) / "web"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "index.html"
-
-    repo_root     = Path(__file__).parent.parent
+    repo_root = Path(__file__).parent.parent
     month_data_js = _build_month_data_js(repo_root)
-
     # ── rendered pieces ───────────────────────────────────────────────────────
     article_cards = "\n".join(_article_card(i + 1, a) for i, a in enumerate(articles))
-    qa_html       = _qa_section(oneliners or []) if F.show_qa_section else ""
-
+    qa_html = _qa_section(oneliners or []) if F.show_qa_section else ""
     # date labels
     try:
-        dt           = datetime.strptime(date_str, "%Y-%m-%d")
+        dt = datetime.strptime(date_str, "%Y-%m-%d")
         date_display = dt.strftime("%d %b %Y").upper()
-        date_label   = dt.strftime("%d %b %Y")
+        date_label = dt.strftime("%d %b %Y")
     except Exception:
         date_display = date_str.upper()
-        date_label   = date_str
+        date_label = date_str
     date_safe = _e(date_str)
-
-    n_art  = str(len(articles))
+    n_art = str(len(articles))
     lang_l = "EN + &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;" if F.generate_hindi else "EN"
-
     # TOC
     if F.show_toc:
         toc_rows = "".join(
@@ -358,14 +308,12 @@ def build_web(
         )
     else:
         toc_html = ""
-
     # topic cloud
     all_topics = sorted({t for a in articles for t in a.get("upsc_topics", [])})
     cloud_html = "".join(
         '<span class="cloud-tag" onclick="filterByTopic(this)">' + _e(t) + "</span>"
         for t in all_topics
     ) if F.show_topic_tags else ""
-
     # right-panel sections (same HTML used in both desktop panel and mobile drawer)
     topics_section = ""
     if F.show_topic_tags and all_topics:
@@ -376,9 +324,8 @@ def build_web(
             '<div class="topic-cloud-block">'
             '<div class="topic-cloud">' + cloud_html + "</div></div>"
         )
-
-    pdf_entries  = _build_pdf_entries(repo_root, date_str) if F.show_pdf_archive else ""
-    pdf_section  = ""
+    pdf_entries = _build_pdf_entries(repo_root, date_str) if F.show_pdf_archive else ""
+    pdf_section = ""
     if F.show_pdf_archive and pdf_entries:
         pdf_section = (
             '<div class="pdf-section-head">'
@@ -386,9 +333,7 @@ def build_web(
             '<span class="pdf-section-head-label">Download PDF</span></div>'
             + pdf_entries
         )
-
     right_content = topics_section + pdf_section
-
     # masthead
     if F.show_sticky_header:
         masthead = (
@@ -403,7 +348,6 @@ def build_web(
         )
     else:
         masthead = ""
-
     # site footer
     site_footer = ""
     if F.show_site_footer:
@@ -413,7 +357,6 @@ def build_web(
             "<br>For serious aspirants. Verify all facts from official sources before the exam."
             "</footer>"
         )
-
     # ── CSS ───────────────────────────────────────────────────────────────────
     # (single-quoted CSS strings avoid conflict with surrounding double-quoted Python)
     css = (
@@ -426,7 +369,6 @@ def build_web(
         "*{margin:0;padding:0;box-sizing:border-box}"
         "body{font-family:'Inter',-apple-system,system-ui,sans-serif;"
         "background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}"
-
         # masthead
         ".masthead{background:var(--white);border-bottom:2px solid var(--blue);"
         "padding:0 24px;display:flex;align-items:center;height:58px;"
@@ -443,7 +385,6 @@ def build_web(
         ".masthead-badge{font-size:.67rem;font-weight:600;color:var(--muted);"
         "background:var(--light);padding:4px 10px;border-radius:4px;"
         "border:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px}"
-
         # hero_image
         ".hero-image {"
         "width: 100%;"
@@ -452,12 +393,11 @@ def build_web(
         "border-radius: 8px;"
         "margin-bottom: 12px;"
         "}"
-        
+       
         # layout
         ".layout{display:grid;"
         "grid-template-columns:var(--sidebar-w) 1fr var(--right-w);"
         "max-width:1380px;margin:0 auto;min-height:calc(100vh - 58px)}"
-
         # panels
         ".left-panel,.right-panel{background:var(--white);position:sticky;top:58px;"
         "height:calc(100vh - 58px);overflow-y:auto;"
@@ -469,7 +409,6 @@ def build_web(
         ".panel-head-dot{width:7px;height:7px;background:var(--blue);border-radius:50%;flex-shrink:0}"
         ".panel-head-label{font-size:.65rem;font-weight:800;color:var(--muted);"
         "letter-spacing:1.8px;text-transform:uppercase}"
-
         # left panel entries
         ".day-entry{border-bottom:1px solid var(--border);transition:background .12s;cursor:pointer}"
         ".day-entry:hover{background:#f5f8ff}"
@@ -480,7 +419,6 @@ def build_web(
         ".day-topics{font-size:.76rem;color:var(--muted);line-height:1.3;margin-bottom:5px}"
         ".day-count{font-size:.64rem;font-weight:600;color:#bbb}"
         ".day-entry.active .day-count{color:var(--blue);opacity:.7}"
-
         # main
         ".main{padding:26px 30px;min-width:0;background:var(--bg)}"
         ".content-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;"
@@ -488,7 +426,6 @@ def build_web(
         ".content-date-pill{font-size:.73rem;font-weight:800;background:var(--blue);"
         "color:#fff;padding:4px 13px;border-radius:4px}"
         ".content-info{font-size:.8rem;color:var(--muted);font-weight:500}"
-
         # TOC
         ".toc{background:var(--white);border:1px solid var(--border);"
         "border-left:4px solid var(--blue);border-radius:6px;padding:18px 20px;margin-bottom:22px}"
@@ -501,7 +438,6 @@ def build_web(
         ".toc-t{font-size:.8rem;color:var(--text);line-height:1.3}"
         ".toc-t a{color:var(--text);text-decoration:none}"
         ".toc-t a:hover{color:var(--blue);text-decoration:underline}"
-
         # article cards
         ".article{background:var(--white);border:1px solid var(--border);"
         "border-radius:6px;padding:20px 22px;margin-bottom:14px;transition:box-shadow .15s}"
@@ -548,7 +484,6 @@ def build_web(
         ".art-src{font-size:.7rem;font-weight:600;color:var(--muted)}"
         ".art-src a{color:var(--blue);text-decoration:none}"
         ".art-src a:hover{text-decoration:underline}"
-
         # Q&A
         ".qa-section{background:var(--white);border:1px solid var(--border);"
         "border-top:3px solid var(--blue);border-radius:6px;padding:22px 24px;margin-top:6px}"
@@ -571,7 +506,6 @@ def build_web(
         ".qa-a{font-size:.83rem;font-weight:700;color:var(--blue2)}"
         ".qa-content-en{display:block}"
         ".qa-content-hi{display:none;font-family:'Noto Sans Devanagari',sans-serif}"
-
         # right panel
         ".topic-cloud-block{padding:13px 14px 15px;border-bottom:1px solid var(--border)}"
         ".topic-cloud{display:flex;flex-wrap:wrap;gap:6px}"
@@ -597,7 +531,6 @@ def build_web(
         ".pdf-dl.en:hover{background:var(--blue2)}"
         ".pdf-dl.hi{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}"
         ".pdf-dl.hi:hover{background:var(--blue);color:#fff}"
-
         # hist view
         "#hist-view{display:none}"
         ".hist-article{background:var(--white);border:1px solid var(--border);"
@@ -609,7 +542,6 @@ def build_web(
         "font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:3px;margin-right:4px}"
         ".no-results{text-align:center;padding:40px;color:var(--muted)}"
         ".hidden{display:none}"
-
         # drawers / mobile
         ".drawer-backdrop{display:none;position:fixed;inset:58px 0 56px 0;"
         "background:rgba(0,0,0,.35);z-index:240;backdrop-filter:blur(1px)}"
@@ -629,12 +561,10 @@ def build_web(
         ".drawer.open{transform:translateX(0)}"
         ".drawer-r{transform:translateX(100%)}"
         ".drawer-r.open{transform:translateX(0)}"
-
         # footer
         ".site-footer{background:var(--black);color:#555;text-align:center;"
         "padding:18px;font-size:.78rem}"
         ".site-footer span{color:var(--blue)}"
-
         # responsive
         "@media(max-width:900px){"
         ":root{--sidebar-w:200px;--right-w:210px}"
@@ -661,27 +591,25 @@ def build_web(
         ".art-title{font-size:.93rem}"
         "}"
     )
-
     # ── JavaScript ────────────────────────────────────────────────────────────
     # NOTE: all Python values injected as string literals — no dynamic expressions
     js = (
         month_data_js + "\n\n"
-        "var TODAY_STR   = '" + date_safe + "';\n"
+        "var TODAY_STR = '" + date_safe + "';\n"
         "var TODAY_LABEL = '" + _e(date_label) + "';\n"
-        "var TODAY_ARTS  = " + n_art + ";\n"
-        "var LANG_LABEL  = '" + lang_l + "';\n\n"
+        "var TODAY_ARTS = " + n_art + ";\n"
+        "var LANG_LABEL = '" + lang_l + "';\n\n"
         r"""
 function fmtDate(d) {
   var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var p = d.split('-');
   return p.length < 3 ? d : parseInt(p[2]) + ' ' + m[parseInt(p[1])-1] + ' ' + p[0];
 }
-
 function buildLeftPanel() {
   var keys = Object.keys(MONTHLY_DATA).sort().reverse();
   var html = '';
-  var todayArts  = MONTHLY_DATA[TODAY_STR] || [];
-  var topicSnip  = todayArts.slice(0,3).map(function(a){return((a.upsc_topics||[])[0]||'');}).filter(Boolean).join(' \u00b7 ');
+  var todayArts = MONTHLY_DATA[TODAY_STR] || [];
+  var topicSnip = todayArts.slice(0,3).map(function(a){return((a.upsc_topics||[])[0]||'');}).filter(Boolean).join(' \u00b7 ');
   html += '<div class="day-entry active" onclick="showToday(this)">'
     + '<div class="day-link">'
     + '<div class="day-date">' + fmtDate(TODAY_STR) + ' \u00b7 Today</div>'
@@ -690,7 +618,7 @@ function buildLeftPanel() {
     + '</div></div>';
   keys.forEach(function(d) {
     if (d === TODAY_STR) return;
-    var arts   = MONTHLY_DATA[d] || [];
+    var arts = MONTHLY_DATA[d] || [];
     if (!arts.length) return;
     var topics = arts.slice(0,3).map(function(a){return((a.upsc_topics||[])[0]||'');}).filter(Boolean).join(' \u00b7 ');
     html += '<div class="day-entry" onclick="showHistDate(\'' + escH(d) + '\',this)">'
@@ -702,36 +630,32 @@ function buildLeftPanel() {
   });
   return html;
 }
-
 var _lpHTML = buildLeftPanel();
-document.getElementById('leftPanelContent').innerHTML  = _lpHTML;
+document.getElementById('leftPanelContent').innerHTML = _lpHTML;
 document.getElementById('drawerLeftContent').innerHTML = _lpHTML;
-
 function showToday(el) {
   markActive(el, true);
   document.getElementById('today-view').style.display = '';
-  document.getElementById('hist-view').style.display  = 'none';
+  document.getElementById('hist-view').style.display = 'none';
   document.getElementById('mainDatePill').textContent = TODAY_LABEL.toUpperCase();
-  document.getElementById('mainInfo').innerHTML       = TODAY_ARTS + ' articles \u00b7 ' + LANG_LABEL;
-  document.getElementById('hdrDate').textContent      = TODAY_LABEL;
+  document.getElementById('mainInfo').innerHTML = TODAY_ARTS + ' articles \u00b7 ' + LANG_LABEL;
+  document.getElementById('hdrDate').textContent = TODAY_LABEL;
   document.querySelectorAll('.article').forEach(function(c){ c.style.display=''; });
   closeAllDrawers();
 }
-
 function showHistDate(d, el) {
   markActive(el, false);
   var arts = MONTHLY_DATA[d] || [];
   document.getElementById('today-view').style.display = 'none';
-  document.getElementById('hist-view').style.display  = '';
+  document.getElementById('hist-view').style.display = '';
   document.getElementById('hist-heading').textContent = fmtDate(d) + ' \u2014 ' + arts.length + ' articles';
-  document.getElementById('hist-articles').innerHTML  = renderHistArticles(arts);
+  document.getElementById('hist-articles').innerHTML = renderHistArticles(arts);
   document.getElementById('hist-empty').classList.toggle('hidden', arts.length > 0);
   document.getElementById('mainDatePill').textContent = fmtDate(d).toUpperCase();
-  document.getElementById('mainInfo').textContent     = arts.length + ' articles';
-  document.getElementById('hdrDate').textContent      = fmtDate(d);
+  document.getElementById('mainInfo').textContent = arts.length + ' articles';
+  document.getElementById('hdrDate').textContent = fmtDate(d);
   closeAllDrawers();
 }
-
 function markActive(el, isToday) {
   document.querySelectorAll('.day-entry').forEach(function(e){ e.classList.remove('active'); });
   if (!el) return;
@@ -740,11 +664,10 @@ function markActive(el, isToday) {
     if (e.getAttribute('onclick') === onc) e.classList.add('active');
   });
 }
-
 function renderHistArticles(arts) {
   if (!arts || !arts.length) return '';
   return arts.map(function(a) {
-    var gs  = a.gs_paper ? '<span class="hist-gs">' + escH(a.gs_paper.split('\u2014')[0].trim()) + '</span>' : '';
+    var gs = a.gs_paper ? '<span class="hist-gs">' + escH(a.gs_paper.split('\u2014')[0].trim()) + '</span>' : '';
     var ctx = (a.context||'').substring(0,280);
     return '<div class="hist-article">'
       + '<div class="hist-meta">' + gs + escH(a.source||'') + '</div>'
@@ -753,7 +676,6 @@ function renderHistArticles(arts) {
       + '</div>';
   }).join('');
 }
-
 function filterByTopic(tag) {
   tag.classList.toggle('active');
   var label = tag.textContent.trim();
@@ -769,7 +691,6 @@ function filterByTopic(tag) {
     c.style.display = show ? '' : 'none';
   });
 }
-
 function switchLang(btn, artId) {
   btn.closest('.tab-bar').querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
@@ -779,7 +700,6 @@ function switchLang(btn, artId) {
   if (en) en.style.display = isHindi ? 'none' : 'block';
   if (hi) hi.style.display = isHindi ? 'block' : 'none';
 }
-
 function switchQA(btn, qaId) {
   btn.closest('.qa-tab-bar').querySelectorAll('.qa-tab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
@@ -789,10 +709,9 @@ function switchQA(btn, qaId) {
   if (en) en.style.display = isHI ? 'none' : 'block';
   if (hi) hi.style.display = isHI ? 'block' : 'none';
 }
-
 function toggleDrawer(side) {
-  var L  = document.getElementById('drawerLeft');
-  var R  = document.getElementById('drawerRight');
+  var L = document.getElementById('drawerLeft');
+  var R = document.getElementById('drawerRight');
   var bd = document.getElementById('drawerBackdrop');
   if (side === 'left') {
     var w = !L.classList.contains('open');
@@ -802,21 +721,17 @@ function toggleDrawer(side) {
     R.classList.toggle('open', w); L.classList.remove('open'); bd.classList.toggle('visible', w);
   }
 }
-
 function closeAllDrawers() {
   document.getElementById('drawerLeft').classList.remove('open');
   document.getElementById('drawerRight').classList.remove('open');
   document.getElementById('drawerBackdrop').classList.remove('visible');
 }
-
 window.addEventListener('scroll', closeAllDrawers, {passive:true});
-
 function escH(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 """
     )
-
     # ── assemble final HTML ───────────────────────────────────────────────────
     html = (
         "<!DOCTYPE html>\n<html lang='en'>\n<head>\n"
@@ -829,7 +744,6 @@ function escH(s) {
         "<style>" + css + "</style>\n"
         "</head>\n<body>\n"
         + masthead + "\n"
-
         # mobile drawers
         "<div class='drawer' id='drawerLeft'>"
         "<div class='panel-head'><div class='panel-head-dot'></div>"
@@ -839,17 +753,14 @@ function escH(s) {
         "<div class='drawer drawer-r' id='drawerRight'>"
         + right_content +
         "</div>\n"
-
         # main grid
         "<div class='layout'>\n"
-
         # left panel
         "<aside class='left-panel'>"
         "<div class='panel-head'><div class='panel-head-dot'></div>"
         "<span class='panel-head-label'>Daily Archive</span></div>"
         "<div id='leftPanelContent'></div>"
         "</aside>\n"
-
         # main content
         "<main class='main'>"
         "<div class='content-bar'>"
@@ -857,14 +768,12 @@ function escH(s) {
         "<span class='content-info' id='mainInfo'>"
         + n_art + " articles &middot; " + lang_l + "</span>"
         "</div>"
-
         # today view
         "<div id='today-view'>"
         + toc_html +
         "<div id='articles-container'>" + article_cards + "</div>"
         + qa_html +
         "</div>"
-
         # historical view
         "<div id='hist-view'>"
         "<div style='margin-bottom:16px'>"
@@ -874,13 +783,11 @@ function escH(s) {
         "<div class='no-results hidden' id='hist-empty'>No articles found for this date.</div>"
         "</div>"
         "</main>\n"
-
         # right panel
         "<aside class='right-panel'>"
         + right_content +
         "</aside>\n"
-        "</div>\n"  # end .layout
-
+        "</div>\n" # end .layout
         # backdrop + mobile nav
         "<div class='drawer-backdrop' id='drawerBackdrop' onclick='closeAllDrawers()'></div>\n"
         "<nav class='mobile-nav'><div class='mobile-nav-inner'>"
@@ -898,16 +805,14 @@ function escH(s) {
         "<circle cx='11' cy='11' r='8'/>"
         "<line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>Topics</button>"
         "</div></nav>\n"
-
         + site_footer + "\n"
         "<script>" + js + "</script>\n"
         "</body></html>"
     )
-
     try:
         out_path.write_text(html, encoding="utf-8")
         kb = out_path.stat().st_size // 1024
-        log.info("Web page -> %s  (%d KB)", out_path, kb)
+        log.info("Web page -> %s (%d KB)", out_path, kb)
         return out_path
     except Exception as exc:
         log.error("Web build failed: %s", exc)
