@@ -7,25 +7,30 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from core.logger import log
 from config.settings import OUTPUT_DIR, SITE_URL
 from config.display_flags import WEB as F
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Small helpers
 # ══════════════════════════════════════════════════════════════════════════════
 def _e(t) -> str:
     """HTML-escape a value."""
     return _html.escape(str(t or ""), quote=False)
+
 def _stars(conf: int) -> str:
     return "&#9733;" * conf + "&#9734;" * (5 - conf)
+
 def _gs_badge(gs: str) -> str:
     if not gs:
         return ""
     label = " · ".join(p.strip() for p in gs.replace("—", "·").split("·")[:2])
     return '<span class="gs-badge">' + _e(label) + "</span>"
+
 def _topic_chips(topics: list[str]) -> str:
     return "".join(
         '<span class="topic-chip">' + _e(t) + "</span>" for t in topics[:3]
     )
+
 # ══════════════════════════════════════════════════════════════════════════════
-# Article card (v4)
+# Article card (v4) - FIXED: Added missing background_hi
 # ══════════════════════════════════════════════════════════════════════════════
 def _article_card(n: int, art: dict) -> str:
     conf = art.get("fact_confidence", 3)
@@ -34,23 +39,27 @@ def _article_card(n: int, art: dict) -> str:
     kps_en = [str(k) for k in art.get("key_points", []) if k]
     kps_hi = [str(k) for k in art.get("key_points_hi", []) if k]
     aid = "art" + str(n)
+    
     # meta row
     num_html = '<span class="art-num">#' + str(n).zfill(2) + "</span>" if F.show_article_number else ""
     gs_html = _gs_badge(art.get("gs_paper", "")) if F.show_gs_badge else ""
     chip_html = _topic_chips(topics) if F.show_topic_tags else ""
     conf_html = '<span class="conf">' + _stars(conf) + "</span>" if F.show_conf_badge else ""
+    
     # why in news
     why = _e(art.get("why_in_news", ""))
     why_html = (
         '<div class="art-why">&#128204; ' + why + "</div>"
         if (why and F.show_why_in_news) else ""
     )
+    
     # titles
     title_html = '<h2 class="art-title">' + _e(art.get("title", "")) + "</h2>"
     title_hi_html = (
         '<h3 class="art-title-hi">' + _e(art.get("title_hi", "")) + "</h3>"
         if F.show_title_hindi else ""
     )
+    
     # ── Hero image for GitHub Pages (website) ──
     hero_path = art.get("hero_image_path")
     hero_html = (
@@ -58,6 +67,7 @@ def _article_card(n: int, art: dict) -> str:
         f'class="hero-image" loading="lazy">'
         if hero_path else ""
     )
+    
     # language tab bar
     if F.show_hindi_tab:
         tab_bar_html = (
@@ -71,52 +81,72 @@ def _article_card(n: int, art: dict) -> str:
         )
     else:
         tab_bar_html = ""
+    
     # English content block
     ctx_html = (
         '<div class="sect-label">Context</div>'
         '<p class="art-context">' + _e(art.get("context", "")) + "</p>"
     ) if F.show_context else ""
+    
     bg_html = (
         '<div class="sect-label">Background</div>'
         '<p class="art-bg">' + _e(art.get("background", "")) + "</p>"
     ) if F.show_background else ""
+    
     kp_li = "".join("<li>" + _e(k) + "</li>" for k in kps_en)
     kp_html = (
         '<div class="sect-label">Key Points</div>'
         '<ul class="kp-list">' + kp_li + "</ul>"
     ) if F.show_key_points else ""
+    
     impl_en = art.get("policy_implication", art.get("implication", ""))
     imp_html = (
         '<div class="sect-label">Implication</div>'
         '<p class="art-context">' + _e(impl_en) + "</p>"
     ) if F.show_implication else ""
+    
     en_div = (
         '<div class="content-en" id="' + aid + '-en">'
         + ctx_html + bg_html + kp_html + imp_html + "</div>"
     )
-    # Hindi content block
+    
+    # Hindi content block - FIXED: Added missing background_hi
     if F.generate_hindi:
+        # Context (संदर्भ)
         ctx_hi = (
             '<div class="sect-label">&#2360;&#2306;&#2342;&#2352;&#2381;&#2349;</div>'
             '<p class="art-context">' + _e(art.get("context_hi", "")) + "</p>"
         ) if F.show_context else ""
+        
+        # Background (पृष्ठभूमि) - THIS WAS MISSING!
+        bg_hi = (
+            '<div class="sect-label">&#2346;&#2371;&#2359;&#2381;&#2336;&#2349;&#2370;&#2350;&#2367;</div>'
+            '<p class="art-bg">' + _e(art.get("background_hi", "")) + "</p>"
+        ) if F.show_background else ""
+        
+        # Key Points (मुख्य बिंदु)
         kp_hi_li = "".join("<li>" + _e(k) + "</li>" for k in kps_hi)
         kp_hi = (
             '<div class="sect-label">&#2350;&#2369;&#2326;&#2381;&#2351; '
             '&#2348;&#2367;&#2306;&#2342;&#2369;</div>'
             '<ul class="kp-list">' + kp_hi_li + "</ul>"
         ) if F.show_key_points else ""
+        
+        # Implication (महत्व)
         impl_hi = art.get("policy_implication_hi", art.get("implication_hi", ""))
         imp_hi = (
             '<div class="sect-label">&#2350;&#2361;&#2340;&#2381;&#2357;</div>'
             '<p class="art-context">' + _e(impl_hi) + "</p>"
         ) if F.show_implication else ""
+        
+        # FIXED: Added bg_hi to the Hindi div
         hi_div = (
             '<div class="content-hi" id="' + aid + '-hi">'
-            + ctx_hi + kp_hi + imp_hi + "</div>"
+            + ctx_hi + bg_hi + kp_hi + imp_hi + "</div>"
         )
     else:
         hi_div = ""
+    
     # verify flags
     flags_html = ""
     if F.show_verify_flags and flags:
@@ -125,6 +155,7 @@ def _article_card(n: int, art: dict) -> str:
             '<div class="verify-flag">&#9873; <strong>Verify:</strong>'
             "<ul>" + items + "</ul></div>"
         )
+    
     # footer
     if F.show_source_link:
         src_inner = (
@@ -135,17 +166,21 @@ def _article_card(n: int, art: dict) -> str:
         src_inner = "<span>" + _e(art.get("source", "")) + "</span>"
     else:
         src_inner = ""
+    
     date_span = (
         "<span>" + _e(art.get("published", "")) + "</span>"
         if F.show_date else ""
     )
+    
     footer_html = (
         '<div class="art-footer">'
         '<span class="art-src">&#128240; ' + src_inner + "</span>"
         + date_span + "</div>"
     )
+    
     topic_attr = " ".join(topics[:3])
     gs_attr = (art.get("gs_paper") or "").split("—")[0].strip()
+    
     return (
         '<div class="article" id="' + aid + '"'
         ' data-topics="' + _e(topic_attr) + '"'
@@ -155,12 +190,14 @@ def _article_card(n: int, art: dict) -> str:
         + tab_bar_html + en_div + hi_div
         + flags_html + footer_html + "</div>"
     )
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Q&A section (v4 list style)
 # ══════════════════════════════════════════════════════════════════════════════
 def _qa_section(oneliners: list[dict]) -> str:
     if not oneliners:
         return ""
+    
     rows = ""
     for i, ol in enumerate(oneliners):
         qid = "qa" + str(i + 1)
@@ -171,6 +208,7 @@ def _qa_section(oneliners: list[dict]) -> str:
         q_hi = _e(ol.get("q_hi", ol.get("title", "")))
         a_hi = _e(ol.get("a_hi", ""))
         src = _e(ol.get("source", ""))
+        
         if F.show_qa_hindi_tab and F.generate_hindi:
             tab_bar = (
                 '<div class="qa-tab-bar">'
@@ -187,11 +225,13 @@ def _qa_section(oneliners: list[dict]) -> str:
         else:
             tab_bar = ""
             hi_block = ""
+        
         src_line = (
             '<div style="font-size:0.66rem;color:#bbb;margin-top:5px;">Source: '
             + src + "</div>"
             if (src and F.show_qa_source) else ""
         )
+        
         rows += (
             '<div class="qa-item">'
             '<span class="qa-n">' + str(i + 1).zfill(2) + ".</span>"
@@ -205,11 +245,13 @@ def _qa_section(oneliners: list[dict]) -> str:
             + hi_block + src_line +
             "</div></div>"
         )
+    
     return (
         '<div class="qa-section">'
         '<div class="qa-head">&#9889; Quick Bites &mdash; Q&amp;A</div>'
         + rows + "</div>"
     )
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Data helpers
 # ══════════════════════════════════════════════════════════════════════════════
@@ -218,35 +260,44 @@ def _build_month_data_js(repo_root: Path) -> str:
     data_dir = repo_root / "data"
     if not data_dir.exists():
         return "var MONTHLY_DATA = {};"
+    
     all_data: dict = {}
     for jf in sorted(data_dir.glob("*.json")):
         try:
             all_data.update(json.loads(jf.read_text(encoding="utf-8")))
         except Exception:
             pass
+    
     return "var MONTHLY_DATA = " + json.dumps(all_data, ensure_ascii=False) + ";"
+
 def _build_pdf_entries(repo_root: Path, date_str: str) -> str:
     """Build v4-style pdf-day entries (right panel + mobile drawer)."""
     pdfs_root = repo_root / "pdfs"
     if not pdfs_root.exists():
         return ""
+    
     entries: list[str] = []
     for month_dir in sorted(pdfs_root.iterdir(), reverse=True):
         if not month_dir.is_dir():
             continue
+        
         en_pdfs = sorted(month_dir.glob("TheCurrents_EN_*.pdf"), reverse=True)
         hi_pdfs = sorted(month_dir.glob("TheCurrents_HI_*.pdf"), reverse=True)
+        
         days = sorted(
             {p.stem.replace("TheCurrents_EN_", "").replace("TheCurrents_HI_", "")
              for p in list(en_pdfs) + list(hi_pdfs)},
             reverse=True,
         )
+        
         for day in days[:6]:
             is_today = (day == date_str)
             cls = " today" if is_today else ""
             today_lbl = " &middot; Today" if is_today else ""
+            
             en_f = month_dir / ("TheCurrents_EN_" + day + ".pdf")
             hi_f = month_dir / ("TheCurrents_HI_" + day + ".pdf")
+            
             en_a = (
                 '<a href="pdfs/' + month_dir.name + "/" + en_f.name + '" class="pdf-dl en">'
                 "&#128196; EN PDF</a>"
@@ -257,13 +308,16 @@ def _build_pdf_entries(repo_root: Path, date_str: str) -> str:
                 "&#128196; HI PDF</a>"
                 if hi_f.exists() else ""
             )
+            
             entries.append(
                 '<div class="pdf-day' + cls + '">'
                 '<div class="pdf-day-date">' + _e(day) + today_lbl + "</div>"
                 '<div class="pdf-btns">' + en_a + hi_a + "</div>"
                 "</div>"
             )
+    
     return "".join(entries)
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Main builder
 # ══════════════════════════════════════════════════════════════════════════════
@@ -277,10 +331,13 @@ def build_web(
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "index.html"
     repo_root = Path(__file__).parent.parent
+    
     month_data_js = _build_month_data_js(repo_root)
+    
     # ── rendered pieces ───────────────────────────────────────────────────────
     article_cards = "\n".join(_article_card(i + 1, a) for i, a in enumerate(articles))
     qa_html = _qa_section(oneliners or []) if F.show_qa_section else ""
+    
     # date labels
     try:
         dt = datetime.strptime(date_str, "%Y-%m-%d")
@@ -289,9 +346,11 @@ def build_web(
     except Exception:
         date_display = date_str.upper()
         date_label = date_str
+    
     date_safe = _e(date_str)
     n_art = str(len(articles))
     lang_l = "EN + &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;" if F.generate_hindi else "EN"
+    
     # TOC
     if F.show_toc:
         toc_rows = "".join(
@@ -308,12 +367,14 @@ def build_web(
         )
     else:
         toc_html = ""
+    
     # topic cloud
     all_topics = sorted({t for a in articles for t in a.get("upsc_topics", [])})
     cloud_html = "".join(
         '<span class="cloud-tag" onclick="filterByTopic(this)">' + _e(t) + "</span>"
         for t in all_topics
     ) if F.show_topic_tags else ""
+    
     # right-panel sections (same HTML used in both desktop panel and mobile drawer)
     topics_section = ""
     if F.show_topic_tags and all_topics:
@@ -324,6 +385,7 @@ def build_web(
             '<div class="topic-cloud-block">'
             '<div class="topic-cloud">' + cloud_html + "</div></div>"
         )
+    
     pdf_entries = _build_pdf_entries(repo_root, date_str) if F.show_pdf_archive else ""
     pdf_section = ""
     if F.show_pdf_archive and pdf_entries:
@@ -333,7 +395,9 @@ def build_web(
             '<span class="pdf-section-head-label">Download PDF</span></div>'
             + pdf_entries
         )
+    
     right_content = topics_section + pdf_section
+    
     # masthead
     if F.show_sticky_header:
         masthead = (
@@ -348,6 +412,7 @@ def build_web(
         )
     else:
         masthead = ""
+    
     # site footer
     site_footer = ""
     if F.show_site_footer:
@@ -357,8 +422,8 @@ def build_web(
             "<br>For serious aspirants. Verify all facts from official sources before the exam."
             "</footer>"
         )
+    
     # ── CSS ───────────────────────────────────────────────────────────────────
-    # (single-quoted CSS strings avoid conflict with surrounding double-quoted Python)
     css = (
         ":root{"
         "--blue:#006ce9;--blue2:#0056b8;--blue-bg:#e8f1fd;"
@@ -393,7 +458,6 @@ def build_web(
         "border-radius: 8px;"
         "margin-bottom: 12px;"
         "}"
-       
         # layout
         ".layout{display:grid;"
         "grid-template-columns:var(--sidebar-w) 1fr var(--right-w);"
@@ -591,8 +655,8 @@ def build_web(
         ".art-title{font-size:.93rem}"
         "}"
     )
+    
     # ── JavaScript ────────────────────────────────────────────────────────────
-    # NOTE: all Python values injected as string literals — no dynamic expressions
     js = (
         month_data_js + "\n\n"
         "var TODAY_STR = '" + date_safe + "';\n"
@@ -732,6 +796,7 @@ function escH(s) {
 }
 """
     )
+    
     # ── assemble final HTML ───────────────────────────────────────────────────
     html = (
         "<!DOCTYPE html>\n<html lang='en'>\n<head>\n"
@@ -809,6 +874,7 @@ function escH(s) {
         "<script>" + js + "</script>\n"
         "</body></html>"
     )
+    
     try:
         out_path.write_text(html, encoding="utf-8")
         kb = out_path.stat().st_size // 1024
