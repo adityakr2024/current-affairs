@@ -73,25 +73,15 @@ Map to the most specific applicable GS paper and topic:
   "Prelims — Constitutional Bodies"
 Be specific. Never just write "GS2" alone.
 
-IMAGE KEYWORDS — strict rules for safety:
-- 4-5 comma-separated English words for a tangible physical thing that can be photographed
-- MUST be a physical object, building, landscape, or process — NOT a concept
-- NEVER include: any person's name, politician, leader, minister, cm, pm
-- NEVER include: country name alone, party name, ministry name
-- GOOD: "nuclear reactor power plant India", "wheat harvest farm Punjab", "solar panel field Rajasthan"
-- GOOD: "supreme court building New Delhi", "railway track infrastructure India"
-- BAD: "Modi government policy", "India bilateral relations", "Sri Lanka India diplomacy"
-- BAD: "Rahul Gandhi", "BJP", "Congress", "government announcement"
-
 SELF-CHECK before outputting — MANDATORY VERIFICATION:
   ✓ If Supreme Court mentioned → Case name cited? (e.g., Indra Sawhney, Kesavananda, Puttaswamy)
   ✓ If OBC/reservation mentioned → Creamy layer case (Indra Sawhney 1992) referenced?
   ✓ If energy/imports/trade routes mentioned → Current international tensions included? (Iran-US-Israel 2024-25, Red Sea crisis, Strait of Hormuz)
   ✓ If domestic governance mentioned → NO "geopolitical" word used?
   ✓ If space/ISRO mentioned → 2026 timeline, not outdated 2023 dates?
+  ✓ English text has all mentioned pointers (context 4-5, background 2, key_points 5, implication 2)
   ✓ Hindi sentence counts match English? (context 4-5, background 2, key_points 5, implication 2)
   ✓ Every number from English appears in Hindi?
-  ✓ image_keywords has NO person names, NO abstract nouns?
   ✓ gs_paper is specific (paper + topic + subtopic)?
   ✓ why_in_news is ONE sentence describing the concrete event today?
 
@@ -121,8 +111,6 @@ Return a single JSON object with ALL these fields. No markdown, no code fences.
   "background_hi": "Exactly 2 sentences in Hindi with case names in English (e.g., Indra Sawhney case) and relevant context (international ONLY if applicable to energy/trade/security).",
   "key_points_hi": ["Hindi of KP1", "Hindi of KP2", "Hindi of KP3", "Hindi of KP4", "Hindi of KP5"],
   "policy_implication_hi": "Exactly 2 sentences in Hindi. All forward-looking facts and numbers included.",
-
-  "image_keywords": "tangible physical subject comma separated no person names no abstract",
 
   "headline_social": "5-7 word punchy headline for Instagram. Institution as subject.",
   "context_social": "2 punchy sentences for Instagram. Single most impactful fact + one key number.",
@@ -226,7 +214,6 @@ def _fallback(article: dict) -> dict:
         "background_hi":         "",
         "key_points_hi":         [t],
         "policy_implication_hi": "",
-        "image_keywords":        "India government policy building",
         "headline_social":       t[:60],
         "context_social":        (s or t)[:150],
         "fact_confidence":       2,
@@ -262,7 +249,6 @@ def _merge(parsed: dict, fallback: dict) -> dict:
         "background_hi":         s("background_hi"),
         "key_points_hi":         lst("key_points_hi")       or fallback["key_points_hi"],
         "policy_implication_hi": s("policy_implication_hi"),
-        "image_keywords":        s("image_keywords")        or fallback["image_keywords"],
         "headline_social":       s("headline_social")       or fallback["headline_social"],
         "context_social":        s("context_social")        or fallback["context_social"],
         "fact_confidence":       confidence,
