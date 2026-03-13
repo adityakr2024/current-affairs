@@ -156,9 +156,11 @@ WHAT IS NOT A VALID UPSC ONE-LINER (never generate these):
 Question format:
 - Direct factual question: "Who / What / Under which / By which / When"
 - NEVER use "Which one of the following" or "निम्नलिखित में से" — there are no options
-- Question must have exactly one direct answer without needing choices
+- Question must have exactly direct answer without needing choices
 - Good: "Under which Article does the Governor reserve a Bill for Presidential assent?"
 - Bad:  "Which one of the following is correct regarding the Governor's power?"
+- Bad: "Under which article does the Supreme Court have the power to give orders in cases related to the death of a student?"
+- Bad: "Under which article does the Supreme Court have the power to hear cases related to vaccine side-effects?"
 - Specific enough to have exactly one correct answer
 - Tests institutional knowledge, not just news recall
 - Hindi questions must NOT start with "निम्नलिखित में से" — use direct factual framing instead
