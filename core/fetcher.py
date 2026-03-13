@@ -1,14 +1,3 @@
-"""
-core/fetcher.py — RSS news fetcher for The Currents.
-
-Reads sources from config/settings.py.
-For each article:
-  1. Extracts image URL from RSS media tags → stored as article_image_url (inset fallback)
-  2. For SCRAPE_IMAGE_SOURCES (The Hindu etc.): ALWAYS scrapes og:image → _article_img
-     og:image is the CMS hero photo (1200px+), far better than the RSS thumbnail.
-     Both fields are preserved: og:image as background, RSS URL as inset fallback.
-  3. All URLs validated (HTTPS, no private IPs) before fetching or storing.
-"""
 from __future__ import annotations
 import sys, os, hashlib, re
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
