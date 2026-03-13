@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core.fetcher             import fetch_all, enrich_images
 from core.filter_engine       import filter_and_rank, filter_oneliners
 from core.enricher            import enrich_all, enrich_oneliners
+from core.context_linker      import link_related_context
 from core.validator           import validate_all
 from core.logger              import log, log_run_summary
 from core.metrics             import get_metrics, reset_metrics
@@ -101,6 +102,7 @@ def run() -> None:
 
     # ── 3. AI enrich ──────────────────────────────────────────────────────────
     with _stage("enrich"):
+        full_articles = link_related_context(full_articles)
         enriched  = enrich_all(full_articles)
         oneliners = enrich_oneliners(oneliners)
     m.set_articles_enriched(len(enriched))
