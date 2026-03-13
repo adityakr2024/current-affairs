@@ -150,6 +150,11 @@ def run() -> None:
                 social_paths = social_paths,
                 staging_dir  = om.temp_web_dir,
             )
+          #Stage web hero images for GitHub Pages website
+            om.copy_web_images_to_ghpages_staging(
+                date_str    = date_str,
+                staging_dir = om.temp_web_dir,
+            )
 
     # ── 10. Deliver ───────────────────────────────────────────────────────────
     with _stage("deliver"):
