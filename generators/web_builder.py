@@ -402,9 +402,11 @@ def build_web(
     if F.show_sticky_header:
         masthead = (
             '<header class="masthead">'
-            '<div class="masthead-logo"><a href="' + https://www.aarambhtimes.in/ + '" style="text-decoration:none;color:inherit">The <span>Currents</span></a></div>'
+            '<div class="masthead-logo"><a href="' + SITE_URL + '" style="text-decoration:none;color:inherit">The <span>Currents</span></a></div>'
             '<div class="masthead-divider"></div>'
             '<div class="masthead-sub">UPSC Current Affairs</div>'
+            '<div class="masthead-spacer"></div>'
+            '<div class="masthead-center">Aarambh Times</div>'
             '<div class="masthead-spacer"></div>'
             '<div class="masthead-badge">Daily &middot; Free &middot; Bilingual</div>'
             '<div class="masthead-date" id="hdrDate">' + date_label + "</div>"
@@ -445,6 +447,9 @@ def build_web(
         ".masthead-sub{font-size:.72rem;color:var(--muted);letter-spacing:1.2px;"
         "text-transform:uppercase;font-weight:600}"
         ".masthead-spacer{flex:1}"
+        ".masthead-center{font-family:'Playfair Display',serif;font-size:1.1rem;"
+        "font-weight:700;color:var(--black);letter-spacing:.5px;"
+        "position:absolute;left:50%;transform:translateX(-50%);pointer-events:none}"
         ".masthead-date{font-size:.75rem;font-weight:700;color:var(--blue);"
         "background:var(--blue-bg);padding:4px 12px;border-radius:4px}"
         ".masthead-badge{font-size:.67rem;font-weight:600;color:var(--muted);"
