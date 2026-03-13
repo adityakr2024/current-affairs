@@ -1,15 +1,3 @@
-"""
-generators/web_builder.py — Static HTML page generator for The Currents (v4 layout).
-
-Three-column layout:
-  Left panel   — Daily archive (sticky, scrollable, JS-populated from MONTHLY_DATA)
-  Main content — Today's articles + TOC + Q&A
-  Right panel  — Topic cloud filter + PDF downloads
-
-All elements respect config/display_flags.py (WEB flags).
-Public API unchanged:
-    build_web(articles, date_str, oneliners=None) -> Path | None
-"""
 from __future__ import annotations
 import html as _html, json
 from pathlib import Path
@@ -79,7 +67,12 @@ def _article_card(n: int, art: dict) -> str:
         '<h3 class="art-title-hi">' + _e(art.get("title_hi", "")) + "</h3>"
         if F.show_title_hindi else ""
     )
-
+  
+    # Inside the loop where you build each article HTML
+    hero_path = article.get("hero_image_path")  # we'll pass this from enricher
+        if hero_path:
+            html += f'<img src="{hero_path}" alt="{article["title"]}" loading="lazy" class="hero-image">\n'
+  
     # language tab bar
     if F.show_hindi_tab:
         tab_bar_html = (
