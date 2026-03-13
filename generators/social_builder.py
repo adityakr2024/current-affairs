@@ -1,22 +1,3 @@
-"""
-generators/social_builder.py — Playwright-based social post generator for The Currents.
-
-DROP-IN REPLACEMENT for the PIL version.
-Public API is identical:
-    build_social_post(article: dict) -> Path | None
-    build_all_posts(articles: list[dict]) -> list[Path]
-
-Why Playwright instead of PIL:
-  - CSS engine handles word-wrap, overflow, hyphens automatically.
-  - Text NEVER cuts mid-word or mid-sentence.
-  - All sentences are period-enforced before injection.
-  - Zones are CSS flex — guaranteed never to overflow.
-  - Zero manual pixel math.
-
-Requires: playwright>=1.40.0
-  pip install playwright && python -m playwright install chromium
-GitHub Actions: add step `python -m playwright install chromium --with-deps`
-"""
 from __future__ import annotations
 
 import datetime
@@ -381,8 +362,8 @@ def _build_html(article: dict) -> str:
     gs_pill_html      = "<div class='gs-pill'>" + gs_tag + "</div>" if (F.show_gs_pill and gs_tag) else ""
     src_date          = source + ("<br>" + date if date else "")
     source_chip_html  = "<div class='source-chip'>" + src_date + "</div>" if (F.show_source_chip and (source or date)) else ""
-    bottom_cta_html   = "<div class='bottom-left'>Daily. Curated. <em>UPSC-Ready.</em></div>" if F.show_bottom_cta else ""
-    bottom_url_html   = "<div class='bottom-right'>adityakr2024.github.io/current-affairs</div>" if F.show_site_url else ""
+    bottom_cta_html   = "<div class='bottom-left'>Daily. Curated.</div>" if F.show_bottom_cta else ""
+    bottom_url_html   = "<div class='bottom-right'>www.aarambhtimes.in</div>" if F.show_site_url else ""
 
     return _HTML_TEMPLATE.format(
         accent      = accent,
