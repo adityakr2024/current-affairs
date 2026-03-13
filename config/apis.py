@@ -41,6 +41,14 @@ PROVIDERS: dict[str, dict] = {
         "tasks": ["enrich", "oneliner", "caption"],  # FIX: added oneliner+caption fallback
         "enabled": True,
     },
+    "groq_4": {
+         "type": "groq", "key_env": "GROQ_API_KEY_4",
+         "model": "llama-3.3-70b-versatile",
+         "base_url": "https://api.groq.com/openai/v1",
+         "rpm": 30, "tpm": 6000, "tpd": 14400, "priority": 1,
+         "tasks": ["enrich", "oneliner", "caption"],  # FIX: added oneliner+caption fallback
+         "enabled": True,
+    },
 
     # ── Cerebras — fast 70b ───────────────────────────────────────────────────
     "cerebras_1": {
