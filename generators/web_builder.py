@@ -402,7 +402,7 @@ def build_web(
     if F.show_sticky_header:
         masthead = (
             '<header class="masthead">'
-            '<div class="masthead-logo">The <span>Currents</span></div>'
+            '<div class="masthead-logo"><a href="' + https://www.aarambhtimes.in/ + '" style="text-decoration:none;color:inherit">The <span>Currents</span></a></div>'
             '<div class="masthead-divider"></div>'
             '<div class="masthead-sub">UPSC Current Affairs</div>'
             '<div class="masthead-spacer"></div>'
