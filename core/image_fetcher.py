@@ -228,3 +228,15 @@ def get_best_image(article: dict) -> "Image.Image | None":
         if img:
             return img
     return None
+
+def save_article_image(image: Image.Image | None, article_id: str, date_str: str) -> str | None:
+    """Save hero image for web (web-accessible). Returns relative path or None."""
+    if not image:
+        return None
+    
+    images_dir = Path("images") / date_str
+    images_dir.mkdir(parents=True, exist_ok=True)
+    filepath = images_dir / f"{article_id}.jpg"
+    
+    image.convert("RGB").save(filepath, "JPEG", quality=85, optimize=True)
+    return f"./images/{date_str}/{article_id}.jpg"   # relative for GitHub Pages
