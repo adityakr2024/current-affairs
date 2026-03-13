@@ -40,6 +40,15 @@ _PARITY_PAIRS = [
 ]
 
 
+def _is_devanagari(text: str, threshold: float = 0.4) -> bool:
+    """Return True if more than `threshold` fraction of letters are Devanagari."""
+    if not text:
+        return False
+    devanagari = sum(1 for c in text if "\u0900" <= c <= "\u097F")
+    letters     = sum(1 for c in text if c.isalpha())
+    return (devanagari / letters) > threshold if letters else False
+
+
 def _count_digits_numbers(text: str) -> set[str]:
     """Extract all standalone numbers/percentages/amounts from text."""
     import re
@@ -59,6 +68,16 @@ def validate_article(article: dict) -> tuple[bool, list[str]]:
     # Skip validation for low-confidence fallback articles
     if article.get("fact_confidence", 5) <= 2:
         return True, []
+
+    # ── 0. Source language guard — reject Hindi-script source articles ─────────
+    # If the fetched title or context is primarily Devanagari, this article came
+    # from a Hindi-language source and must not appear in English outputs.
+    if _is_devanagari(article.get("title", "")) or _is_devanagari(article.get("context", "")):
+        issues.append(
+            "HINDI SOURCE: title/context is Devanagari — fetched from a Hindi-language "
+            "source; must be excluded from English PDF, webpage, and social outputs."
+        )
+        return False, issues  # fail fast — no further checks needed
 
     # ── 1. Required field presence ────────────────────────────────────────────
     for field in _REQUIRED:
