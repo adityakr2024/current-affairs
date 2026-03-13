@@ -39,7 +39,7 @@ class SharedFlags:
     show_gs_badge:      bool = True   # GS-1 / GS-2 / GS-3 paper badge
     show_topic_tags:    bool = True   # Polity, Economy, IR topic chips
     show_conf_badge:    bool = True   # ★★★☆☆ fact-confidence stars
-    show_verify_flags:  bool = True   # ⚑ Verify: suspicious claim warnings
+    show_verify_flags:  bool = False   # ⚑ Verify: suspicious claim warnings
 
     # ── Sections ────────────────────────────────────────────────────────────
     show_toc:           bool = True   # Table of contents
