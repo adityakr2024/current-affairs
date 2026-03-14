@@ -42,7 +42,7 @@ PROVIDERS: dict[str, dict] = {
         "model": "llama-3.3-70b",                   # FIX: was llama3.1-70b (404)
         "base_url": "https://api.cerebras.ai/v1",
         "rpm": 30, "tpm": 60000, "tpd": 0, "priority": 2,
-        "tasks": ["enrich"], "enabled": True,
+        "tasks": ["enrich"], "enabled": False,
     },
 
     # ── Gemini Flash — light tasks ────────────────────────────────────────────
@@ -51,21 +51,21 @@ PROVIDERS: dict[str, dict] = {
         "model": "gemini-2.0-flash-lite",
         "base_url": "https://generativelanguage.googleapis.com/v1beta",
         "rpm": 30, "tpm": 0, "tpd": 1500, "priority": 1,
-        "tasks": ["oneliner", "caption", "filter"], "enabled": True,
+        "tasks": ["oneliner", "caption", "filter"], "enabled": False,
     },
     "gemini_2": {
         "type": "google", "key_env": "GEMINI_API_KEY_2",
         "model": "gemini-2.0-flash-lite",
         "base_url": "https://generativelanguage.googleapis.com/v1beta",
         "rpm": 30, "tpm": 0, "tpd": 1500, "priority": 1,
-        "tasks": ["oneliner", "caption", "filter"], "enabled": True,
+        "tasks": ["oneliner", "caption", "filter"], "enabled": False,
     },
     "gemini_3": {
         "type": "google", "key_env": "GEMINI_API_KEY_3",
         "model": "gemini-2.0-flash-lite",            # FIX: was gemini-1.5-flash (404)
         "base_url": "https://generativelanguage.googleapis.com/v1beta",
         "rpm": 15, "tpm": 0, "tpd": 1500, "priority": 2,
-        "tasks": ["oneliner", "caption", "filter"], "enabled": True,
+        "tasks": ["oneliner", "caption", "filter"], "enabled": False,
     },
 
     # ── OpenAI ────────────────────────────────────────────────────────────────
@@ -74,21 +74,21 @@ PROVIDERS: dict[str, dict] = {
         "model": "gpt-4o-mini",
         "base_url": "https://api.openai.com/v1",
         "rpm": 500, "tpm": 200000, "tpd": 0, "priority": 2,
-        "tasks": ["enrich", "oneliner", "caption"], "enabled": True,
+        "tasks": ["enrich", "oneliner", "caption"], "enabled": False,
     },
     "openai_2": {
         "type": "openai_compat", "key_env": "OPENAI_API_KEY_2",
         "model": "gpt-4o-mini",
         "base_url": "https://api.openai.com/v1",
         "rpm": 500, "tpm": 200000, "tpd": 0, "priority": 2,
-        "tasks": ["enrich", "oneliner", "caption"], "enabled": True,
+        "tasks": ["enrich", "oneliner", "caption"], "enabled": False,
     },
     "openai_3": {
         "type": "openai_compat", "key_env": "OPENAI_API_KEY_3",
         "model": "gpt-4o-mini",
         "base_url": "https://api.openai.com/v1",
         "rpm": 500, "tpm": 200000, "tpd": 0, "priority": 2,
-        "tasks": ["enrich", "oneliner", "caption"], "enabled": True,
+        "tasks": ["enrich", "oneliner", "caption"], "enabled": False,
     },
 
     # ── OpenRouter — light fallback ───────────────────────────────────────────
@@ -97,14 +97,14 @@ PROVIDERS: dict[str, dict] = {
         "model": "meta-llama/llama-3.2-3b-instruct:free",
         "base_url": "https://openrouter.ai/api/v1",
         "rpm": 20, "tpm": 0, "tpd": 0, "priority": 3,
-        "tasks": ["oneliner", "caption"], "enabled": True,
+        "tasks": ["oneliner", "caption"], "enabled": False,
     },
     "openrouter_2": {
         "type": "openai_compat", "key_env": "OPENROUTER_API_KEY_2",
         "model": "meta-llama/llama-3.2-3b-instruct:free",
         "base_url": "https://openrouter.ai/api/v1",
         "rpm": 20, "tpm": 0, "tpd": 0, "priority": 3,
-        "tasks": ["oneliner", "caption"], "enabled": True,
+        "tasks": ["oneliner", "caption"], "enabled": False,
     },
 
     # ── Anthropic — paid, highest quality, enrich fallback ───────────────────
@@ -113,7 +113,7 @@ PROVIDERS: dict[str, dict] = {
         "model": "claude-haiku-4-5-20251001",
         "base_url": "https://api.anthropic.com/v1",
         "rpm": 50, "tpm": 0, "tpd": 0, "priority": 4,
-        "tasks": ["enrich"], "enabled": True,
+        "tasks": ["enrich"], "enabled": False,
     },
 }
 
