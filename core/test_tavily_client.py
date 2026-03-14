@@ -25,7 +25,7 @@ os.environ.update({
 
 # Fresh import
 for mod in list(sys.modules):
-    if "tavily" in mod:
+    if "tavily" in mod and mod != __name__:
         del sys.modules[mod]
 
 from core.tavily_client import (
@@ -58,7 +58,7 @@ class TestSwitch(unittest.TestCase):
     def test_disabled_env_blocks_all_calls(self):
         with patch.dict(os.environ, {"TAVILY_ENABLED": "false"}):
             for mod in list(sys.modules):
-                if "tavily" in mod: del sys.modules[mod]
+                if "tavily" in mod and mod != __name__: del sys.modules[mod]
             from core.tavily_client import TavilyClient
             c = TavilyClient()
             self.assertFalse(c.is_available)
@@ -72,7 +72,7 @@ class TestSwitch(unittest.TestCase):
             "TAVILY_API_KEY_3": "", "TAVILY_MCP_ENABLED": "false",
         }):
             for mod in list(sys.modules):
-                if "tavily" in mod: del sys.modules[mod]
+                if "tavily" in mod and mod != __name__: del sys.modules[mod]
             from core.tavily_client import TavilyClient
             c = TavilyClient()
             self.assertFalse(c.is_available)
@@ -116,7 +116,7 @@ class TestThreeKeyRotation(unittest.TestCase):
 
     def _fresh_client(self):
         for mod in list(sys.modules):
-            if "tavily" in mod: del sys.modules[mod]
+            if "tavily" in mod and mod != __name__: del sys.modules[mod]
         from core.tavily_client import TavilyClient
         return TavilyClient()
 
@@ -295,7 +295,7 @@ class TestFallbackResponses(unittest.TestCase):
 
     def _client(self):
         for mod in list(sys.modules):
-            if "tavily" in mod: del sys.modules[mod]
+            if "tavily" in mod and mod != __name__: del sys.modules[mod]
         from core.tavily_client import TavilyClient
         return TavilyClient()
 
