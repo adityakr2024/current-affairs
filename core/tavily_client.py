@@ -42,35 +42,29 @@ from typing import Any, Optional
 
 import requests
 
+from config.settings import OUTPUT_DIR
+from config.tavily import (
+    TAVILY_CB_RESET_AFTER,
+    TAVILY_CB_THRESHOLD,
+    TAVILY_ENABLED,
+    TAVILY_HARD_STOP_PCT,
+    TAVILY_KEYS,
+    TAVILY_MCP_ENABLED,
+    TAVILY_MCP_TIMEOUT,
+    TAVILY_MONTHLY_LIMIT,
+    TAVILY_TIMEOUT,
+    TAVILY_WARN_PCT,
+)
+
 logger = logging.getLogger(__name__)
 
 # ─────────────────────────────────────────────────────────────────
 # CONFIG
 # ─────────────────────────────────────────────────────────────────
-TAVILY_ENABLED        = os.getenv("TAVILY_ENABLED", "true").lower() == "true"
-TAVILY_MONTHLY_LIMIT  = int(os.getenv("TAVILY_MONTHLY_LIMIT", "1000"))
-TAVILY_WARN_PCT       = float(os.getenv("TAVILY_WARN_PCT",   "0.80"))
-TAVILY_HARD_STOP_PCT  = float(os.getenv("TAVILY_HARD_STOP_PCT", "0.95"))
-TAVILY_CB_THRESHOLD   = int(os.getenv("TAVILY_CB_THRESHOLD",   "3"))
-TAVILY_CB_RESET_AFTER = int(os.getenv("TAVILY_CB_RESET_AFTER", "300"))
-TAVILY_TIMEOUT        = int(os.getenv("TAVILY_TIMEOUT",        "15"))
-
-# Three API keys in priority order
-TAVILY_KEYS: list[str] = [
-    k for k in [
-        os.getenv("TAVILY_API_KEY_1", ""),
-        os.getenv("TAVILY_API_KEY_2", ""),
-        os.getenv("TAVILY_API_KEY_3", ""),
-    ] if k
-]
-
-# MCP config
 TAVILY_MCP_REMOTE_URL = "https://mcp.tavily.com/mcp/"
 TAVILY_MCP_LOCAL_CMD  = ["npx", "-y", "@tavily/mcp"]
-TAVILY_MCP_TIMEOUT    = int(os.getenv("TAVILY_MCP_TIMEOUT", "10"))
-TAVILY_MCP_ENABLED    = os.getenv("TAVILY_MCP_ENABLED", "true").lower() == "true"
 
-USAGE_DIR = Path(os.getenv("OUTPUT_DIR", "/tmp/the_currents")) / "data"
+USAGE_DIR = Path(OUTPUT_DIR) / "data"
 BASE_URL  = "https://api.tavily.com"
 
 
