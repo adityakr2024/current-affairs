@@ -9,19 +9,28 @@ from core.logger import log
 
 EXCLUDE_PATTERNS: list[str] = [
     # Entertainment / celebrity
-    r"\bipl\b", r"\bcricket\b", r"\bbollywood\b", r"\bfilm\s+review\b",
+    r"\bipl\b", r"\bcricket\b", r"\bbollywood\b", r"\bfilm(s)?\b", r"\bcinema\b",
     r"\bbox\s+office\b", r"\bwedding\b", r"\bdivorce\b", r"\bbreakup\b",
     r"\bviral\b", r"\bmeme\b", r"\btrending\b", r"\bfollowers\b",
-    r"\binstagram\b.*\bpost\b", r"\bcelebrity\b",
+    r"\binstagram\b.*\bpost\b", r"\bcelebrity\b", r"\bactor\b", r"\bactress\b",
     # Pure political drama — statements, allegations, attacks
     r"\bslams\b", r"\battacks\b", r"\blashes\s+out\b", r"\bhits\s+out\b",
     r"\blashes\b.*\bpm\b", r"\blashes\b.*\bcm\b",
     r"\baccuses\b", r"\balleges\b",
     r"\brally\b", r"\broadshow\b", r"\belection\s+speech\b",
     r"\bpolitical\s+vendetta\b",
+    # Low-yield local crimes/accidents and fraud blotter
+    r"\bcheated\b", r"\bcheating\b", r"\bfraud\b", r"\bfake\b.*\bscheme\b",
+    r"\barrested\b", r"\brobbery\b", r"\bmurder\b", r"\baccident\b", r"\bstolen\b",
+
+    # Local political succession chatter / personality profiles
+    r"\bhints?\b.*\bsuccessor\b", r"\bsuccessor\b.*\bhints?\b",
+    r"\btoast\s+of\s+the\s+town\b", r"\b(clears?|cleared|clearing)\s+upsc\b",
     # Electoral (not institutional)
     r"\bbypolls?\b", r"\bvote\s+share\b", r"\bparty\s+symbol\b",
     r"\bexit\s+poll\b", r"\bopinion\s+poll\b",
+    # Market ticker noise
+    r"\bsensex\b", r"\bnifty\b",
     # Vague / not current affairs
     r"\bhoroscope\b", r"\bastrology\b", r"\bhow\s+to\b",
     r"\btop\s+\d+\b", r"\bbest\s+\d+\b",
@@ -32,10 +41,15 @@ EXCLUDE_PATTERNS: list[str] = [
 # — the heart of what UPSC considers "current affairs".
 
 EVENT_BONUSES: list[tuple[str, int]] = [
+    # Priority 1: Courts/judiciary observations and rulings
+    (r"\b(supreme\s+court|high\s+court|sc|hc)\b.*?(says|observes|warns|rules|directs|stays|upholds|apprehends)", +18),
+    (r"\b(constitution\s+bench|cji)\b", +20),
     (r"\bsupreme\s+court\b.*?(landmark|historic|first-ever|upholds.*dignity|passive euthanasia|life support|vegetative state|right to die)", +18),
 
-    # Highest — Parliament/Cabinet formal actions
-    (r"\bcabinet\s+(approves?|clears?|nods?|okays?)\b",        +15),
+    # Priority 2: Union-level cabinet actions
+    (r"\b(union\s+cabinet|centre|central\s+govt)\s+(approves?|clears?|nods?|okays?)\b", +18),
+    (r"\bcabinet\s+(approves?|clears?|nods?|okays?)\b",        +5),
+    # Parliament/formal actions
     (r"\bparliament\s+passes?\b",                               +15),
     (r"\blok\s+sabha\s+passes?\b",                             +15),
     (r"\brajya\s+sabha\s+passes?\b",                           +15),
@@ -64,6 +78,14 @@ EVENT_BONUSES: list[tuple[str, int]] = [
     # Budget / Finance
     (r"\bbudget\s+(allocates?|presents?|proposes?)\b",         +12),
     (r"\bfinance\s+commission\b",                              +10),
+
+    # Priority 3: Economic indicators
+    (r"\b(cpi|wpi|inflation|gdp|fiscal\s+deficit)\b", +15),
+    (r"\b(price\s+pressures?|consumer\s+price\s+index)\b", +15),
+
+    # Priority 4: Health and clean-energy policy signals
+    (r"\b(vaccine|immunisation|compensation\s+programme)\b", +12),
+    (r"\b(sustainable\s+energy|renewable\s+energy|net\s+zero)\b", +12),
 ]
 # ── GATE 2B: Statement / drama penalties ──────────────────────────────────────
 # These signals in the TITLE indicate a statement/opinion — not a policy event.
@@ -71,9 +93,9 @@ EVENT_BONUSES: list[tuple[str, int]] = [
 
 STATEMENT_PENALTIES: list[tuple[str, int]] = [
     # Politician as subject + says/claims
-    (r"^(modi|rahul|kejriwal|shah|mamata|yogi|fadnavis|shinde|gehlot|nitish|chandrashekhar)\b.*\b(says?|said|claims?|demands?|urges?|calls?\s+for|warns?|vows?|pledges?|promises?)\b", -18),
+    (r"^(modi|rahul|kejriwal|shah|mamata|yogi|fadnavis|shinde|gehlot|nitish|chandrashekhar)\b.*\b(says?|said|claims?|demands?|urges?|calls?\s+for|warns?|vows?|pledges?|promises?)\b", -20),
     # Generic statement pattern — title starts with name followed by speech verb
-    (r"^\w+\s+\w+\s+(says?|said|claims?|alleges?|demands?|urges?|calls?\s+for|blames?|criticises?|condemns?)\b", -10),
+    (r"^(?!(supreme\s+court|rbi|niti\s+aayog|ec|government|centre|sc|hc|cji|parliament|ministry))\w+\s+\w+\s+(says?|said|claims?|alleges?|demands?|urges?)\b", -15),
     # Promises without action
     (r"\bpromises?\b", -12),
     (r"\bvows?\s+to\b", -12),
@@ -89,100 +111,44 @@ STATEMENT_PENALTIES: list[tuple[str, int]] = [
 
 UPSC_TOPICS: dict[str, dict] = {
     "Polity & Governance": {"weight": 10, "keywords": [
-        "constitution", "constitutional", "supreme court", "high court", "parliament",
-        "lok sabha", "rajya sabha", "president", "governor", "cabinet", "ministry",
-        "legislation", "amendment", "ordinance", "judicial", "fundamental rights",
-        "directive principles", "federalism", "centre-state", "tribunal", "election commission",
-        "cag", "lokpal", "cbi", "ed", "finance commission", "urban local body", "gram panchayat",
-        "mgnregs", "mnrega", "ayushman bharat", "pm kisan", "pm awas", "swachh bharat",
-        "pocso", "it act", "pml act", "uapa", "afspa", "ndps",
+        # Federalism & Constitutional (High Value)
+        "constitution", "federalism", "centre-state", "inter-state", "governor",
+        "article", "schedule", "pension", "citizenship", "secularism", "preamble",
+        "delimitation", "judicial review", "judicial activism", "basic structure",
+        # Union Institutions
+        "union cabinet", "central government", "centre", "parliament", "lok sabha",
+        "rajya sabha", "president", "vice president", "cabinet committee",
+        "election commission", "cag", "finance commission", "niti aayog",
+        "law commission", "vigilance commission", "lokpal", "national commission for",
+        # Legislative/Legal
+        "bill", "act", "ordinance", "amendment", "statutory", "tribunal", "collegium",
+        "it act", "uapa", "pmla", "afspa", "data protection", "ipc", "crpc", "bharatiya nyaya sanhita",
     ]},
-    "International Relations": {"weight": 9, "keywords": [
-        "united nations", "un security council", "unga", "who", "imf", "world bank", "nato",
-        "brics", "sco", "g20", "g7", "asean", "saarc", "quad", "iaea", "bilateral", "multilateral",
-        "treaty", "agreement", "summit", "foreign policy", "diplomatic", "sanctions", "mou",
-        "india-us", "india-china", "india-russia", "india-pakistan", "india-japan",
-        "west asia", "iran", "israel", "ukraine", "russia", "nuclear deal", "indo-pacific",
-        "fta", "free trade agreement", "cepa", "mea", "ministry of external affairs",
-        "sri lanka", "bangladesh", "nepal", "maldives", "myanmar", "afghanistan",
+
+    "Economy": {"weight": 10, "keywords": [
+        # Macro indicators (National)
+        "gdp", "cpi", "wpi", "inflation", "fiscal deficit", "monetary policy", "rbi",
+        "repo rate", "currency", "rupee", "forex", "balance of payments", "gst council",
+        # Markets & Trade
+        "sebi", "fdi", "export", "import", "trade agreement", "fta", "cepa", "world bank",
+        "imf", "wto", "global economy", "economic survey", "budget", "direct tax",
+        # Infrastructure & Manufacturing
+        "pli scheme", "semiconductor mission", "atmanirbhar", "logistics policy",
+        "pm gati shakti", "industrial corridor", "semiconductors", "energy transition",
     ]},
-    "Economy": {"weight": 9, "keywords": [
-        "gdp", "inflation", "rbi", "monetary policy", "repo rate", "fiscal deficit", "budget",
-        "gst", "fdi", "forex", "balance of payments", "trade deficit", "export", "import",
-        "msme", "startup", "banking", "nbfc", "sebi", "niti aayog", "economic survey",
-        "rupee", "oil price", "crude oil", "urea", "fertilizer", "pli scheme", "semiconductor",
-        "industrial corridor", "atmanirbhar", "16th finance commission", "disinvestment",
-        "insolvency", "ibc", "nclt", "esop", "capital market", "stock exchange",
+
+    "International Relations": {"weight": 12, "keywords": [
+        "bilateral", "multilateral", "summit", "g20", "quad", "brics", "sco", "asean",
+        "united nations", "unsc", "foreign policy", "diplomatic", "strategic partnership",
+        "india-us", "india-china", "india-russia", "india-pakistan", "indo-pacific",
+        "west asia", "global south", "maritime security", "soft power",
     ]},
-    "Geography & Environment": {"weight": 9, "keywords": [
-        "climate change", "carbon", "emission", "net zero", "biodiversity", "wildlife",
-        "forest cover", "pollution", "air quality", "aqi", "renewable energy", "solar",
-        "wind energy", "green hydrogen", "cop", "unfccc", "paris agreement", "ngt",
-        "tiger reserve", "wetland", "ramsar", "mangrove", "coral reef", "glacier",
-        "cyclone", "drought", "flood", "earthquake", "tsunami", "el nino", "la nina",
-        "monsoon", "sea level rise", "disaster management", "ndrf", "forest rights act",
-        "compensatory afforestation", "ecozone", "critical wildlife habitat",
-    ]},
-    "Science & Technology": {"weight": 8, "keywords": [
-        "isro", "chandrayaan", "aditya", "gaganyaan", "satellite", "space mission",
-        "artificial intelligence", "machine learning", "generative ai", "llm",
-        "ai governance", "ai regulation", "semiconductor", "chip", "quantum computing",
-        "biotechnology", "genome", "drug discovery", "cyber security", "data privacy",
-        "missile", "drdo", "defence technology", "5g", "6g", "digital india", "patent",
-        "nuclear reactor", "thorium", "bhabha", "barc",
-    ]},
-    "Health & Social Issues": {"weight": 8, "keywords": [
-        "health policy", "public health", "ayushman", "malnutrition", "obesity", "diabetes",
-        "tuberculosis", "tb", "hiv", "vaccine", "immunisation", "clinical trial", "poverty",
-        "education policy", "nutrition", "welfare scheme", "women empowerment", "child rights",
-        "tribal", "scheduled caste", "scheduled tribe", "obc", "reservation", "nfhs",
-        "gender", "labour rights", "minimum wage", "social security", "demographic",
-        "refugee", "displaced", "humanitarian", "neet", "jee", "higher education",
-    ]},
-    "Defence & Security": {"weight": 10, "keywords": [
-        "indian navy", "naval", "warship", "submarine", "coast guard", "maritime security",
-        "piracy", "sea lane", "indian ocean", "bay of bengal", "arabian sea", "south china sea",
-        "fighter jet", "rafale", "tejas", "defence procurement", "army", "air force",
-        "border security", "lac", "loc", "joint exercise", "indigenisation",
-        "terrorism", "naxal", "crpf", "bsf", "cisf", "itbp", "drdo", "defence export",
-    ]},
-    "Agriculture & Rural": {"weight": 8, "keywords": [
-        "farmer", "agriculture", "horticulture", "crop", "msp", "irrigation", "kisan",
-        "rural", "food security", "fci", "pds", "fertilizer", "organic farming",
-        "pm-kisan", "soil health", "animal husbandry", "fisheries", "aquaculture",
-        "fpo", "livestock", "dairy", "poultry", "rice", "wheat", "food export",
-        "agri infrastructure fund", "enam", "gramin",
-    ]},
-    "Infrastructure": {"weight": 7, "keywords": [
-        "highway", "expressway", "railway", "bullet train", "metro", "port", "airport",
-        "sagarmala", "bharatmala", "dedicated freight corridor", "logistics",
-        "pm gati shakti", "smart city", "amrut", "housing", "industrial corridor",
-        "power grid", "transmission", "broadband", "optical fibre",
-    ]},
-    "Schemes & Initiatives": {"weight": 9, "keywords": [
-        "scheme", "mission", "programme", "yojana", "abhiyan", "campaign", "initiative",
-        "launches", "launched", "inaugurated", "inaugurates", "roll out",
-        "cabinet approves", "cabinet clears", "government announces", "centre launches",
-        "policy notified", "act notified", "pm inaugurates", "pm launches",
-        "pm-kisan", "pm kisan", "pm awas", "ayushman bharat", "jal jeevan", "ujjwala",
-        "swachh bharat", "poshan", "beti bachao", "mgnregs", "pli scheme",
-        "startup india", "skill india", "digital india", "national health mission",
-        "allocated", "sanctioned", "commissioned", "operationalised",
-    ]},
-    "History & Culture": {"weight": 8, "keywords": [
-        "heritage", "freedom fighter", "martyrdom", "jayanti", "punyatithi",
-        "ambedkar", "gandhi", "subhas chandra", "world heritage", "intangible heritage",
-        "archaeological", "gi tag", "classical dance", "classical music",
-        "independence movement", "non-cooperation", "civil disobedience",
-        "asm", "uneco", "cultural ministry", "sangeet natak akademi",
-    ]},
-    "Prelims Special": {"weight": 8, "keywords": [
-        "padma", "bharat ratna", "nobel prize", "un award", "world heritage", "ramsar site",
-        "biosphere reserve", "tiger census", "elephant census", "human development index",
-        "ease of doing business", "global hunger index", "world happiness",
-        "global innovation index", "nhrc", "ncw", "sebi", "trai", "irdai", "fssai",
-        "new species", "space discovery", "esic", "dpiit", "dgft",
-        "india's rank", "india ranks", "report released", "index released",
+
+    "Environment & Science": {"weight": 9, "keywords": [
+        "climate change", "cop28", "cop29", "net zero", "carbon credit", "green hydrogen",
+        "biodiversity", "wildlife protection", "ramsar", "tiger census", "isro",
+        "gaganyaan", "artificial intelligence", "ai governance", "quantum computing",
+        "biotechnology", "nuclear energy", "thorium", "defence technology",
     ]},
 }
 
@@ -202,6 +168,35 @@ ACTION_PHRASES: list[str] = [
 INDIA_PROXIMITY: list[str] = [
     "india", "indian", "new delhi", "modi", "pm modi", "india-",
 ]
+
+STATE_ANCHORS: list[str] = [
+    "kerala", "tamil nadu", "up", "uttar pradesh", "bihar", "punjab",
+    "maharashtra", "bengal", "karnataka", "telangana", "odisha", "rajasthan",
+]
+
+NATIONAL_INSTITUTIONS: list[str] = [
+    "supreme court", "centre", "central government", "rbi", "niti aayog",
+    "parliament", "sc", "hc", "cji", "ministry of",
+]
+
+GOLDEN_PASS_TERMS: list[str] = [
+    "basic structure", "collegium system", "article 356", "beps", "p-notes",
+    "carbon sequestration", "nagoya protocol", "crispr", "string of pearls",
+    "two-state solution", "eez", "uniform civil code", "ucc",
+    "delimitation commission",
+]
+
+TOPIC_ANCHOR_WEIGHTS: dict[str, int] = {
+    "inflation": 15,
+    "cpi": 15,
+    "wpi": 15,
+    "gdp": 15,
+    "vaccine": 12,
+    "sustainable energy": 12,
+    "net zero": 12,
+    "fiscal deficit": 15,
+    "monetary policy": 15,
+}
 
 SCHEME_SIGNALS: list[str] = [
     "crore", "lakh", "beneficiar", "yojana", "scheme", "mission", "programme",
@@ -242,9 +237,11 @@ def score_article(a: dict) -> tuple[int, list[str]]:
             break  # only the highest single event bonus
 
     # Statement / drama penalties — applied to TITLE ONLY
+    statement_penalty_applied = False
     for pattern, penalty in STATEMENT_PENALTIES:
         if re.search(pattern, title):
             score += penalty  # penalty is negative
+            statement_penalty_applied = True
             break
 
     # Institution mention
@@ -263,6 +260,34 @@ def score_article(a: dict) -> tuple[int, list[str]]:
         score += 4
     if any(z in text for z in INDIA_PROXIMITY):
         score += 3
+
+    mentions_state = any(re.search(r"\b" + re.escape(s) + r"\b", title) for s in STATE_ANCHORS)
+    mentions_national = any(re.search(r"\b" + re.escape(n) + r"\b", title) for n in NATIONAL_INSTITUTIONS)
+
+    # Federalism logic: reward Centre-State institutional interaction, dampen local state executive noise
+    if mentions_state:
+        if mentions_national:
+            score += 15
+            if "Centre-State Relations" not in topics:
+                topics.append("Centre-State Relations")
+        elif "cabinet" in title or re.search(r"\bcm\b", title):
+            score -= 25
+
+    # Institutional shield for statement headlines
+    if re.search(r"\b(says?|said|claims?|urges?|apprehends?)\b", title):
+        if mentions_national:
+            score += 10
+        elif not statement_penalty_applied:
+            score -= 15
+
+    # Golden-pass terms (high-yield static UPSC anchors)
+    if any(term in text for term in GOLDEN_PASS_TERMS):
+        score += 30
+
+    # High-priority topical anchors
+    for word, weight in TOPIC_ANCHOR_WEIGHTS.items():
+        if word in text:
+            score += weight
 
     # Action phrase in title
     if any(p in title for p in ACTION_PHRASES):
