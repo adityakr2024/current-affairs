@@ -220,6 +220,7 @@ def _fallback(article: dict) -> dict:
         "background_hi":         "",
         "key_points_hi":         [t],
         "policy_implication_hi": "",
+        "image_keywords":       [t[:80]] if t else [],
         "headline_social":       t[:60],
         "context_social":        (s or t)[:150],
         "fact_confidence":       2,
@@ -255,11 +256,43 @@ def _merge(parsed: dict, fallback: dict) -> dict:
         "background_hi":         s("background_hi"),
         "key_points_hi":         lst("key_points_hi")       or fallback["key_points_hi"],
         "policy_implication_hi": s("policy_implication_hi"),
+        "image_keywords":       lst("image_keywords")       or fallback.get("image_keywords", []),
         "headline_social":       s("headline_social")       or fallback["headline_social"],
         "context_social":        s("context_social")        or fallback["context_social"],
         "fact_confidence":       confidence,
         "fact_flags":            slst("fact_flags"),
     }
+
+
+def _chat_with_timeout(
+    system: str,
+    user: str,
+    max_tokens: int,
+    temperature: float,
+    task: str,
+    timeout_s: int,
+) -> str:
+    """
+    Run ai_client.chat with a hard timeout.
+
+    Important: ThreadPoolExecutor context managers wait for worker completion.
+    If the AI call stalls (provider cooling/retries), that wait can look like a
+    pipeline freeze even after TimeoutError. We therefore shut down the executor
+    with wait=False on timeout so the pipeline can move on immediately.
+    """
+    ex = ThreadPoolExecutor(max_workers=1)
+    future = ex.submit(chat, system, user, max_tokens, temperature, task)
+    try:
+        return future.result(timeout=timeout_s)
+    except FuturesTimeoutError:
+        future.cancel()
+        ex.shutdown(wait=False, cancel_futures=True)
+        raise
+    except Exception:
+        ex.shutdown(wait=False, cancel_futures=False)
+        raise
+    else:
+        ex.shutdown(wait=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -325,17 +358,19 @@ def enrich_article(article: dict) -> dict:
     )
 
     try:
-        with ThreadPoolExecutor(max_workers=1) as ex:
-            future = ex.submit(
-                chat, ARTICLE_SYSTEM, user_prompt,
-                AI_MAX_TOKENS, AI_TEMPERATURE, "enrich"
+        try:
+            raw = _chat_with_timeout(
+                ARTICLE_SYSTEM,
+                user_prompt,
+                AI_MAX_TOKENS,
+                AI_TEMPERATURE,
+                "enrich",
+                timeout_s=45,
             )
-            try:
-                raw = future.result(timeout=45)
-            except FuturesTimeoutError:
-                log.warning(f"AI call TIMED OUT after 45s for: {title[:60]} — using fallback")
-                get_metrics().record_fallback()
-                return {**article, **fb}
+        except FuturesTimeoutError:
+            log.warning(f"AI call TIMED OUT after 45s for: {title[:60]} — using fallback")
+            get_metrics().record_fallback()
+            return {**article, **fb}
         parsed = _parse_json(raw)
         fields = _merge(parsed, fb)
     except Exception as exc:
@@ -390,18 +425,21 @@ def enrich_oneliners(items: list[dict]) -> list[dict]:
     user_msg  = f"Generate Q&A pairs for these {len(items)} headlines:\n\n{headlines}"
 
     try:
-        with ThreadPoolExecutor(max_workers=1) as ex:
-            future = ex.submit(
-                chat, ONELINER_SYSTEM, user_msg, 1400, AI_TEMPERATURE, "oneliner"
+        try:
+            raw = _chat_with_timeout(
+                ONELINER_SYSTEM,
+                user_msg,
+                1400,
+                AI_TEMPERATURE,
+                "oneliner",
+                timeout_s=45,
             )
-            try:
-                raw = future.result(timeout=45)
-            except FuturesTimeoutError:
-                log.warning("Q&A chat call TIMED OUT after 45s — using title as question")
-                for item in items:
-                    item.update({"q_en": item["title"], "q_hi": item["title"],
-                                 "a_en": "", "a_hi": ""})
-                return items
+        except FuturesTimeoutError:
+            log.warning("Q&A chat call TIMED OUT after 45s — using title as question")
+            for item in items:
+                item.update({"q_en": item["title"], "q_hi": item["title"],
+                             "a_en": "", "a_hi": ""})
+            return items
         parsed = _parse_json(raw)
         if not isinstance(parsed, list):
             raise ValueError(f"Expected JSON array, got {type(parsed)}")
