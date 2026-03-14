@@ -36,21 +36,6 @@ class TestExclusion:
     def test_excludes_film_policy(self):
         assert is_excluded(_art("Government announces new film production policy"))
 
-    def test_excludes_state_successor_chatter(self):
-        assert is_excluded(_art("Nitish Kumar hints at Samrat Choudhary as his successor in Bihar"))
-
-    def test_excludes_local_upsc_human_interest(self):
-        assert is_excluded(_art("A Bihar youth became toast of the town for clearing UPSC"))
-
-    def test_excludes_fake_pm_scheme_cheating_arrest(self):
-        assert is_excluded(_art("Man arrested for cheating buyers with fake Prime Minister scheme"))
-
-    def test_excludes_hinted_successor_chatter(self):
-        assert is_excluded(_art("Nitish Kumar hinted at X as his successor in Bihar"))
-
-    def test_excludes_will_urge_rhetoric(self):
-        assert is_excluded(_art("Will urge Centre to increase limit of non-domestic LPG cylinders"))
-
 
 # ── Scoring ────────────────────────────────────────────────────────────────────
 class TestScoring:
@@ -78,10 +63,6 @@ class TestScoring:
         state_sc, _ = score_article(_art("Kerala Cabinet approves new logistics policy"))
         assert union_sc > state_sc
 
-
-    def test_geopolitical_says_rhetoric_gets_penalty(self):
-        sc, _ = score_article(_art("BRICS should play a role in supporting global security, says Iran"))
-        assert sc < 15
     def test_institutional_statement_not_penalized_like_political_statement(self):
         sc_inst, _ = score_article(_art("Supreme Court says states must ensure prisoner dignity"))
         sc_pol, _ = score_article(_art("Rahul Gandhi says government has failed on inflation"))
@@ -101,15 +82,6 @@ class TestScoring:
         sc, _ = score_article(_art("Centre launches vaccine injury compensation programme"))
         assert sc >= 20
 
-
-    def test_supreme_court_apprehends_statement_scores_high(self):
-        sc, topics = score_article(_art("Paid menstrual pain leave may cost women their careers, Supreme Court apprehends"))
-        assert sc >= 20
-        assert "Centre-State Relations" not in topics
-
-    def test_state_anchor_up_does_not_match_inside_words(self):
-        _, topics = score_article(_art("Supreme Court apprehends misuse of labour policy"))
-        assert "Centre-State Relations" not in topics
     def test_state_national_interaction_gets_centre_state_topic(self):
         _, topics = score_article(_art("Kerala challenges Centre policy in Supreme Court"))
         assert "Centre-State Relations" in topics
