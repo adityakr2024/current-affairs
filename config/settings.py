@@ -30,14 +30,6 @@ for _src in RSS_SOURCES:
             f"RSS source '{_src['name']}' uses non-HTTPS URL — update config/settings.py"
         )
 
-# ── Image scraping ─────────────────────────────────────────────────────────────
-# Sources whose article pages are scraped for og:image (hero photograph).
-SCRAPE_IMAGE_SOURCES: set[str] = {
-    "The Hindu",
-    "Indian Express",
-    "Down to Earth",
-}
-
 # ── Image quality thresholds ───────────────────────────────────────────────────
 ARTICLE_IMAGE_MIN_WIDTH  = 500   # px — rejects thumbnails, icons, logos
 ARTICLE_IMAGE_MIN_HEIGHT = 300   # px — rejects banners/strips
