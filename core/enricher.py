@@ -6,7 +6,15 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from core.ai_client import chat, _get_pool
 from core.logger import log
 from core.metrics import get_metrics
-from config.settings import INTER_ARTICLE_SLEEP, PRE_ONELINER_SLEEP, AI_MAX_TOKENS, AI_TEMPERATURE
+from config.settings import (
+    INTER_ARTICLE_SLEEP,
+    PRE_ONELINER_SLEEP,
+    AI_MAX_TOKENS,
+    AI_TEMPERATURE,
+    AI_ENRICH_TIMEOUT_SEC,
+    MAX_ENRICH_STAGE_SECONDS,
+    MAX_ENRICH_PACING_SLEEP,
+)
 
 # ── Tavily grounding support (same flag as fetcher.py) ───────────────────────
 from core.tavily_client import tavily
@@ -434,13 +442,13 @@ def enrich_article(article: dict) -> dict:
             raw = _chat_with_timeout(
                 ARTICLE_SYSTEM,
                 user_prompt,
-                AI_MAX_TOKENS,
+                max_out_tokens,
                 AI_TEMPERATURE,
                 "enrich",
-                timeout_s=45,
+                timeout_s=AI_ENRICH_TIMEOUT_SEC,
             )
         except FuturesTimeoutError:
-            log.warning(f"AI call TIMED OUT after 45s for: {title[:60]} — using fallback")
+            log.warning(f"AI call TIMED OUT after {AI_ENRICH_TIMEOUT_SEC}s for: {title[:60]} — using fallback")
             get_metrics().record_fallback()
             return {**article, **fb}
         parsed = _parse_json(raw)
@@ -456,9 +464,22 @@ def enrich_article(article: dict) -> dict:
 def enrich_all(articles: list[dict]) -> list[dict]:
     enriched = []
     total    = len(articles)
+    stage_start = time.time()
     log.info(f"🤖 AI enrichment: {total} articles")
+    log.info(f"⏱  Enrichment stage budget: {MAX_ENRICH_STAGE_SECONDS}s")
 
     for i, art in enumerate(articles, 1):
+        elapsed = time.time() - stage_start
+        if elapsed >= MAX_ENRICH_STAGE_SECONDS:
+            remaining = total - i + 1
+            log.warning(
+                "⏱  Enrichment budget exceeded (%ss). Skipping remaining %d articles via fail-safe.",
+                MAX_ENRICH_STAGE_SECONDS,
+                remaining,
+            )
+            get_metrics().record_fallback()
+            break
+
         log.info(f"  [{i:02d}/{total}] {art['title'][:70]}…")
         try:
             result = enrich_article(art)
@@ -478,11 +499,14 @@ def enrich_all(articles: list[dict]) -> list[dict]:
             enriched.append({**art, **_fallback(art)})
 
         if i < total:
+            remaining_budget = MAX_ENRICH_STAGE_SECONDS - (time.time() - stage_start)
+            if remaining_budget <= 0:
+                continue
             try:
                 interval = _get_pool("enrich").call_interval()
             except Exception:
                 interval = INTER_ARTICLE_SLEEP
-            interval = min(interval, float(INTER_ARTICLE_SLEEP))
+            interval = min(interval, float(INTER_ARTICLE_SLEEP), MAX_ENRICH_PACING_SLEEP, remaining_budget)
             if interval > 0:
                 log.info(f"⏳ enrich pacing sleep: {interval:.1f}s")
                 time.sleep(interval)
@@ -510,10 +534,10 @@ def enrich_oneliners(items: list[dict]) -> list[dict]:
                 1400,
                 AI_TEMPERATURE,
                 "oneliner",
-                timeout_s=45,
+                timeout_s=AI_ENRICH_TIMEOUT_SEC,
             )
         except FuturesTimeoutError:
-            log.warning("Q&A chat call TIMED OUT after 45s — using title as question")
+            log.warning(f"Q&A chat call TIMED OUT after {AI_ENRICH_TIMEOUT_SEC}s — using title as question")
             for item in items:
                 item.update({"q_en": item["title"], "q_hi": item["title"],
                              "a_en": "", "a_hi": ""})
