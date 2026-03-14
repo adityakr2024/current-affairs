@@ -358,7 +358,7 @@ def filter_and_rank(articles: list[dict], top_n: int = FULL_ARTICLES_PER_RUN) ->
 
     log.info(f"Selected {len(selected)} articles from {len(scored)} qualified")
     for i, a in enumerate(selected, 1):
-        log.info(f"  {i:02}. [{a['_score']:3d}] {a['source']:<16} {a['title'][:65]}")
+        log.info(f"{i:02}. [{a['_score']:3d}] {a['source']} {a['title'][:80]}")
     return selected
 
 
