@@ -400,31 +400,31 @@ def build_web(
     
     # masthead
     if F.show_sticky_header:
-    masthead = (
-        '<header class="masthead">'
-        '<style>'
-        '.masthead-center-desktop { display: block; }'
-        '.masthead-center-mobile  { display: none;  }'
-        '@media (max-width: 600px) {'
-        '  .masthead-center-desktop { display: none;  }'
-        '  .masthead-center-mobile  { display: block; }'
-        '}'
-        '</style>'
-        '<div class="masthead-logo">'
-        '<a href="https://www.aarambhtimes.in" style="text-decoration:none;color:inherit">'
-        'The <span>Currents</span>'
-        '</a>'
-        '</div>'
-        '<div class="masthead-divider"></div>'
-        '<div class="masthead-sub">UPSC Current Affairs</div>'
-        '<div class="masthead-spacer"></div>'
-        '<div class="masthead-center masthead-center-desktop">The Currents</div>'
-        '<div class="masthead-center masthead-center-mobile">Aarambh Times</div>'
-        '<div class="masthead-spacer"></div>'
-        '<div class="masthead-badge">Daily &middot; Free &middot; Bilingual</div>'
-        '<div class="masthead-date" id="hdrDate">' + date_label + '</div>'
-        '</header>'
-    )
+        masthead = (
+            '<header class="masthead">'
+            '<style>'
+            '.masthead-center-desktop { display: block; }'
+            '.masthead-center-mobile  { display: none;  }'
+            '@media (max-width: 600px) {'
+            '  .masthead-center-desktop { display: none;  }'
+            '  .masthead-center-mobile  { display: block; }'
+            '}'
+            '</style>'
+            '<div class="masthead-logo">'
+            '<a href="https://www.aarambhtimes.in" style="text-decoration:none;color:inherit">'
+            'Aarambh Times <span>The Currents</span>'
+            '</a>'
+            '</div>'
+            '<div class="masthead-divider"></div>'
+            '<div class="masthead-sub">UPSC Current Affairs</div>'
+            '<div class="masthead-spacer"></div>'
+            '<div class="masthead-center masthead-center-desktop">Aarambh Times The Currents</div>'
+            '<div class="masthead-center masthead-center-mobile">Aarambh Times The Currents</div>'
+            '<div class="masthead-spacer"></div>'
+            '<div class="masthead-badge">Daily &middot; Free &middot; Bilingual</div>'
+            '<div class="masthead-date" id="hdrDate">' + date_label + '</div>'
+            '</header>'
+        )
     else:
         masthead = ""
     
@@ -432,7 +432,7 @@ def build_web(
     site_footer = ""
     if F.show_site_footer:
         site_footer = (
-            '<footer class="site-footer"><span>The Currents</span>'
+            '<footer class="site-footer"><span>Aarambh Times The Currents</span>'
             " &middot; UPSC Current Affairs &middot; " + date_label +
             "<br>For serious aspirants. Verify all facts from official sources before the exam."
             "</footer>"
@@ -820,7 +820,7 @@ function escH(s) {
         "<!DOCTYPE html>\n<html lang='en'>\n<head>\n"
         "<meta charset='UTF-8'>\n"
         "<meta name='viewport' content='width=device-width, initial-scale=1.0'>\n"
-        "<title>The Currents &mdash; UPSC Current Affairs &mdash; " + date_safe + "</title>\n"
+        "<title>Aarambh Times The Currents &mdash; UPSC Current Affairs &mdash; " + date_safe + "</title>\n"
         "<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800"
         "&amp;family=Playfair+Display:wght@700;900"
         "&amp;family=Noto+Sans+Devanagari:wght@400;500;600;700&amp;display=swap' rel='stylesheet'>\n"
