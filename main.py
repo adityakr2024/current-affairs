@@ -1,7 +1,6 @@
+from __future__ import annotations
 from core.tavily_client import tavily
 logger.info("[Tavily] Startup status: %s", tavily.status_report())
-
-from __future__ import annotations
 
 import contextlib, json, sys, os
 from datetime import datetime
