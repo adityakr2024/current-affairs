@@ -482,7 +482,10 @@ def enrich_all(articles: list[dict]) -> list[dict]:
                 interval = _get_pool("enrich").call_interval()
             except Exception:
                 interval = INTER_ARTICLE_SLEEP
-            time.sleep(interval)
+            interval = min(interval, float(INTER_ARTICLE_SLEEP))
+            if interval > 0:
+                log.info(f"⏳ enrich pacing sleep: {interval:.1f}s")
+                time.sleep(interval)
 
     low_conf = [a for a in enriched if a.get("fact_confidence", 5) <= 2]
     flagged  = [a for a in enriched if a.get("fact_flags")]
