@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from core.fetcher             import fetch_all, enrich_images
+from core.fetcher             import fetch_all
 from core.filter_engine       import filter_and_rank, filter_oneliners
 from core.enricher            import enrich_all, enrich_oneliners
 from core.context_linker      import link_related_context
@@ -99,10 +99,6 @@ def run() -> None:
     if len(full_articles) < min(MIN_ARTICLES_PER_RUN, FULL_ARTICLES_PER_RUN):
         log.error(f"Only {len(full_articles)} articles passed filter — aborting.")
         return
-
-    # ── 2b. og:image scraping ─────────────────────────────────────────────────
-    with _stage("images"):
-        enrich_images(full_articles)
 
     # ── 3. AI enrich ──────────────────────────────────────────────────────────
     with _stage("enrich"):

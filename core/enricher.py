@@ -10,6 +10,7 @@ from config.settings import INTER_ARTICLE_SLEEP, PRE_ONELINER_SLEEP, AI_MAX_TOKE
 
 # ── Tavily grounding support (same flag as fetcher.py) ───────────────────────
 from core.tavily_client import tavily
+from config.tavily import TAVILY_FETCH_AUGMENT_ENABLED
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -299,22 +300,110 @@ def _chat_with_timeout(
 # Tavily Grounding Helper
 # ─────────────────────────────────────────────────────────────────────────────
 
+
+
+def _estimate_tokens(text: str) -> int:
+    """Cheap token estimate (~4 chars/token) to keep prompts within safe bounds."""
+    if not text:
+        return 0
+    return max(1, len(text) // 4)
+
+
+def _clip_text(text: str, max_chars: int) -> str:
+    text = (text or "").strip()
+    if len(text) <= max_chars:
+        return text
+    return text[: max(0, max_chars - 1)].rstrip() + "…"
+
+
+def _build_enrich_prompt(article: dict) -> tuple[str, int]:
+    """
+    Build a token-budgeted enrichment prompt and output token cap.
+
+    Goal: keep total (system + user + output) around ~2000 tokens to avoid
+    provider stalls while retaining UPSC-quality structure and constraints.
+    """
+    title = (article.get("title") or "").strip()
+    source = (article.get("source") or "").strip()
+
+    # Start generous; reduce if estimated total exceeds budget.
+    summary = _clip_text(article.get("summary", ""), 500)
+    grounding = _get_tavily_grounding_block(title)
+
+    total_budget = 1950
+    min_out = 900
+
+    def assemble(sum_text: str, ground_text: str) -> str:
+        return (
+            f"Headline: {title}\n"
+            f"Source: {source}\n"
+            f"Summary: {sum_text}\n"
+            f"{ground_text}\n\n"
+            "After writing all English fields, verify each Hindi field: every number, "
+            "₹ amount, percentage, scheme name, and organisation from the English field "
+            "must appear in the Hindi field. Hindi readers deserve identical depth."
+        )
+
+    # Progressive compression only when needed.
+    user_prompt = assemble(summary, grounding)
+    est_total = _estimate_tokens(ARTICLE_SYSTEM) + _estimate_tokens(user_prompt) + AI_MAX_TOKENS
+
+    if est_total > total_budget:
+        grounding = _clip_text(grounding, 700)
+        user_prompt = assemble(summary, grounding)
+        est_total = _estimate_tokens(ARTICLE_SYSTEM) + _estimate_tokens(user_prompt) + AI_MAX_TOKENS
+
+    if est_total > total_budget:
+        summary = _clip_text(summary, 320)
+        user_prompt = assemble(summary, grounding)
+        est_total = _estimate_tokens(ARTICLE_SYSTEM) + _estimate_tokens(user_prompt) + AI_MAX_TOKENS
+
+    system_tokens = _estimate_tokens(ARTICLE_SYSTEM)
+    user_tokens = _estimate_tokens(user_prompt)
+    max_out = min(AI_MAX_TOKENS, max(min_out, total_budget - system_tokens - user_tokens))
+
+    log.info(
+        "[enricher] token budget est: system=%d user=%d max_out=%d total~%d",
+        system_tokens, user_tokens, max_out, system_tokens + user_tokens + max_out,
+    )
+
+    return user_prompt, max_out
+
+
+
+# Cache Tavily grounding per title for the current process/run to avoid duplicate API calls.
+_GROUNDING_CACHE: dict[str, str] = {}
+_GROUNDING_CACHE_MAX = 256
+
+
+def _oneliner_max_tokens(item_count: int) -> int:
+    """Scale one-liner output tokens with list size to reduce over-allocation."""
+    # Typical answer size stays compact; keep a hard cap for cost/latency safety.
+    return max(500, min(1200, 260 + (item_count * 85)))
+
 def _get_tavily_grounding_block(title: str) -> str:
     """
     Fetch verified recent context/facts via Tavily (same flag as fetcher.py).
     Returns formatted block or empty string on any failure / flag off.
     """
-    if not os.getenv("ENABLE_TAVILY_FETCH_AUGMENT", "false").lower() == "true":
+    title_key = (title or "").strip().lower()
+    if title_key in _GROUNDING_CACHE:
+        return _GROUNDING_CACHE[title_key]
+
+    if not TAVILY_FETCH_AUGMENT_ENABLED:
+        _GROUNDING_CACHE[title_key] = ""
         return ""
 
     if not tavily.is_available:
         log.debug("[enricher] Tavily client not available — skipping grounding")
+        _GROUNDING_CACHE[title_key] = ""
         return ""
 
     result = tavily.grounding_search(title)
 
     if result is None:
         log.debug(f"[enricher] grounding_search returned None for '{title[:60]}…'")
+        _GROUNDING_CACHE[title_key] = ""
         return ""
 
     snippets = [
@@ -324,14 +413,19 @@ def _get_tavily_grounding_block(title: str) -> str:
     ]
 
     if not snippets:
+        _GROUNDING_CACHE[title_key] = ""
         return ""
 
-    return (
+    block = (
         "\n\nVerified recent facts and context from reliable sources "
         "(prioritise these facts; do NOT hallucinate or contradict them):\n"
         + "\n".join(snippets)
         + "\n"
     )
+    if len(_GROUNDING_CACHE) >= _GROUNDING_CACHE_MAX:
+        _GROUNDING_CACHE.clear()
+    _GROUNDING_CACHE[title_key] = block
+    return block
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -339,23 +433,10 @@ def _get_tavily_grounding_block(title: str) -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def enrich_article(article: dict) -> dict:
-    title   = article["title"]
-    summary = article.get("summary", "")[:500]
-    source  = article.get("source", "")
-    fb      = _fallback(article)
+    title = article["title"]
+    fb = _fallback(article)
 
-    # ── Tavily grounding (optional — skipped if flag off or Tavily unavailable) ──
-    grounding_block = _get_tavily_grounding_block(title)
-
-    user_prompt = (
-        f"Headline: {title}\n"
-        f"Source: {source}\n"
-        f"Summary: {summary}\n"
-        f"{grounding_block}\n\n"
-        "After writing all English fields, verify each Hindi field: every number, "
-        "₹ amount, percentage, scheme name, and organisation from the English field "
-        "must appear in the Hindi field. Hindi readers deserve identical depth."
-    )
+    user_prompt, max_out_tokens = _build_enrich_prompt(article)
 
     try:
         try:

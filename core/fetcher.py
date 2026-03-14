@@ -6,16 +6,16 @@ import feedparser
 import requests
 from config.settings import (
     RSS_SOURCES, MAX_RAW_ARTICLES, IMAGE_FETCH_TIMEOUT,
-    SCRAPE_IMAGE_SOURCES, OFFLINE_CUTOFF_HOUR_IST,
+    OFFLINE_CUTOFF_HOUR_IST, FULL_ARTICLES_PER_RUN,
 )
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
-from core.image_fetcher import image_url_from_rss_entry, fetch_article_image
 from core.security import is_safe_url, sanitise_text, safe_for_prompt, MAX_TITLE_LEN, MAX_SUMMARY_LEN
 from core.logger import log
 
 # ── Tavily integration ────────────────────────────────────────────────────────
 from core.tavily_client import tavily
+from config.tavily import TAVILY_FETCH_AUGMENT_ENABLED
 
 _HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"}
 
@@ -101,10 +101,6 @@ def _fetch_feed(source: dict) -> list[dict]:
             log.warning(f"Prompt injection detected, skipping: {e}")
             continue
 
-        rss_img_url = image_url_from_rss_entry(entry)
-        if rss_img_url and not is_safe_url(rss_img_url):
-            rss_img_url = None
-
         articles.append({
             "title": title,
             "summary": summary[:MAX_SUMMARY_LEN],
@@ -113,7 +109,6 @@ def _fetch_feed(source: dict) -> list[dict]:
             "source_weight": source.get("weight", 5),
             "category": "International" if name in _INTERNATIONAL_SOURCES else "India",
             "_id": hashlib.md5(title.encode()).hexdigest()[:12],
-            "article_image_url": rss_img_url or "", # RSS thumbnail → inset circle fallback
         })
 
     return articles
@@ -124,7 +119,7 @@ def _fetch_tavily_augmentation() -> list[dict]:
     Optional Tavily real-time boost.
     Returns small set of fresh UPSC-relevant articles or [] on any failure.
     """
-    if not os.getenv("ENABLE_TAVILY_FETCH_AUGMENT", "false").lower() == "true":
+    if not TAVILY_FETCH_AUGMENT_ENABLED:
         log.info("[fetcher] Tavily augmentation disabled via env flag")
         return []
 
@@ -183,7 +178,6 @@ def _fetch_tavily_augmentation() -> list[dict]:
                 "source_weight": 11,  # higher than most RSS Tier-1 (10)
                 "category": "India",  # or detect if international
                 "_id": title_hash,
-                "article_image_url": result.images[0] if result.images else "",  # optional Tavily image
             }
 
             try:
@@ -202,41 +196,10 @@ def _fetch_tavily_augmentation() -> list[dict]:
     return all_tavily
 
 
-def enrich_images(articles: list[dict]) -> None:
-    """
-    For SCRAPE_IMAGE_SOURCES, ALWAYS scrape og:image regardless of whether
-    the RSS feed already provided a thumbnail.
-
-    Why: RSS thumbnails are often small (150–300px). og:image is the CMS-chosen
-    hero photo (typically 1200px+). We want the hero photo for the background.
-
-    Stores:
-      article["_article_img"]     — PIL Image from og:image (background quality)
-      article["article_image_url"]— RSS thumbnail URL preserved (inset fallback)
-    """
-    scrape_needed = [
-        a for a in articles
-        if a["source"] in SCRAPE_IMAGE_SOURCES and a.get("url")
-    ]
-
-    if not scrape_needed:
-        return
-
-    log.info(f"📷 Scraping og:image for {len(scrape_needed)} articles...")
-    ok = 0
-    for art in scrape_needed:
-        img = fetch_article_image(art["url"], art["source"])
-        if img:
-            art["_article_img"] = img   # PIL Image — used as social post background
-            ok += 1
-
-    log.info(f"   og:image: {ok}/{len(scrape_needed)} succeeded")
-
-
 def fetch_all() -> list[dict]:
     """
     Fetch all RSS sources, optionally augment with Tavily real-time articles,
-    deduplicate by title hash, enrich with images.
+    and deduplicate by title hash.
     Returns flat deduplicated list capped at MAX_RAW_ARTICLES.
     """
     all_articles: list[dict] = []
@@ -258,7 +221,14 @@ def fetch_all() -> list[dict]:
     log.info(f"   Total unique from RSS: {len(all_articles)}")
 
     # ── Optional real-time Tavily boost ───────────────────────────────────────
-    tavily_arts = _fetch_tavily_augmentation()
+    # If RSS already has enough diversity headroom for filtering/ranking,
+    # skip extra Tavily API calls to reduce cost and latency.
+    enough_rss_for_selection = len(all_articles) >= max(20, FULL_ARTICLES_PER_RUN * 2)
+    tavily_arts = []
+    if enough_rss_for_selection:
+        log.info("[fetcher] Skipping Tavily augmentation — RSS volume already sufficient")
+    else:
+        tavily_arts = _fetch_tavily_augmentation()
 
     # Merge & deduplicate (Tavily might overlap with RSS)
     for ta in tavily_arts:
@@ -267,8 +237,5 @@ def fetch_all() -> list[dict]:
             all_articles.append(ta)
 
     log.info(f"   Final unique after Tavily: {len(all_articles)}")
-
-    # Optional image enrichment (still present — harmless if downstream not using)
-    enrich_images(all_articles)
 
     return all_articles[:MAX_RAW_ARTICLES]
