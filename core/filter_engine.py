@@ -19,13 +19,8 @@ EXCLUDE_PATTERNS: list[str] = [
     r"\baccuses\b", r"\balleges\b",
     r"\brally\b", r"\broadshow\b", r"\belection\s+speech\b",
     r"\bpolitical\s+vendetta\b",
-    # Low-yield local crimes/accidents and fraud blotter
-    r"\bcheated\b", r"\bcheating\b", r"\bfraud\b", r"\bfake\b.*\bscheme\b",
-    r"\barrested\b", r"\brobbery\b", r"\bmurder\b", r"\baccident\b", r"\bstolen\b",
-
-    # Local political succession chatter / personality profiles
-    r"\bhints?\b.*\bsuccessor\b", r"\bsuccessor\b.*\bhints?\b",
-    r"\btoast\s+of\s+the\s+town\b", r"\b(clears?|cleared|clearing)\s+upsc\b",
+    # Low-yield local crimes/accidents
+    r"\bcheated\b", r"\brobbery\b", r"\bmurder\b", r"\baccident\b", r"\bstolen\b",
     # Electoral (not institutional)
     r"\bbypolls?\b", r"\bvote\s+share\b", r"\bparty\s+symbol\b",
     r"\bexit\s+poll\b", r"\bopinion\s+poll\b",
@@ -42,7 +37,7 @@ EXCLUDE_PATTERNS: list[str] = [
 
 EVENT_BONUSES: list[tuple[str, int]] = [
     # Priority 1: Courts/judiciary observations and rulings
-    (r"\b(supreme\s+court|high\s+court|sc|hc)\b.*?(says|observes|warns|rules|directs|stays|upholds|apprehends)", +18),
+    (r"\b(supreme\s+court|high\s+court|sc|hc)\b.*?(says|observes|warns|rules|directs|stays|upholds)", +18),
     (r"\b(constitution\s+bench|cji)\b", +20),
     (r"\bsupreme\s+court\b.*?(landmark|historic|first-ever|upholds.*dignity|passive euthanasia|life support|vegetative state|right to die)", +18),
 
@@ -261,8 +256,8 @@ def score_article(a: dict) -> tuple[int, list[str]]:
     if any(z in text for z in INDIA_PROXIMITY):
         score += 3
 
-    mentions_state = any(re.search(r"\b" + re.escape(s) + r"\b", title) for s in STATE_ANCHORS)
-    mentions_national = any(re.search(r"\b" + re.escape(n) + r"\b", title) for n in NATIONAL_INSTITUTIONS)
+    mentions_state = any(s in title for s in STATE_ANCHORS)
+    mentions_national = any(n in title for n in NATIONAL_INSTITUTIONS)
 
     # Federalism logic: reward Centre-State institutional interaction, dampen local state executive noise
     if mentions_state:
@@ -274,7 +269,7 @@ def score_article(a: dict) -> tuple[int, list[str]]:
             score -= 25
 
     # Institutional shield for statement headlines
-    if re.search(r"\b(says?|said|claims?|urges?|apprehends?)\b", title):
+    if re.search(r"\b(says?|said|claims?|urges?)\b", title):
         if mentions_national:
             score += 10
         elif not statement_penalty_applied:

@@ -39,8 +39,8 @@ ARTICLE_IMAGE_MAX_RATIO  = 2.8   # width/height — rejects ultra-wide logos/ban
 MAX_RAW_ARTICLES         = 200   # Fetch at most this many from RSS
 FULL_ARTICLES_PER_RUN    = 15    # Target article count for PDF and social posts
 MIN_ARTICLES_PER_RUN     = 2     # Minimum acceptable — system still runs below target
-QUICK_BITES_PER_RUN      = 10    # Target quick-bite one-liner count
-MIN_ONELINERS_PER_RUN    = 5     # Minimum acceptable
+QUICK_BITES_PER_RUN      = 0    # Target quick-bite one-liner count
+MIN_ONELINERS_PER_RUN    = 0     # Minimum acceptable
 FILTER_SCORE_THRESHOLD   = 15    # Min score to pass filter
 MAX_PER_TOPIC            = 4     # Diversity cap: max articles per UPSC topic
 

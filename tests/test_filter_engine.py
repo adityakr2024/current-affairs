@@ -36,15 +36,6 @@ class TestExclusion:
     def test_excludes_film_policy(self):
         assert is_excluded(_art("Government announces new film production policy"))
 
-    def test_excludes_state_successor_chatter(self):
-        assert is_excluded(_art("Nitish Kumar hints at Samrat Choudhary as his successor in Bihar"))
-
-    def test_excludes_local_upsc_human_interest(self):
-        assert is_excluded(_art("A Bihar youth became toast of the town for clearing UPSC"))
-
-    def test_excludes_fake_pm_scheme_cheating_arrest(self):
-        assert is_excluded(_art("Man arrested for cheating buyers with fake Prime Minister scheme"))
-
 
 # ── Scoring ────────────────────────────────────────────────────────────────────
 class TestScoring:
@@ -91,15 +82,6 @@ class TestScoring:
         sc, _ = score_article(_art("Centre launches vaccine injury compensation programme"))
         assert sc >= 20
 
-
-    def test_supreme_court_apprehends_statement_scores_high(self):
-        sc, topics = score_article(_art("Paid menstrual pain leave may cost women their careers, Supreme Court apprehends"))
-        assert sc >= 20
-        assert "Centre-State Relations" not in topics
-
-    def test_state_anchor_up_does_not_match_inside_words(self):
-        _, topics = score_article(_art("Supreme Court apprehends misuse of labour policy"))
-        assert "Centre-State Relations" not in topics
     def test_state_national_interaction_gets_centre_state_topic(self):
         _, topics = score_article(_art("Kerala challenges Centre policy in Supreme Court"))
         assert "Centre-State Relations" in topics
