@@ -8,7 +8,7 @@ import os
 # Weight 10 = Tier 1 (official/primary), 9 = Tier 2 (UPSC-aligned), 7 = Tier 3
 RSS_SOURCES: list[dict] = [
     # ── Official / Primary ─────────────────────────────────────────────────────
-    {"name": "PIB",            "url": "https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3",        "weight": 9},
+    #{"name": "PIB",            "url": "https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3",        "weight": 9},
     {"name": "Rajya Sabha",     "url": "https://sansad.in/rs/rss/rss.xml",                              "weight": 10},
     # ── The Hindu ─────────────────────────────────────────────────────────────
     {"name": "The Hindu (National)",      "url": "https://www.thehindu.com/news/national/?service=rss",            "weight": 9},
