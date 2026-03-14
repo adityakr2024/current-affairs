@@ -11,16 +11,16 @@ RSS_SOURCES: list[dict] = [
     {"name": "PIB",            "url": "https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3",        "weight": 9},
     {"name": "Rajya Sabha",     "url": "https://sansad.in/rs/rss/rss.xml",                              "weight": 10},
     # ── The Hindu ─────────────────────────────────────────────────────────────
-    {"name": "The Hindu",      "url": "https://www.thehindu.com/news/national/?service=rss",            "weight": 9},
-    {"name": "The Hindu",      "url": "https://www.thehindu.com/news/international/?service=rss",       "weight": 9},
-    {"name": "The Hindu",      "url": "https://www.thehindu.com/business/?service=rss",                 "weight": 9},
-    {"name": "The Hindu",      "url": "https://www.thehindu.com/sci-tech/science/?service=rss",         "weight": 9},
+    {"name": "The Hindu (National)",      "url": "https://www.thehindu.com/news/national/?service=rss",            "weight": 9},
+    {"name": "The Hindu (International)",      "url": "https://www.thehindu.com/news/international/?service=rss",       "weight": 9},
+    {"name": "The Hindu (Editorial)",      "url": "https://www.thehindu.com/opinion/editorial/?service=rss",                 "weight": 9},
+    {"name": "The Hindu (Sci-Tech)",      "url": "https://www.thehindu.com/sci-tech/science/?service=rss",         "weight": 9},
     # ── Indian Express ────────────────────────────────────────────────────────
     {"name": "Indian Express", "url": "https://indianexpress.com/section/india/feed/",                  "weight": 8},
-    {"name": "Indian Express", "url": "https://indianexpress.com/section/business/economy/feed/",       "weight": 8},
+    #{"name": "Indian Express", "url": "https://indianexpress.com/section/business/economy/feed/",       "weight": 8},
     # ── Specialist ───────────────────────────────────────────────────────────
-    {"name": "Down to Earth",  "url": "https://www.downtoearth.org/rss",                                "weight": 8},
-    {"name": "Mint",           "url": "https://www.livemint.com/rss/economy",                           "weight": 7},
+    #{"name": "Down to Earth",  "url": "https://www.downtoearth.org/rss",                                "weight": 8},
+    #{"name": "Mint",           "url": "https://www.livemint.com/rss/economy",                           "weight": 7},
 ]
 
 # Enforce HTTPS on all configured RSS sources at startup
@@ -37,7 +37,7 @@ ARTICLE_IMAGE_MAX_RATIO  = 2.8   # width/height — rejects ultra-wide logos/ban
 
 # ── Article pipeline limits ────────────────────────────────────────────────────
 MAX_RAW_ARTICLES         = 200   # Fetch at most this many from RSS
-FULL_ARTICLES_PER_RUN    = 4    # Target article count for PDF and social posts
+FULL_ARTICLES_PER_RUN    = 15    # Target article count for PDF and social posts
 MIN_ARTICLES_PER_RUN     = 2     # Minimum acceptable — system still runs below target
 QUICK_BITES_PER_RUN      = 10    # Target quick-bite one-liner count
 MIN_ONELINERS_PER_RUN    = 5     # Minimum acceptable
