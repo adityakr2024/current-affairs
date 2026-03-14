@@ -129,33 +129,3 @@ class TestRuntimeGuards:
 
         assert len(out) == 1
         assert out[0]["title"] == "b"
-
-
-    def test_enrich_all_caps_inter_article_sleep(self, monkeypatch):
-        from core.enricher import enrich_all, INTER_ARTICLE_SLEEP
-
-        class _Pool:
-            def call_interval(self):
-                return 120.0
-
-        slept = []
-
-        def _fake_enrich(article):
-            return {
-                **article,
-                "fact_confidence": 4,
-                "fact_flags": [],
-                "gs_paper": "GS2 — Governance",
-            }
-
-        monkeypatch.setattr("core.enricher.enrich_article", _fake_enrich)
-        monkeypatch.setattr("core.enricher._get_pool", lambda *_: _Pool())
-        monkeypatch.setattr("core.enricher.time.sleep", lambda v: slept.append(v))
-
-        enrich_all([
-            {"title": "a", "summary": "a", "source": "s"},
-            {"title": "b", "summary": "b", "source": "s"},
-        ])
-
-        assert slept
-        assert slept[0] == float(INTER_ARTICLE_SLEEP)

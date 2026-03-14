@@ -21,10 +21,10 @@ def _env_float(name: str, default: float) -> float:
 
 
 # Global switch for Tavily client usage.
-TAVILY_ENABLED = _env_bool("TAVILY_ENABLED", True)
+TAVILY_ENABLED = _env_bool("TAVILY_ENABLED", False)
 
 # Feature switches used by pipeline stages.
-TAVILY_FETCH_AUGMENT_ENABLED = _env_bool("ENABLE_TAVILY_FETCH_AUGMENT", True)
+TAVILY_FETCH_AUGMENT_ENABLED = _env_bool("ENABLE_TAVILY_FETCH_AUGMENT", False)
 
 # Direct API limits/guards.
 TAVILY_MONTHLY_LIMIT = _env_int("TAVILY_MONTHLY_LIMIT", 1000)
@@ -36,7 +36,7 @@ TAVILY_TIMEOUT = _env_int("TAVILY_TIMEOUT", 15)
 
 # MCP config.
 TAVILY_MCP_TIMEOUT = _env_int("TAVILY_MCP_TIMEOUT", 10)
-TAVILY_MCP_ENABLED = _env_bool("TAVILY_MCP_ENABLED", True)
+TAVILY_MCP_ENABLED = _env_bool("TAVILY_MCP_ENABLED", False)
 
 # Keys in priority order.
 TAVILY_KEYS: list[str] = [
