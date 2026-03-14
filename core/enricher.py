@@ -1,6 +1,6 @@
 from __future__ import annotations
 import json, re, time, sys, os
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
+from concurrent.futures import TimeoutError as FuturesTimeoutError
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from core.ai_client import chat, _get_pool
@@ -273,27 +273,18 @@ def _chat_with_timeout(
     task: str,
     timeout_s: int,
 ) -> str:
-    """
-    Run ai_client.chat with a hard timeout.
-
-    Important: ThreadPoolExecutor context managers wait for worker completion.
-    If the AI call stalls (provider cooling/retries), that wait can look like a
-    pipeline freeze even after TimeoutError. We therefore shut down the executor
-    with wait=False on timeout so the pipeline can move on immediately.
-    """
-    ex = ThreadPoolExecutor(max_workers=1)
-    future = ex.submit(chat, system, user, max_tokens, temperature, task)
+    """Run ai_client.chat with a hard wall-clock timeout."""
     try:
-        return future.result(timeout=timeout_s)
-    except FuturesTimeoutError:
-        future.cancel()
-        ex.shutdown(wait=False, cancel_futures=True)
-        raise
-    except Exception:
-        ex.shutdown(wait=False, cancel_futures=False)
-        raise
-    else:
-        ex.shutdown(wait=True)
+        return chat(
+            system,
+            user,
+            max_tokens,
+            temperature,
+            task,
+            timeout_s=timeout_s,
+        )
+    except TimeoutError as exc:
+        raise FuturesTimeoutError(str(exc)) from exc
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -471,6 +462,9 @@ def enrich_all(articles: list[dict]) -> list[dict]:
         log.info(f"  [{i:02d}/{total}] {art['title'][:70]}…")
         try:
             result = enrich_article(art)
+            if result.get("fact_flags") == ["AI enrichment failed — content from RSS summary only"]:
+                log.warning("         ⏭  dropped (AI unavailable; skipped instead of fallback)")
+                continue
             enriched.append(result)
             conf   = result.get("fact_confidence", 3)
             flags  = result.get("fact_flags", [])

@@ -129,14 +129,25 @@ class ProviderPool:
         return available[self._rr_index % len(available)]
 
     def chat(self, system: str, user: str,
-             max_tokens: int = 800, temperature: float = 0.3) -> str:
+             max_tokens: int = 800, temperature: float = 0.3,
+             timeout_s: float | None = None) -> str:
         max_attempts = len(self._providers) * 2
         transient_attempt = 0   # counts transient errors for backoff
+        start = time.time()
+
+        def remaining_timeout() -> float:
+            if timeout_s is None:
+                return REQUEST_TIMEOUT
+            left = timeout_s - (time.time() - start)
+            if left <= 0:
+                raise TimeoutError(f"AI pool timeout after {timeout_s:.0f}s")
+            return max(1.0, min(REQUEST_TIMEOUT, left))
 
         for attempt in range(max_attempts):
             # Wait for a provider to become available
             wait_start = time.time()
             while True:
+                remaining_timeout()
                 p = self._next_available()
                 if p:
                     break
@@ -152,7 +163,14 @@ class ProviderPool:
                     time.sleep(min(wait_sec + 1, 30))
 
             try:
-                response, in_tok, out_tok = self._call(p, system, user, max_tokens, temperature)
+                response, in_tok, out_tok = self._call(
+                    p,
+                    system,
+                    user,
+                    max_tokens,
+                    temperature,
+                    request_timeout=remaining_timeout(),
+                )
                 p.record_success(in_tok, out_tok)
                 self._rr_index    += 1
                 self._last_provider = p
@@ -207,18 +225,20 @@ class ProviderPool:
     # ── Provider call implementations ─────────────────────────────────────────
 
     def _call(self, p: Provider, system: str, user: str,
-              max_tokens: int, temperature: float) -> tuple[str, int, int]:
+              max_tokens: int, temperature: float,
+              request_timeout: float) -> tuple[str, int, int]:
         t = p.spec["type"]
         if t in ("groq", "openai_compat"):
-            return self._call_openai(p, system, user, max_tokens, temperature)
+            return self._call_openai(p, system, user, max_tokens, temperature, request_timeout)
         elif t == "google":
-            return self._call_google(p, system, user, max_tokens, temperature)
+            return self._call_google(p, system, user, max_tokens, temperature, request_timeout)
         elif t == "anthropic":
-            return self._call_anthropic(p, system, user, max_tokens, temperature)
+            return self._call_anthropic(p, system, user, max_tokens, temperature, request_timeout)
         raise ValueError(f"Unknown provider type: {t}")
 
     def _call_openai(self, p: Provider, system: str, user: str,
-                     max_tokens: int, temperature: float) -> tuple[str, int, int]:
+                     max_tokens: int, temperature: float,
+                     request_timeout: float) -> tuple[str, int, int]:
         url  = p.spec["base_url"].rstrip("/") + "/chat/completions"
         body = {
             "model": p.spec["model"],
@@ -236,7 +256,7 @@ class ProviderPool:
             headers["HTTP-Referer"] = "https://github.com/the-currents"
             headers["X-Title"]      = "The Currents"
 
-        resp = p._session.post(url, json=body, headers=headers, timeout=REQUEST_TIMEOUT)
+        resp = p._session.post(url, json=body, headers=headers, timeout=request_timeout)
         resp.raise_for_status()
         data = resp.json()
         usage = data.get("usage", {})
@@ -245,7 +265,8 @@ class ProviderPool:
         return data["choices"][0]["message"]["content"], in_tok, out_tok
 
     def _call_google(self, p: Provider, system: str, user: str,
-                     max_tokens: int, temperature: float) -> tuple[str, int, int]:
+                     max_tokens: int, temperature: float,
+                     request_timeout: float) -> tuple[str, int, int]:
         model = p.spec["model"]
         base  = p.spec["base_url"].rstrip("/")
         # Key in query param — never logged because redact() strips it
@@ -254,7 +275,7 @@ class ProviderPool:
             "contents": [{"role": "user", "parts": [{"text": f"{system}\n\n{user}"}]}],
             "generationConfig": {"maxOutputTokens": max_tokens, "temperature": temperature},
         }
-        resp = p._session.post(url, json=body, timeout=REQUEST_TIMEOUT)
+        resp = p._session.post(url, json=body, timeout=request_timeout)
         if not resp.ok:
             raise Exception(f"Error code: {resp.status_code} - {resp.text[:200]}")
         data = resp.json()
@@ -263,7 +284,8 @@ class ProviderPool:
         return data["candidates"][0]["content"]["parts"][0]["text"], in_tok, out_tok
 
     def _call_anthropic(self, p: Provider, system: str, user: str,
-                        max_tokens: int, temperature: float) -> tuple[str, int, int]:
+                        max_tokens: int, temperature: float,
+                        request_timeout: float) -> tuple[str, int, int]:
         url  = p.spec["base_url"].rstrip("/") + "/messages"
         body = {
             "model": p.spec["model"], "max_tokens": max_tokens,
@@ -275,7 +297,7 @@ class ProviderPool:
             "anthropic-version": "2023-06-01",
             "Content-Type":      "application/json",
         }
-        resp = p._session.post(url, json=body, headers=headers, timeout=REQUEST_TIMEOUT)
+        resp = p._session.post(url, json=body, headers=headers, timeout=request_timeout)
         resp.raise_for_status()
         data = resp.json()
         usage = data.get("usage", {})
@@ -324,7 +346,8 @@ def _get_pool(task: str = "enrich") -> ProviderPool:
 
 def chat(system: str, user: str, max_tokens: int = 800,
          temperature: float = 0.3,
-         task: str = "enrich") -> str:
+         task: str = "enrich",
+         timeout_s: float | None = None) -> str:
     """
     Send a chat request using the pool assigned to `task`.
 
@@ -333,4 +356,4 @@ def chat(system: str, user: str, max_tokens: int = 800,
     task="caption"  → uses light providers
     task="filter"   → uses light providers
     """
-    return _get_pool(task).chat(system, user, max_tokens, temperature)
+    return _get_pool(task).chat(system, user, max_tokens, temperature, timeout_s=timeout_s)

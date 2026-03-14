@@ -268,6 +268,7 @@ class KeySlot:
             "available":         self.is_available,
             "circuit_open":      self.cb.is_open,
             "credits_used":      u.credits_used,
+            "credits_limit":     u.credits_limit,
             "credits_remaining": u.credits_remaining,
             "usage_pct":         round(pct, 1),
             "calls_this_month":  u.calls_this_month,
