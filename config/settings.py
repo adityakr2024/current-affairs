@@ -49,6 +49,13 @@ INTER_ARTICLE_SLEEP      = 16    # Seconds between AI calls (Groq TPM safety)
 PRE_ONELINER_SLEEP       = 8     # Sleep before batch one-liner call
 AI_MAX_TOKENS            = 1800  # Increased for GS paper mapping field
 AI_TEMPERATURE           = 0.3
+AI_ENRICH_TIMEOUT_SEC      = 45   # Per-article wall-clock timeout for enrichment API call
+MAX_ENRICH_STAGE_SECONDS  = 300  # Global enrichment stage cap (fail-safe after 5 min)
+MAX_ENRICH_PACING_SLEEP   = 3.0  # Clamp between-article pacing sleep to avoid long idle waits
+PROVIDER_MAX_WAIT_S       = 10   # Max time to wait when all providers are cooling
+
+# Backward-compatible alias used by older code/ops docs.
+AI_STAGE_BUDGET_SEC       = MAX_ENRICH_STAGE_SECONDS
 
 # ── Single-provider mode ───────────────────────────────────────────────────────
 # When only 1 API key is available, reduce output to stay within free tier

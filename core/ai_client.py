@@ -19,6 +19,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from config.apis import PROVIDERS, get_api_key, active_providers
+from config.settings import PROVIDER_MAX_WAIT_S
 from core.security import redact, backoff_sleep
 from core.logger   import log, log_api_call, log_cost_warning
 from core.metrics  import get_metrics
@@ -151,8 +152,9 @@ class ProviderPool:
                 p = self._next_available()
                 if p:
                     break
-                if time.time() - wait_start > 300:
-                    raise RuntimeError("All providers in cooldown >5min. Aborting.")
+                wait_limit = PROVIDER_MAX_WAIT_S if timeout_s is None else min(PROVIDER_MAX_WAIT_S, max(1.0, timeout_s))
+                if time.time() - wait_start > wait_limit:
+                    raise RuntimeError(f"All providers cooling >{wait_limit:.0f}s. Aborting.")
                 soonest = min(
                     (pr._ready_at for pr in self._providers if not pr._dead),
                     default=time.time(),
