@@ -443,7 +443,7 @@ def enrich_article(article: dict) -> dict:
             raw = _chat_with_timeout(
                 ARTICLE_SYSTEM,
                 user_prompt,
-                max_out_tokens,
+                AI_MAX_TOKENS,
                 AI_TEMPERATURE,
                 "enrich",
                 timeout_s=45,
@@ -510,7 +510,7 @@ def enrich_oneliners(items: list[dict]) -> list[dict]:
             raw = _chat_with_timeout(
                 ONELINER_SYSTEM,
                 user_msg,
-                _oneliner_max_tokens(len(items)),
+                1400,
                 AI_TEMPERATURE,
                 "oneliner",
                 timeout_s=45,

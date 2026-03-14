@@ -8,7 +8,7 @@ import os
 # Weight 10 = Tier 1 (official/primary), 9 = Tier 2 (UPSC-aligned), 7 = Tier 3
 RSS_SOURCES: list[dict] = [
     # ── Official / Primary ─────────────────────────────────────────────────────
-    {"name": "PIB",            "url": "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",        "weight": 10},
+    {"name": "PIB",            "url": "https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3",        "weight": 9},
     {"name": "Rajya Sabha",     "url": "https://sansad.in/rs/rss/rss.xml",                              "weight": 10},
     # ── The Hindu ─────────────────────────────────────────────────────────────
     {"name": "The Hindu",      "url": "https://www.thehindu.com/news/national/?service=rss",            "weight": 9},
@@ -37,8 +37,8 @@ ARTICLE_IMAGE_MAX_RATIO  = 2.8   # width/height — rejects ultra-wide logos/ban
 
 # ── Article pipeline limits ────────────────────────────────────────────────────
 MAX_RAW_ARTICLES         = 200   # Fetch at most this many from RSS
-FULL_ARTICLES_PER_RUN    = 10    # Target article count for PDF and social posts
-MIN_ARTICLES_PER_RUN     = 5     # Minimum acceptable — system still runs below target
+FULL_ARTICLES_PER_RUN    = 4    # Target article count for PDF and social posts
+MIN_ARTICLES_PER_RUN     = 2     # Minimum acceptable — system still runs below target
 QUICK_BITES_PER_RUN      = 10    # Target quick-bite one-liner count
 MIN_ONELINERS_PER_RUN    = 5     # Minimum acceptable
 FILTER_SCORE_THRESHOLD   = 15    # Min score to pass filter

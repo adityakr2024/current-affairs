@@ -24,7 +24,7 @@ def _env_float(name: str, default: float) -> float:
 TAVILY_ENABLED = _env_bool("TAVILY_ENABLED", True)
 
 # Feature switches used by pipeline stages.
-TAVILY_FETCH_AUGMENT_ENABLED = _env_bool("ENABLE_TAVILY_FETCH_AUGMENT", False)
+TAVILY_FETCH_AUGMENT_ENABLED = _env_bool("ENABLE_TAVILY_FETCH_AUGMENT", True)
 
 # Direct API limits/guards.
 TAVILY_MONTHLY_LIMIT = _env_int("TAVILY_MONTHLY_LIMIT", 1000)
