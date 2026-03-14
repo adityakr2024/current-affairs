@@ -100,6 +100,9 @@ STATEMENT_PENALTIES: list[tuple[str, int]] = [
     (r"\bwalkout\b", -12),
     # Election-related (not institutional)
     (r"\b(wins?|loses?|elected|defeated)\b.*\b(election|seat|constituency)\b", -15),
+    # Geopolitical rhetoric headlines (not concrete policy action)
+    (r"\bsays?\s+(iran|china|russia|us|u\.?s\.?|officials?)\b", -18),
+    (r"^will\s+urge\b", -18),
 ]
 
 # ── GATE 2C: UPSC topic keywords ──────────────────────────────────────────────
