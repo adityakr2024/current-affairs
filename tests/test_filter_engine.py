@@ -93,6 +93,17 @@ class TestScoring:
     def test_golden_pass_term_gets_major_boost(self):
         sc, _ = score_article(_art("Explained: Basic structure doctrine and limits of amendment power"))
         assert sc >= 35
+
+    def test_successor_chatter_penalized_vs_judicial_social_justice(self):
+        sc_chatter, _ = score_article(_art("Nitish Kumar hints at Samrat Choudhary as his successor in Bihar"))
+        sc_upsc, topics = score_article(_art("Supreme Court says menstrual leave law may hurt women's careers"))
+        assert sc_upsc > sc_chatter
+        assert "Social Justice" in topics
+
+    def test_human_interest_upsc_exam_story_gets_lower_score(self):
+        sc_story, _ = score_article(_art("A Bihar youth became toast of the town for clearing UPSC"))
+        sc_policy, _ = score_article(_art("Parliament passes women workforce participation bill"))
+        assert sc_policy > sc_story
     def test_international_india_proximity(self):
         a = _art("UN Security Council meets on Indian Ocean dispute", category="International")
         a["category"] = "International"

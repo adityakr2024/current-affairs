@@ -29,7 +29,13 @@ EXCLUDE_PATTERNS: list[str] = [
     # Vague / not current affairs
     r"\bhoroscope\b", r"\bastrology\b", r"\bhow\s+to\b",
     r"\btop\s+\d+\b", r"\bbest\s+\d+\b",
+    # Human-interest / personality profile noise
+    r"\btoast\s+of\s+the\s+town\b",
+    r"\bviral\s+story\b",
+    r"\bhuman\s+interest\b",
+    r"\b(clear(?:s|ed|ing)?|crack(?:s|ed)?)\s+upsc\b",
 ]
+
 
 # ── GATE 2A: Event-type bonuses ────────────────────────────────────────────────
 # These phrases in title or summary indicate a CONCRETE government action
@@ -103,6 +109,9 @@ STATEMENT_PENALTIES: list[tuple[str, int]] = [
     # Geopolitical rhetoric headlines (not concrete policy action)
     (r"\bsays?\s+(iran|china|russia|us|u\.?s\.?|officials?)\b", -18),
     (r"^will\s+urge\b", -18),
+    # Personality/electoral succession chatter
+    (r"\bhints?\s+at\b.*\bsuccessor\b", -40),
+    (r"\b(successor|heir\s+apparent)\b", -20),
 ]
 
 # ── GATE 2C: UPSC topic keywords ──────────────────────────────────────────────
@@ -147,6 +156,13 @@ UPSC_TOPICS: dict[str, dict] = {
         "biodiversity", "wildlife protection", "ramsar", "tiger census", "isro",
         "gaganyaan", "artificial intelligence", "ai governance", "quantum computing",
         "biotechnology", "nuclear energy", "thorium", "defence technology",
+    ]},
+
+    "Social Justice": {"weight": 12, "keywords": [
+        "women", "gender", "menstrual", "maternity", "workforce", "labour force",
+        "equal opportunity", "equal pay", "sexual harassment", "posh act",
+        "workplace equality", "care economy", "social justice", "transgender",
+        "disability rights", "child rights",
     ]},
 }
 
@@ -194,6 +210,9 @@ TOPIC_ANCHOR_WEIGHTS: dict[str, int] = {
     "net zero": 12,
     "fiscal deficit": 15,
     "monetary policy": 15,
+    "menstrual leave": 18,
+    "gender equality": 12,
+    "workforce participation": 12,
 }
 
 SCHEME_SIGNALS: list[str] = [
@@ -233,6 +252,14 @@ def score_article(a: dict) -> tuple[int, list[str]]:
         if re.search(pattern, text):
             score += bonus
             break  # only the highest single event bonus
+
+    # Strong judiciary + rights-policy signal
+    if re.search(r"\b(supreme\s+court|high\s+court)\b", text) and re.search(
+        r"\b(menstrual\s+leave|gender|women|workplace|equality|rights?)\b", text
+    ):
+        score += 14
+        if "Social Justice" not in topics:
+            topics.append("Social Justice")
 
     # Statement / drama penalties — applied to TITLE ONLY
     statement_penalty_applied = False
@@ -300,6 +327,7 @@ def score_article(a: dict) -> tuple[int, list[str]]:
     if re.search(r"\d[\d,]*\s*(lakh|crore)\s*(beneficiar|farmer|women|entrepreneur)", text):
         score += 3
 
+    topics = list(dict.fromkeys(topics))
     return score, topics
 
 
